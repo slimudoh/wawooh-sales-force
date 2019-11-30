@@ -1,6 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 function Signup() {
+  let history = useHistory();
+
+  const [pageOne, setPageOne] = useState(true);
+  const [pageTwo, setPageTwo] = useState(false);
+
+  const openPageOne = e => {
+    e.preventDefault();
+
+    setPageOne(true);
+    setPageTwo(false);
+  };
+
+  const openPageTwo = () => {
+    setPageOne(false);
+    setPageTwo(true);
+  };
+
+  const signup = () => {
+    history.push("/dashboard");
+  };
+
   return (
     <div className="auth">
       <div className="auth__image">
@@ -19,69 +41,75 @@ function Signup() {
           </p>
           <span>Kindly complete the form below</span>
         </div>
-        <div className="auth__form--form">
-          <div>
-            <div className="auth__form--form-input">
-              <label>Firstname:</label>
-              <div>
-                <input type="text" placeholder="Kayode" />
+
+        {pageOne ? (
+          <div className="auth__form--form">
+            <div>
+              <div className="auth__form--form-input">
+                <label>Firstname:</label>
+                <div>
+                  <input type="text" placeholder="Kayode" />
+                </div>
               </div>
-            </div>
 
-            <div className="auth__form--form-input">
-              <label>Lastname:</label>
-              <div>
-                <input type="text" placeholder="Emeka" />
+              <div className="auth__form--form-input">
+                <label>Lastname:</label>
+                <div>
+                  <input type="text" placeholder="Emeka" />
+                </div>
               </div>
-            </div>
 
-            <div className="auth__form--form-input">
-              <label>Phone Number:</label>
-              <div>
-                <input type="text" placeholder="08070000000" />
+              <div className="auth__form--form-input">
+                <label>Phone Number:</label>
+                <div>
+                  <input type="text" placeholder="08070000000" />
+                </div>
               </div>
-            </div>
 
-            <div className="auth__form--form-msg">
-              Already registered, You can sign in <span>here</span>
-            </div>
+              <div className="auth__form--form-msg">
+                Already registered, You can sign in <span>here</span>
+              </div>
 
-            <div className="auth__form--form-button">
-              <button>Next</button>
+              <div className="auth__form--form-button">
+                <button onClick={openPageTwo}>Next</button>
+              </div>
             </div>
           </div>
-        </div>
+        ) : null}
 
-        {/* <div className="auth__form--form">
-          <div>
-            <div className="auth__form--form-input">
-              <label>Password:</label>
-              <div>
-                <input type="password" placeholder="***********" />
+        {pageTwo ? (
+          <div className="auth__form--form">
+            <div>
+              <div className="auth__form--form-input">
+                <label>Password:</label>
+                <div>
+                  <input type="password" placeholder="***********" />
+                </div>
               </div>
-            </div>
 
-            <div className="auth__form--form-input">
-              <label>Confirm Password:</label>
-              <div>
-                <input type="password" placeholder="***********" />
+              <div className="auth__form--form-input">
+                <label>Confirm Password:</label>
+                <div>
+                  <input type="password" placeholder="***********" />
+                </div>
               </div>
-            </div>
 
-            <div className="auth__form--form-remember">
-              <div className="auth__form--form-remember-rem">
-                <input type="checkbox" /> <span>Remember me</span>
+              <div className="auth__form--form-remember">
+                <div className="auth__form--form-remember-rem">
+                  <input type="checkbox" /> <span>Remember me</span>
+                </div>
+                <div className="auth__form--form-remember-psd">
+                  Forgot Password?
+                </div>
               </div>
-              <div className="auth__form--form-remember-psd">
-                Forgot Password?
-              </div>
-            </div>
 
-            <div className="auth__form--form-button">
-              <button>Sign Up</button>
+              <div className="auth__form--form-button">
+                <div onClick={openPageOne}>Back</div>
+                <div onClick={signup}>Sign Up</div>
+              </div>
             </div>
           </div>
-        </div> */}
+        ) : null}
       </div>
     </div>
   );
