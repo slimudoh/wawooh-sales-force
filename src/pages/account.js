@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 import Header from "../components/header";
 import Sidebar from "../components/sidebar";
@@ -20,7 +21,7 @@ function Account() {
       <Sidebar />
       <div className="container">
         <div className="account__nav">
-          Home > <span>Account</span>
+          <Link to="/">Home</Link> > <span>Account</span>
         </div>
         <div className="account__cards">
           <p>Select Account</p>

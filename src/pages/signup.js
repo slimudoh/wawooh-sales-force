@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 function Signup() {
   let history = useHistory();
@@ -67,7 +67,10 @@ function Signup() {
               </div>
 
               <div className="auth__form--form-msg">
-                Already registered, You can sign in <span>here</span>
+                Already registered, You can sign in{" "}
+                <span>
+                  <Link to="/signin">here</Link>
+                </span>
               </div>
 
               <div className="auth__form--form-button">
