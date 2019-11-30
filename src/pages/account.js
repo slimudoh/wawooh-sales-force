@@ -21,7 +21,7 @@ function Account() {
       <Sidebar />
       <div className="container">
         <div className="account__nav">
-          <Link to="/">Home</Link> > <span>Account</span>
+          <Link to="/dashboard">Home</Link> > <span>Account</span>
         </div>
         <div className="account__cards">
           <p>Select Account</p>
