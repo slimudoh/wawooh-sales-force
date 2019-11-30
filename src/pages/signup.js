@@ -16,12 +16,78 @@ function Signup() {
           </p>
           <span>Kindly complete the form below</span>
         </div>
+        {/* <div className="auth__form--form">
+          <div>
+            <div className="auth__form--form-input">
+              <label>Firstname:</label>
+              <div>
+                <input type="text" placeholder="Kayode" />
+              </div>
+            </div>
+
+            <div className="auth__form--form-input">
+              <label>Lastname:</label>
+              <div>
+                <input type="text" placeholder="Emeka" />
+              </div>
+            </div>
+
+            <div className="auth__form--form-input">
+              <label>Phone Number:</label>
+              <div>
+                <input type="text" placeholder="08070000000" />
+              </div>
+            </div>
+
+            <div className="auth__form--form-msg">
+              Already registered, You can sign in <span>here</span>
+            </div>
+
+            <div className="auth__form--form-button">
+              <button>Next</button>
+            </div>
+          </div>
+        </div> */}
+
         <div className="auth__form--form">
-          <div>kkk</div>
+          <div>
+            <div className="auth__form--form-input">
+              <label>Password:</label>
+              <div>
+                <input type="password" placeholder="***********" />
+              </div>
+            </div>
+
+            <div className="auth__form--form-input">
+              <label>Confirm Password:</label>
+              <div>
+                <input type="password" placeholder="***********" />
+              </div>
+            </div>
+
+            <div className="auth__form--form-remember">
+              <div className="auth__form--form-remember-rem">
+                <input type="checkbox" /> <span>Remember me</span>
+              </div>
+              <div className="auth__form--form-remember-psd">
+                Forgot Password?
+              </div>
+            </div>
+
+            <div className="auth__form--form-button">
+              <button>Sign Up</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
+// firstname
+//       lastname
+//       phone number
+//       password
+//       confirm password
 
 export default Signup;
