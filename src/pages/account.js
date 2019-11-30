@@ -1,16 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 import Header from "../components/header";
 import Sidebar from "../components/sidebar";
 
 function Account() {
+  const [accountModal, setAccountModal] = useState(false);
+
+  const openModal = () => {
+    setAccountModal(true);
+  };
+
+  const closeModal = () => {
+    setAccountModal(false);
+  };
+
   return (
     <div>
       <Header />
       <Sidebar />
       <div className="container">
         <div className="account__nav">
-          Home > <span>Account</span>
+          <Link to="/dashboard">Home</Link> > <span>Account</span>
         </div>
         <div className="account__cards">
           <p>Select Account</p>
@@ -35,38 +46,40 @@ function Account() {
             </div>
           </div>
           <div className="account__cards--btn">
-            <div>Add Account</div>
+            <div onClick={openModal}>Add Account</div>
           </div>
         </div>
-        <div className="account__modal">
-          <div>
-            <div className="account__modal__content">
-              <p>
-                <span>X</span>
-              </p>
-              <div>
-                <p>Enter Account Details</p>
-                <div className="account__modal__content--input">
-                  <label>Account Name:</label>
-                  <input type="text" />
-                </div>
+        {accountModal ? (
+          <div className="account__modal">
+            <div>
+              <div className="account__modal__content">
+                <p>
+                  <span onClick={closeModal}>close</span>
+                </p>
+                <div>
+                  <p>Enter Account Details</p>
+                  <div className="account__modal__content--input">
+                    <label>Account Name:</label>
+                    <input type="text" />
+                  </div>
 
-                <div className="account__modal__content--input">
-                  <label>Account Number:</label>
-                  <input type="text" />
-                </div>
+                  <div className="account__modal__content--input">
+                    <label>Account Number:</label>
+                    <input type="text" />
+                  </div>
 
-                <div className="account__modal__content--input">
-                  <label>Bank Name:</label>
-                  <input type="text" />
-                </div>
-                <div className="account__modal__content--btn">
-                  <button>Submit</button>
+                  <div className="account__modal__content--input">
+                    <label>Bank Name:</label>
+                    <input type="text" />
+                  </div>
+                  <div className="account__modal__content--btn">
+                    <button>Submit</button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        ) : null}
       </div>
     </div>
   );

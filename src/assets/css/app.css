@@ -31,14 +31,59 @@
   font-family: "Bad Script", cursive;
 }
 
+@media (max-width: 1000px) {
+  .auth__image {
+    font-size: 7em;
+  }
+}
+
+@media (max-width: 800px) {
+  .auth__image {
+    padding-left: 10px;
+  }
+}
+
+@media (max-width: 700px) {
+  .auth__image {
+    font-size: 5em;
+  }
+}
+
 .auth__image > img {
   display: block;
 }
 
 .auth__form {
   width: 50%;
+  height: 100vh;
+  overflow: auto;
   padding-top: 30px;
   padding-right: 50px;
+  padding-bottom: 50px;
+}
+
+@media (max-width: 800px) {
+  .auth__form {
+    padding-right: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .auth {
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+
+  .auth__image {
+    width: 100%;
+    height: 400px;
+    font-size: 7em;
+  }
+
+  .auth__form {
+    width: 100%;
+    height: 500px;
+  }
 }
 
 .auth__form--logo {
@@ -113,18 +158,39 @@
 
 .auth__form--form-button {
   margin-bottom: 20px;
-  border: 1px solid #000;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  align-content: center;
 }
 
 .auth__form--form-button > button {
   width: 100%;
   height: 40px;
   outline: 0;
-  border: none;
   background-color: #000;
   color: #fff;
   font-size: 12px;
   cursor: pointer;
+  border: 1px solid #000;
+}
+
+.auth__form--form-button > div {
+  width: 45%;
+  height: 40px;
+  background-color: #000;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  border: 1px solid #000;
 }
 
 .auth__form--form-msg {
@@ -138,6 +204,10 @@
 .auth__form--form-msg > span {
   color: var(--goldColor);
   cursor: pointer;
+}
+
+.auth__form--form-msg > span > a {
+  color: var(--goldColor);
 }
 
 .auth__form--form-remember {
@@ -183,14 +253,46 @@
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   align-content: center;
   background: #fff;
   z-index: 2;
+  box-shadow: 0 1px 1px #00000026;
+}
+
+@media (max-width: 800px) {
+  .header {
+    padding: 0 20px;
+  }
+}
+
+@media (max-width: 500px) {
+  .header {
+    padding: 0 10px;
+  }
 }
 
 .header__logo {
   width: 128px;
+}
+
+.header__burger {
+  width: 40px;
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .header__burger {
+    display: block;
+  }
+}
+
+.header__burger > div {
+  width: 100%;
+  height: 6px;
+  background-color: var(--goldColor);
+  border-radius: 5px;
+  margin: 3px 0;
 }
 
 .sidebar {
@@ -202,22 +304,92 @@
   padding-left: 50px;
   padding-top: 100px;
   background: #fff;
+  display: block;
 }
 
-.sidebar > div {
-  height: 50px;
+@media (max-width: 900px) {
+  .sidebar {
+    display: none;
+  }
+}
+
+a {
+  text-decoration: none;
+}
+
+.sidebar > a {
+  color: #000;
+}
+
+.sidebar > a > div {
   padding-left: 30px;
+  cursor: pointer;
+  height: 50px;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
   justify-content: flex-start;
   align-content: center;
-  cursor: pointer;
 }
 
-.sidebar > div:hover {
+.sidebar > a > div:hover {
   background-color: #f8f1e3;
+}
+
+.sidebar__active > div {
+  background-color: #f8f1e3;
+}
+
+.header__burger--cover {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .header__burger--cover {
+    display: block;
+  }
+}
+
+.sidebar__mobile {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 250px;
+  padding-left: 50px;
+  padding-top: 100px;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .sidebar__mobile {
+    display: block;
+  }
+}
+
+.sidebar__mobile > a {
+  color: #000;
+}
+
+.sidebar__mobile > a > div {
+  padding-left: 30px;
+  cursor: pointer;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  align-content: center;
 }
 
 .container {
@@ -227,6 +399,13 @@
   padding-right: 20px;
   min-height: 100vh;
   overflow: auto;
+}
+
+@media (max-width: 900px) {
+  .container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
 }
 
 .dash__intro {
@@ -256,8 +435,24 @@
   align-content: center;
 }
 
+@media (max-width: 700px) {
+  .dash__cards {
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+}
+
 .dash__cards > div {
   padding-right: 10px;
+  width: 33.333333333%;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 700px) {
+  .dash__cards > div {
+    padding-right: 0;
+    width: 100%;
+  }
 }
 
 .dash__cards--white {
@@ -300,6 +495,9 @@
   text-align: left;
   font-weight: 600;
   margin: 10px 0 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .dash__cards--img {
@@ -380,6 +578,10 @@
   color: #000;
 }
 
+.payment__nav > a {
+  color: #000;
+}
+
 .payment__nav > span {
   font-size: 12px;
   text-align: left;
@@ -403,8 +605,15 @@
   flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
-  align-content: center;
+  align-content: flex-start;
   margin: 30px 0;
+}
+
+@media (max-width: 700px) {
+  .payment__cards > div {
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
 }
 
 .payment__cards--btn {
@@ -415,7 +624,15 @@
   border-right: 2px solid #ddd;
 }
 
+@media (max-width: 700px) {
+  .payment__cards--btn {
+    width: 100%;
+    border-right: 2px solid transparent;
+  }
+}
+
 .payment__cards--btn > div {
+  max-width: 200px;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -460,7 +677,22 @@
   padding-left: 10px;
 }
 
+@media (max-width: 700px) {
+  .payment__cards--card {
+    padding-left: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+  .payment__cards--card {
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+}
+
 .payment__cards--card > div {
+  width: 50%;
   padding: 0 10px;
   display: flex;
   flex-direction: row;
@@ -468,6 +700,19 @@
   align-items: center;
   justify-content: center;
   align-content: center;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 700px) {
+  .payment__cards--card > div {
+    padding: 0 10px 0 0;
+  }
+}
+
+@media (max-width: 500px) {
+  .payment__cards--card > div {
+    width: 100%;
+  }
 }
 
 .payment__cards--card > div > div {
@@ -520,6 +765,11 @@
   background-color: #fff;
   padding: 20px;
   margin-bottom: 100px;
+  overflow: auto;
+}
+
+.payment__body > div {
+  min-width: 500px;
 }
 
 .payment__body--header {
@@ -571,6 +821,10 @@
   color: #000;
 }
 
+.account__nav > a {
+  color: #000;
+}
+
 .account__nav > span {
   font-size: 12px;
   text-align: left;
@@ -582,6 +836,12 @@
   background-color: #fff;
   padding: 50px;
   margin-bottom: 100px;
+}
+
+@media (max-width: 700px) {
+  .account__cards {
+    padding: 20px;
+  }
 }
 
 .account__cards > p {
@@ -601,9 +861,24 @@
   margin-top: 50px;
 }
 
+@media (max-width: 700px) {
+  .account__cards-list {
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+}
+
 .account__cards-card {
   width: 33.33333333%;
   padding-right: 10px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 700px) {
+  .account__cards-card {
+    width: 100%;
+    padding-right: 0;
+  }
 }
 
 .account__cards-card > div {
@@ -674,8 +949,8 @@
 
 .account__modal__content > p > span {
   font-size: 12px;
-  font-weight: 600;
   cursor: pointer;
+  color: red;
 }
 
 .account__modal__content > div {
