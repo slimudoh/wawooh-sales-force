@@ -1,6 +1,14 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 function Signin() {
+  let history = useHistory();
+
+  const signin = e => {
+    e.preventDefault();
+    history.push("/dashboard");
+  };
+
   return (
     <div className="auth">
       <div className="auth__image">
@@ -40,7 +48,7 @@ function Signin() {
             </div>
 
             <div className="auth__form--form-button">
-              <button>Sign in</button>
+              <button onClick={signin}>Sign in</button>
             </div>
           </div>
         </div>
