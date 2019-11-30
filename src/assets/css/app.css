@@ -19,6 +19,16 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  align-content: center;
+  color: #fff;
+  padding-left: 50px;
+  font-size: 10em;
+  font-family: "Bad Script", cursive;
 }
 
 .auth__image > img {
@@ -122,6 +132,7 @@
   color: #000;
   font-size: 12px;
   font-style: italic;
+  text-align: center;
 }
 
 .auth__form--form-msg > span {

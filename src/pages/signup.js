@@ -3,7 +3,10 @@ import React from "react";
 function Signup() {
   return (
     <div className="auth">
-      <div className="auth__image"></div>
+      <div className="auth__image">
+        Sales <br />
+        &nbsp;&nbsp;&nbsp;force
+      </div>
       <div className="auth__form">
         <div className="auth__form--logo">
           <div>
@@ -16,7 +19,7 @@ function Signup() {
           </p>
           <span>Kindly complete the form below</span>
         </div>
-        {/* <div className="auth__form--form">
+        <div className="auth__form--form">
           <div>
             <div className="auth__form--form-input">
               <label>Firstname:</label>
@@ -47,9 +50,9 @@ function Signup() {
               <button>Next</button>
             </div>
           </div>
-        </div> */}
+        </div>
 
-        <div className="auth__form--form">
+        {/* <div className="auth__form--form">
           <div>
             <div className="auth__form--form-input">
               <label>Password:</label>
@@ -78,16 +81,9 @@ function Signup() {
               <button>Sign Up</button>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
 }
-
-// firstname
-//       lastname
-//       phone number
-//       password
-//       confirm password
-
 export default Signup;
