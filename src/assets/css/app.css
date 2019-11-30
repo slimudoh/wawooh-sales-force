@@ -1,0 +1,80 @@
+:root {
+  --goldColor: #d19822;
+  --debugger: 1px dotted red;
+}
+
+.auth {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: center;
+  align-content: center;
+}
+
+.auth__image {
+  width: 50%;
+  height: 100vh;
+  background-image: url("../img/demo.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.auth__image > img {
+  display: block;
+}
+
+.auth__form {
+  width: 50%;
+  padding-top: 30px;
+  padding-right: 50px;
+}
+
+.auth__form--logo {
+  overflow: hidden;
+}
+
+.auth__form--logo > div {
+  width: 150px;
+  float: right;
+}
+
+.auth__form--logo > div > img {
+  width: 100%;
+}
+
+.auth__form--heading {
+  text-align: center;
+  padding: 50px 0 20px 0;
+}
+
+.auth__form--heading > p {
+  font-size: 20px;
+  color: #000;
+  margin: 0 0 10px 0;
+}
+
+.auth__form--heading > p > span {
+  color: var(--goldColor);
+}
+
+.auth__form--heading > span {
+  color: #000;
+}
+
+.auth__form--form {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+}
+
+.auth__form--form > div {
+  border: var(--debugger);
+  max-width: 400px;
+  margin: auto;
+  padding: 0 10px;
+}
