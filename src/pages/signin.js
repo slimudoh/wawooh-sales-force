@@ -21,25 +21,27 @@ function Signin() {
     const emailRegExp = /\S+@\S+\.\S+/;
 
     if (emailInput.value.trim() === "") {
-      setErrorMessage("please enter your email");
+      setErrorMessage("Please enter your email.");
       setErrorStatus(true);
       return;
     }
 
     if (!emailRegExp.test(emailInput.value.trim())) {
-      setErrorMessage("please enter your email");
+      setErrorMessage("Please enter your email.");
       setErrorStatus(true);
       return;
     }
 
     if (passwordInput.value.trim() === "") {
-      setErrorMessage("please enter your password");
+      setErrorMessage("Please enter your password.");
       setErrorStatus(true);
       return;
     }
 
     setErrorMessage(null);
     setErrorStatus(false);
+    setSuccessMessage(null);
+    setSuccessStatus(false);
 
     console.log(emailInput.value);
     console.log(passwordInput.value);
