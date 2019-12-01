@@ -26,8 +26,10 @@ function Signup() {
   return (
     <div className="auth">
       <div className="auth__image">
-        Sales <br />
-        &nbsp;&nbsp;&nbsp;force
+        <div>
+          Sales <br />
+          &nbsp;&nbsp;&nbsp;force
+        </div>
       </div>
       <div className="auth__form">
         <div className="auth__form--logo">
