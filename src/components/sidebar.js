@@ -1,7 +1,13 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 
 function Sidebar() {
+  let history = useHistory();
+
+  const logout = () => {
+    history.push("/");
+  };
+
   return (
     <div className="sidebar">
       <NavLink to="/dashboard" exact activeClassName="sidebar__active">
@@ -15,6 +21,8 @@ function Sidebar() {
       <NavLink to="/account" exact activeClassName="sidebar__active">
         <div>Account</div>
       </NavLink>
+
+      <div onClick={logout}>Log Out</div>
     </div>
   );
 }

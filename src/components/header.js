@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 
 function Header() {
+  let history = useHistory();
   const [showMobile, setShowMobile] = useState(false);
 
   const showMobileNav = () => {
@@ -10,6 +11,10 @@ function Header() {
 
   const closeMobileNav = () => {
     setShowMobile(false);
+  };
+
+  const logout = () => {
+    history.push("/");
   };
 
   return (
@@ -43,6 +48,8 @@ function Header() {
           <NavLink to="/account" exact activeClassName="sidebar__active">
             <div onClick={closeMobileNav}>Account</div>
           </NavLink>
+
+          <div onClick={logout}>Log Out</div>
         </div>
       ) : null}
     </div>
