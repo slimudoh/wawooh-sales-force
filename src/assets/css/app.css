@@ -1045,3 +1045,29 @@ a {
   outline: 0;
   cursor: pointer;
 }
+
+.error {
+  border: 1px solid red;
+  padding: 5px;
+  background-color: rgba(255, 0, 0, 0.2);
+}
+
+.error > div {
+  color: #000;
+  font-style: italic;
+  font-size: 12px;
+  padding: 5px 0;
+}
+
+.success {
+  border: 1px solid green;
+  padding: 5px;
+  background-color: rgba(0, 128, 0, 0.55);
+}
+
+.success > div {
+  color: #fff;
+  font-style: italic;
+  font-size: 12px;
+  padding: 5px 0;
+}
