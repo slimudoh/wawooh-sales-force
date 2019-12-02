@@ -35,7 +35,6 @@ function Payment() {
                   </div>
                   <div className="payment__cards--card-icon">
                     <div>
-                      {" "}
                       <img src={require("../assets/img/pay.svg")} alt="" />
                     </div>
                   </div>
@@ -49,7 +48,6 @@ function Payment() {
                   </div>
                   <div className="payment__cards--card-icon">
                     <div>
-                      {" "}
                       <img src={require("../assets/img/pending.svg")} alt="" />
                     </div>
                   </div>

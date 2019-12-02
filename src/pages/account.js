@@ -3,9 +3,21 @@ import { Link } from "react-router-dom";
 
 import Header from "../components/header";
 import Sidebar from "../components/sidebar";
+import Error from "../components/error";
+import Success from "../components/success";
 
 function Account() {
   const [accountModal, setAccountModal] = useState(false);
+  const [errorStatus, setErrorStatus] = useState(false);
+  const [successStatus, setSuccessStatus] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+
+  const [accountData, setAccountData] = useState({
+    accountName: "",
+    accountNumber: "",
+    bankName: ""
+  });
 
   const openModal = () => {
     setAccountModal(true);
@@ -13,6 +25,63 @@ function Account() {
 
   const closeModal = () => {
     setAccountModal(false);
+  };
+
+  const handleAccountData = e =>
+    setAccountData({
+      ...accountData,
+      [e.target.name]: e.target.value
+    });
+
+  const createAccount = e => {
+    e.preventDefault();
+
+    let accountdata = accountData;
+
+    // if (signupdata.phone === "") {
+    //   setErrorMessage("Please go back and enter your phone number.");
+    //   setErrorStatus(true);
+    //   return;
+    // }
+
+    // if (!parseInt(signupdata.phone)) {
+    //   setErrorMessage("Please go back and enter your phone number.");
+    //   setErrorStatus(true);
+    //   return;
+    // }
+
+    // if (signupdata.password.trim() === "") {
+    //   setErrorMessage("Please enter your password.");
+    //   setErrorStatus(true);
+    //   return;
+    // }
+
+    // if (signupdata.password.trim().length < 8) {
+    //   setErrorMessage("Password must not be less than 8 characters.");
+    //   setErrorStatus(true);
+    //   return;
+    // }
+
+    // if (/\s/.test(signupdata.password.trim())) {
+    //   setErrorMessage("Password must not contain space.");
+    //   setErrorStatus(true);
+    //   return;
+    // }
+
+    // if (signupdata.confirm.trim() === "") {
+    //   setErrorMessage("Please confirm your password.");
+    //   setErrorStatus(true);
+    //   return;
+    // }
+
+    setErrorMessage(null);
+    setErrorStatus(false);
+    setSuccessMessage(null);
+    setSuccessStatus(false);
+
+    // signupdata.password = signupData.password.trim();
+
+    // history.push("/dashboard");
   };
 
   return (
@@ -54,26 +123,46 @@ function Account() {
             <div>
               <div className="account__modal__content">
                 <p>
-                  <span onClick={closeModal}>close</span>
+                  <span onClick={closeModal}>X</span>
                 </p>
                 <div>
                   <p>Enter Account Details</p>
                   <div className="account__modal__content--input">
                     <label>Account Name:</label>
-                    <input type="text" />
+                    <input
+                      type="text"
+                      name="accountName"
+                      value={accountData.accountName}
+                      onChange={handleAccountData}
+                    />
                   </div>
 
                   <div className="account__modal__content--input">
                     <label>Account Number:</label>
-                    <input type="text" />
+                    <input
+                      type="text"
+                      name="accountNumber"
+                      value={accountData.accountNumber}
+                      onChange={handleAccountData}
+                    />
                   </div>
 
                   <div className="account__modal__content--input">
                     <label>Bank Name:</label>
-                    <input type="text" />
+                    <input
+                      type="text"
+                      name="bankName"
+                      value={accountData.bankName}
+                      onChange={handleAccountData}
+                    />
                   </div>
                   <div className="account__modal__content--btn">
-                    <button>Submit</button>
+                    <button onClick={createAccount}>Submit</button>
+                  </div>
+
+                  <div className="account__modal--alert">
+                    <Error status={errorStatus} message={errorMessage} />
+                    <Success status={successStatus} message={successMessage} />
                   </div>
                 </div>
               </div>

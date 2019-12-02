@@ -880,10 +880,12 @@ a {
 }
 
 .account__cards {
+  max-width: 800px;
   margin-top: 30px;
   background-color: #fff;
   padding: 50px;
   margin-bottom: 100px;
+  border-radius: 5px;
 }
 
 @media (max-width: 700px) {
@@ -939,6 +941,7 @@ a {
   font-size: 12px;
   text-align: left;
   color: #fff;
+  font-weight: 600;
 }
 
 .account__cards-card > div > p {
