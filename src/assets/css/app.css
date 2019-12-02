@@ -1175,3 +1175,7 @@ a {
   font-size: 12px;
   padding: 5px 0;
 }
+
+.notfound {
+  text-align: center;
+}
