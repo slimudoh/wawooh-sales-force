@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import axios from "axios";
+import * as types from "../store/constant";
 import Error from "../components/error";
 import Success from "../components/success";
 
@@ -12,6 +13,7 @@ function Signup() {
   const [successStatus, setSuccessStatus] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [verifyCode, setVerifyCode] = useState(null);
 
   const [signupData, setSignupData] = useState({
     firstname: "",
@@ -23,22 +25,15 @@ function Signup() {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_SIGNUP_PATH}${code}`)
+      // .get(`types.SIGNUP_CODE${code}`)
+      .get(`${types.SIGNUP_CODE}`)
       .then(resp => {
-        console.log(resp);
-        // let signupdata = signupData;
-        // signupdata.firstname = resp.data.data.firstName;
-        // signupdata.lastname = resp.data.data.lastName;
-        // signupdata.phone = "";
-        // signupdata.password = "";
-        // signupdata.firstname = "";
-        // setSignupData(signupdata);
-        // console.log(signupData);
+        setVerifyCode(resp.data);
       })
       .catch(err => {
         console.log(JSON.stringify(err));
       });
-  }, [code]);
+  }, [verifyCode]);
 
   const [pageOne, setPageOne] = useState(true);
   const [pageTwo, setPageTwo] = useState(false);
