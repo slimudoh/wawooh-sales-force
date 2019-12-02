@@ -64,39 +64,23 @@ function Reset() {
         </div>
         <div className="auth__form--heading">
           <p>
-            Welcome to the <span>Sales Force</span>
+            Reset <span>Password</span>
           </p>
-          <span>Kindly complete the form to access your account</span>
+          <span>Kindly complete the form to reset your password.</span>
         </div>
         <div className="auth__form--form">
           <div>
             <div className="auth__form--form-input">
-              <label>Email:</label>
+              <label>Enter New Password:</label>
               <div>
-                <input type="text" ref={email} />
+                <input type="text" ref={password} />
               </div>
             </div>
 
             <div className="auth__form--form-input">
-              <label>Password:</label>
+              <label>Confirm New Password:</label>
               <div>
-                <input type="password" ref={password} />
-              </div>
-            </div>
-
-            <div className="auth__form--form-input">
-              <label>Password:</label>
-              <div>
-                <input type="password" ref={password} />
-              </div>
-            </div>
-
-            <div className="auth__form--form-remember">
-              <div className="auth__form--form-remember-rem">
-                <input type="checkbox" /> Remember me
-              </div>
-              <div className="auth__form--form-remember-psd">
-                <Link to="change-password">Forgot Password?</Link>
+                <input type="password" ref={confirm} />
               </div>
             </div>
 
