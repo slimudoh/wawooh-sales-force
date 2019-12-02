@@ -880,10 +880,12 @@ a {
 }
 
 .account__cards {
+  max-width: 800px;
   margin-top: 30px;
   background-color: #fff;
   padding: 50px;
   margin-bottom: 100px;
+  border-radius: 5px;
 }
 
 @media (max-width: 700px) {
@@ -939,6 +941,7 @@ a {
   font-size: 12px;
   text-align: left;
   color: #fff;
+  font-weight: 600;
 }
 
 .account__cards-card > div > p {
@@ -1036,7 +1039,6 @@ a {
 .account__modal__content--btn {
   margin: 20px auto 0 auto;
   width: 80%;
-
   border: 1px solid #000;
   background-color: #000;
   color: #fff;
@@ -1049,6 +1051,11 @@ a {
   border: 0;
   outline: 0;
   cursor: pointer;
+}
+
+.account__modal--alert {
+  width: 80%;
+  margin: 20px auto;
 }
 
 .error {

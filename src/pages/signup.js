@@ -51,7 +51,7 @@ function Signup() {
     }
 
     if (!parseInt(signupdata.phone)) {
-      setErrorMessage("Please go back and enter your phone number.");
+      setErrorMessage("Phone number must be numbers.");
       setErrorStatus(true);
       return;
     }
