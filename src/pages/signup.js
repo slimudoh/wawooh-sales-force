@@ -44,18 +44,6 @@ function Signup() {
 
     let signupdata = signupData;
 
-    if (signupdata.firstname === "") {
-      setErrorMessage("Please go back and enter your firstname.");
-      setErrorStatus(true);
-      return;
-    }
-
-    if (signupdata.lastname === "") {
-      setErrorMessage("Please go back and enter your lastname.");
-      setErrorStatus(true);
-      return;
-    }
-
     if (signupdata.phone === "") {
       setErrorMessage("Please go back and enter your phone number.");
       setErrorStatus(true);
@@ -135,6 +123,7 @@ function Signup() {
                     name="firstname"
                     value={signupData.firstname}
                     onChange={handleSignupData}
+                    readOnly
                   />
                 </div>
               </div>
@@ -148,6 +137,7 @@ function Signup() {
                     name="lastname"
                     value={signupData.lastname}
                     onChange={handleSignupData}
+                    readOnly
                   />
                 </div>
               </div>
@@ -211,9 +201,6 @@ function Signup() {
               <div className="auth__form--form-remember">
                 <div className="auth__form--form-remember-rem">
                   <input type="checkbox" /> <span>Remember me</span>
-                </div>
-                <div className="auth__form--form-remember-psd">
-                  Forgot Password?
                 </div>
               </div>
 
