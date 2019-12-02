@@ -1039,7 +1039,6 @@ a {
 .account__modal__content--btn {
   margin: 20px auto 0 auto;
   width: 80%;
-
   border: 1px solid #000;
   background-color: #000;
   color: #fff;
@@ -1052,6 +1051,11 @@ a {
   border: 0;
   outline: 0;
   cursor: pointer;
+}
+
+.account__modal--alert {
+  width: 80%;
+  margin: 20px auto;
 }
 
 .error {

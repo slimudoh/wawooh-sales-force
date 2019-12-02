@@ -20,10 +20,18 @@ function Account() {
   });
 
   const openModal = () => {
+    setErrorMessage(null);
+    setErrorStatus(false);
+    setSuccessMessage(null);
+    setSuccessStatus(false);
     setAccountModal(true);
   };
 
   const closeModal = () => {
+    setErrorMessage(null);
+    setErrorStatus(false);
+    setSuccessMessage(null);
+    setSuccessStatus(false);
     setAccountModal(false);
   };
 
@@ -38,50 +46,45 @@ function Account() {
 
     let accountdata = accountData;
 
-    // if (signupdata.phone === "") {
-    //   setErrorMessage("Please go back and enter your phone number.");
-    //   setErrorStatus(true);
-    //   return;
-    // }
+    if (accountdata.accountName === "") {
+      setErrorMessage("Please enter you account name.");
+      setErrorStatus(true);
+      return;
+    }
 
-    // if (!parseInt(signupdata.phone)) {
-    //   setErrorMessage("Please go back and enter your phone number.");
-    //   setErrorStatus(true);
-    //   return;
-    // }
+    if (accountdata.accountNumber === "") {
+      setErrorMessage("Please enter you account number.");
+      setErrorStatus(true);
+      return;
+    }
 
-    // if (signupdata.password.trim() === "") {
-    //   setErrorMessage("Please enter your password.");
-    //   setErrorStatus(true);
-    //   return;
-    // }
+    if (!parseInt(accountdata.accountNumber)) {
+      setErrorMessage("Account number must be numbers.");
+      setErrorStatus(true);
+      return;
+    }
 
-    // if (signupdata.password.trim().length < 8) {
-    //   setErrorMessage("Password must not be less than 8 characters.");
-    //   setErrorStatus(true);
-    //   return;
-    // }
-
-    // if (/\s/.test(signupdata.password.trim())) {
-    //   setErrorMessage("Password must not contain space.");
-    //   setErrorStatus(true);
-    //   return;
-    // }
-
-    // if (signupdata.confirm.trim() === "") {
-    //   setErrorMessage("Please confirm your password.");
-    //   setErrorStatus(true);
-    //   return;
-    // }
+    if (accountdata.bankName === "") {
+      setErrorMessage("Please enter you bank name.");
+      setErrorStatus(true);
+      return;
+    }
 
     setErrorMessage(null);
     setErrorStatus(false);
     setSuccessMessage(null);
     setSuccessStatus(false);
 
-    // signupdata.password = signupData.password.trim();
+    console.log(accountdata);
+    accountdata.accountName = "";
+    accountdata.accountNumber = "";
+    accountdata.bankName = "";
 
-    // history.push("/dashboard");
+    setAccountData({
+      ...accountdata
+    });
+
+    setAccountModal(false);
   };
 
   return (
