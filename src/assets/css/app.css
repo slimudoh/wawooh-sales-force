@@ -806,13 +806,14 @@ a {
 
 .payment__body {
   background-color: #fff;
-  padding: 20px;
+  /* padding: 20px; */
   margin-bottom: 100px;
   overflow: auto;
 }
 
 .payment__body > div {
   min-width: 500px;
+  padding: 20px;
 }
 
 .payment__body--header {

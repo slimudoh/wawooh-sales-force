@@ -1,15 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import Error from "../components/error";
 import Success from "../components/success";
 
 function Signup() {
   let history = useHistory();
-  const firstname = useRef(null);
-  const lastname = useRef(null);
-  const phone = useRef(null);
-  const password = useRef(null);
-  const confirm = useRef(null);
 
   const [errorStatus, setErrorStatus] = useState(false);
   const [successStatus, setSuccessStatus] = useState(false);
@@ -20,7 +15,8 @@ function Signup() {
     firstname: "",
     lastname: "",
     phone: "",
-    password: ""
+    password: "",
+    confirm: ""
   });
 
   const [pageOne, setPageOne] = useState(true);
@@ -39,18 +35,6 @@ function Signup() {
   };
 
   const openPageTwo = () => {
-    let firstnameInput = firstname.current;
-    let lastnameInput = lastname.current;
-    let phoneInput = phone.current;
-
-    let signupdata = signupData;
-    signupdata.firstname = firstnameInput.value.trim();
-    signupdata.lastname = lastnameInput.value.trim();
-    signupdata.phone = phoneInput.value.trim();
-    signupdata.password = "";
-
-    setSignupData(signupdata);
-
     setPageOne(false);
     setPageTwo(true);
   };
@@ -59,9 +43,6 @@ function Signup() {
     e.preventDefault();
 
     let signupdata = signupData;
-
-    let passwordInput = password.current;
-    let confirmInput = confirm.current;
 
     if (signupdata.firstname === "") {
       setErrorMessage("Please go back and enter your firstname.");
@@ -87,20 +68,20 @@ function Signup() {
       return;
     }
 
-    if (passwordInput.value.trim() === "") {
+    if (signupdata.password.trim() === "") {
       setErrorMessage("Please enter your password.");
       setErrorStatus(true);
       return;
     }
 
-    if (confirmInput.value.trim() === "") {
+    if (signupdata.confirm.trim() === "") {
       setErrorMessage("Please confirm your password.");
       setErrorStatus(true);
       return;
     }
 
-    if (passwordInput.value.trim() !== confirmInput.value.trim()) {
-      setErrorMessage("Password not identical.");
+    if (signupdata.password.trim() !== signupdata.confirm.trim()) {
+      setErrorMessage("Passwords not identical.");
       setErrorStatus(true);
       return;
     }
@@ -110,12 +91,16 @@ function Signup() {
     setSuccessMessage(null);
     setSuccessStatus(false);
 
-    signupdata.password = passwordInput.value.trim();
-
-    console.log(signupdata);
+    signupdata.password = signupData.password.trim();
 
     history.push("/dashboard");
   };
+
+  const handleSignupData = e =>
+    setSignupData({
+      ...signupData,
+      [e.target.name]: e.target.value
+    });
 
   return (
     <div className="auth">
@@ -144,21 +129,39 @@ function Signup() {
               <div className="auth__form--form-input">
                 <label>Firstname:</label>
                 <div>
-                  <input type="text" placeholder="Kayode" ref={firstname} />
+                  <input
+                    type="text"
+                    placeholder="Kayode"
+                    name="firstname"
+                    value={signupData.firstname}
+                    onChange={handleSignupData}
+                  />
                 </div>
               </div>
 
               <div className="auth__form--form-input">
                 <label>Lastname:</label>
                 <div>
-                  <input type="text" placeholder="Emeka" ref={lastname} />
+                  <input
+                    type="text"
+                    placeholder="Emeka"
+                    name="lastname"
+                    value={signupData.lastname}
+                    onChange={handleSignupData}
+                  />
                 </div>
               </div>
 
               <div className="auth__form--form-input">
                 <label>Phone Number:</label>
                 <div>
-                  <input type="text" placeholder="08070000000" ref={phone} />
+                  <input
+                    type="text"
+                    placeholder="08070000000"
+                    name="phone"
+                    value={signupData.phone}
+                    onChange={handleSignupData}
+                  />
                 </div>
               </div>
 
@@ -185,7 +188,9 @@ function Signup() {
                   <input
                     type="password"
                     placeholder="***********"
-                    ref={password}
+                    name="password"
+                    value={signupData.password}
+                    onChange={handleSignupData}
                   />
                 </div>
               </div>
@@ -196,7 +201,9 @@ function Signup() {
                   <input
                     type="password"
                     placeholder="***********"
-                    ref={confirm}
+                    name="confirm"
+                    value={signupData.confirm}
+                    onChange={handleSignupData}
                   />
                 </div>
               </div>
