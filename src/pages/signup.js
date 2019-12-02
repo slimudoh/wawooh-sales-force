@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useHistory, useParams } from "react-router-dom";
+import axios from "axios";
 import Error from "../components/error";
 import Success from "../components/success";
 
 function Signup() {
   let history = useHistory();
+  let { code } = useParams();
 
   const [errorStatus, setErrorStatus] = useState(false);
   const [successStatus, setSuccessStatus] = useState(false);
@@ -18,6 +20,25 @@ function Signup() {
     password: "",
     confirm: ""
   });
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_SIGNUP_PATH}${code}`)
+      .then(resp => {
+        console.log(resp);
+        // let signupdata = signupData;
+        // signupdata.firstname = resp.data.data.firstName;
+        // signupdata.lastname = resp.data.data.lastName;
+        // signupdata.phone = "";
+        // signupdata.password = "";
+        // signupdata.firstname = "";
+        // setSignupData(signupdata);
+        // console.log(signupData);
+      })
+      .catch(err => {
+        console.log(JSON.stringify(err));
+      });
+  }, [code]);
 
   const [pageOne, setPageOne] = useState(true);
   const [pageTwo, setPageTwo] = useState(false);
@@ -131,7 +152,6 @@ function Signup() {
                 <div>
                   <input
                     type="text"
-                    placeholder="Kayode"
                     name="firstname"
                     value={signupData.firstname}
                     onChange={handleSignupData}
@@ -145,7 +165,6 @@ function Signup() {
                 <div>
                   <input
                     type="text"
-                    placeholder="Emeka"
                     name="lastname"
                     value={signupData.lastname}
                     onChange={handleSignupData}

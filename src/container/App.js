@@ -1,5 +1,10 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import React, { useState } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect
+} from "react-router-dom";
 import "./../assets/css/reset.css";
 import "./../assets/css/app.css";
 
@@ -10,23 +15,30 @@ import Reset from "../pages/reset";
 import Dashboard from "../pages/dashboard";
 import Payment from "../pages/payment";
 import Account from "../pages/account";
+import Notfound from "../pages/notfound";
 
 function App() {
+  const [auth, setAuth] = useState(false);
+
   return (
     <div>
       <Router>
         <Switch>
-          <Route exact path="/" component={Signup} />
+          <Route exact path="/fashion/:code" component={Signup} />
           <Route path="/signin" component={Signin} />
           <Route path="/change-password" component={Password} />
           <Route path="/new-password" component={Reset} />
-          <Route path="/dashboard" component={Dashboard} />
-          <Route path="/payment" component={Payment} />
-          <Route path="/account" component={Account} />
+          {auth ? <Route path="/dashboard" component={Dashboard} /> : null}
+          {auth ? <Route path="/payment" component={Payment} /> : null}
+          {auth ? <Route path="/account" component={Account} /> : null}
+          {auth ? <Route component={Notfound} /> : null}
+          <Route render={() => <Redirect to="/signin" />} />
         </Switch>
       </Router>
     </div>
   );
 }
+
+// http://192.168.10.35:8094/fashion/agent/salesforce/update_profile/"+agentCode
 
 export default App;
