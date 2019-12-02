@@ -3,10 +3,11 @@ import { useHistory, Link } from "react-router-dom";
 import Error from "../components/error";
 import Success from "../components/success";
 
-function Signin() {
+function Reset() {
   let history = useHistory();
-  const email = useRef(null);
+
   const password = useRef(null);
+  const confirm = useRef(null);
 
   const [errorStatus, setErrorStatus] = useState(false);
   const [successStatus, setSuccessStatus] = useState(false);
@@ -16,24 +17,23 @@ function Signin() {
   const signin = e => {
     e.preventDefault();
 
-    let emailInput = email.current;
     let passwordInput = password.current;
-    const emailRegExp = /\S+@\S+\.\S+/;
-
-    if (emailInput.value.trim() === "") {
-      setErrorMessage("Please enter your email.");
-      setErrorStatus(true);
-      return;
-    }
-
-    if (!emailRegExp.test(emailInput.value.trim())) {
-      setErrorMessage("Please enter your email.");
-      setErrorStatus(true);
-      return;
-    }
+    let confirmInput = confirm.current;
 
     if (passwordInput.value.trim() === "") {
       setErrorMessage("Please enter your password.");
+      setErrorStatus(true);
+      return;
+    }
+
+    if (confirmInput.value.trim() === "") {
+      setErrorMessage("Please confirm your password.");
+      setErrorStatus(true);
+      return;
+    }
+
+    if (passwordInput.value.trim() !== confirmInput.value.trim()) {
+      setErrorMessage("Passwords not identical.");
       setErrorStatus(true);
       return;
     }
@@ -43,10 +43,9 @@ function Signin() {
     setSuccessMessage(null);
     setSuccessStatus(false);
 
-    console.log(emailInput.value);
     console.log(passwordInput.value);
 
-    history.push("/dashboard");
+    history.push("/signin");
   };
 
   return (
@@ -85,6 +84,13 @@ function Signin() {
               </div>
             </div>
 
+            <div className="auth__form--form-input">
+              <label>Password:</label>
+              <div>
+                <input type="password" ref={password} />
+              </div>
+            </div>
+
             <div className="auth__form--form-remember">
               <div className="auth__form--form-remember-rem">
                 <input type="checkbox" /> Remember me
@@ -95,7 +101,7 @@ function Signin() {
             </div>
 
             <div className="auth__form--form-button">
-              <button onClick={signin}>Sign in</button>
+              <button onClick={signin}>Reset Password</button>
             </div>
 
             <div className="auth__form--form-msg">
@@ -113,4 +119,4 @@ function Signin() {
   );
 }
 
-export default Signin;
+export default Reset;

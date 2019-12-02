@@ -233,7 +233,7 @@
   flex-direction: row;
   flex-wrap: nowrap;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   align-content: center;
   font-size: 12px;
 }
@@ -247,6 +247,10 @@
   color: var(--goldColor);
   font-size: 12px;
   text-align: right;
+}
+
+.auth__form--form-remember-psd > a {
+  color: var(--goldColor);
 }
 
 .header {

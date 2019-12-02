@@ -3,21 +3,19 @@ import { useHistory, Link } from "react-router-dom";
 import Error from "../components/error";
 import Success from "../components/success";
 
-function Signin() {
+function Password() {
   let history = useHistory();
   const email = useRef(null);
-  const password = useRef(null);
 
   const [errorStatus, setErrorStatus] = useState(false);
   const [successStatus, setSuccessStatus] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
-  const signin = e => {
+  const reset = e => {
     e.preventDefault();
 
     let emailInput = email.current;
-    let passwordInput = password.current;
     const emailRegExp = /\S+@\S+\.\S+/;
 
     if (emailInput.value.trim() === "") {
@@ -32,21 +30,14 @@ function Signin() {
       return;
     }
 
-    if (passwordInput.value.trim() === "") {
-      setErrorMessage("Please enter your password.");
-      setErrorStatus(true);
-      return;
-    }
-
     setErrorMessage(null);
     setErrorStatus(false);
     setSuccessMessage(null);
     setSuccessStatus(false);
 
     console.log(emailInput.value);
-    console.log(passwordInput.value);
 
-    history.push("/dashboard");
+    history.push("/new-password");
   };
 
   return (
@@ -65,9 +56,9 @@ function Signin() {
         </div>
         <div className="auth__form--heading">
           <p>
-            Welcome to the <span>Sales Force</span>
+            Change <span>Password</span>
           </p>
-          <span>Kindly complete the form to access your account</span>
+          <span>Kindly enter you email to receive a reset password link.</span>
         </div>
         <div className="auth__form--form">
           <div>
@@ -78,28 +69,14 @@ function Signin() {
               </div>
             </div>
 
-            <div className="auth__form--form-input">
-              <label>Password:</label>
-              <div>
-                <input type="password" ref={password} />
-              </div>
-            </div>
-
-            <div className="auth__form--form-remember">
-              <div className="auth__form--form-remember-rem">
-                <input type="checkbox" /> Remember me
-              </div>
-              <div className="auth__form--form-remember-psd">
-                <Link to="change-password">Forgot Password?</Link>
-              </div>
-            </div>
-
-            <div className="auth__form--form-button">
-              <button onClick={signin}>Sign in</button>
-            </div>
-
             <div className="auth__form--form-msg">
-              Not yet registered, check you email for a signup link.
+              Remember password, You can sign in{" "}
+              <span>
+                <Link to="/signin">here</Link>
+              </span>
+            </div>
+            <div className="auth__form--form-button">
+              <button onClick={reset}>Send Link</button>
             </div>
 
             <div className="auth__form--alert">
@@ -113,4 +90,4 @@ function Signin() {
   );
 }
 
-export default Signin;
+export default Password;
