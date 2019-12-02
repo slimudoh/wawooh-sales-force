@@ -62,6 +62,18 @@ function Signup() {
       return;
     }
 
+    if (signupdata.password.trim().length < 8) {
+      setErrorMessage("Password must not be less than 8 characters.");
+      setErrorStatus(true);
+      return;
+    }
+
+    if (/\s/.test(signupdata.password.trim())) {
+      setErrorMessage("Password must not contain space.");
+      setErrorStatus(true);
+      return;
+    }
+
     if (signupdata.confirm.trim() === "") {
       setErrorMessage("Please confirm your password.");
       setErrorStatus(true);
