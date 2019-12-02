@@ -26,6 +26,18 @@ function Reset() {
       return;
     }
 
+    if (passwordInput.value.trim().length < 8) {
+      setErrorMessage("Password must not be less than 8 characters.");
+      setErrorStatus(true);
+      return;
+    }
+
+    if (/\s/.test(passwordInput.value.trim())) {
+      setErrorMessage("Password must not contain space.");
+      setErrorStatus(true);
+      return;
+    }
+
     if (confirmInput.value.trim() === "") {
       setErrorMessage("Please confirm your password.");
       setErrorStatus(true);
@@ -73,7 +85,7 @@ function Reset() {
             <div className="auth__form--form-input">
               <label>Enter New Password:</label>
               <div>
-                <input type="text" ref={password} />
+                <input type="password" ref={password} />
               </div>
             </div>
 
