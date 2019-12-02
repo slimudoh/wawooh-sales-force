@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 import Header from "../components/header";
 import Sidebar from "../components/sidebar";
 
 function Payment() {
+  const [modal, setModal] = useState(false);
+
+  const openModal = () => {
+    setModal(true);
+  };
+
+  const closeModal = () => {
+    setModal(false);
+  };
+
   return (
     <div>
       <Header />
@@ -17,7 +27,7 @@ function Payment() {
           <p>Payments</p>
           <div>
             <div className="payment__cards--btn">
-              <div>
+              <div onClick={openModal}>
                 <div className="payment__cards--btn-icon">
                   <div>
                     <img src={require("../assets/img/withdraw.svg")} alt="" />
@@ -81,6 +91,29 @@ function Payment() {
             </div>
           </div>
         </div>
+        {modal ? (
+          <div className="payment__modal">
+            <div>
+              <div className="payment__modal__content">
+                <p>
+                  <span onClick={closeModal}>X</span>
+                </p>
+                <span>Select an Account to receive payment.</span>
+                <div>
+                  <div>
+                    <span>FCMB</span>
+                    <p>0123456789</p>
+                  </div>
+
+                  <div>
+                    <span>FCMB</span>
+                    <p>0123456789</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );

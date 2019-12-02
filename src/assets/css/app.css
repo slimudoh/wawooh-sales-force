@@ -636,6 +636,7 @@ a {
 }
 
 .payment__cards {
+  max-width: 800px;
   margin-top: 30px;
 }
 
@@ -809,8 +810,8 @@ a {
 }
 
 .payment__body {
+  max-width: 800px;
   background-color: #fff;
-  /* padding: 20px; */
   margin-bottom: 100px;
   overflow: auto;
 }
@@ -861,6 +862,96 @@ a {
 
 .payment__body--table-status-fail {
   color: red;
+}
+
+.payment__modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  overflow: auto;
+}
+
+.payment__modal > div {
+  max-width: 500px;
+  padding: 0 10px;
+  margin: 50px auto;
+}
+
+.payment__modal__content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.payment__modal__content > p {
+  text-align: right;
+  margin: 0 0 10px 0;
+}
+
+.payment__modal__content > p > span {
+  font-size: 12px;
+  font-weight: 600;
+  color: red;
+  cursor: pointer;
+}
+
+.payment__modal__content > span {
+  font-size: 20px;
+  text-align: center;
+  margin: 10px 0 0 0;
+}
+
+.payment__modal__content > div {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  align-content: center;
+}
+
+@media (max-width: 500px) {
+  .payment__modal__content > div {
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+}
+
+.payment__modal__content > div > div {
+  width: 45%;
+  padding: 20px;
+  background-color: #60c0e8;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 500px) {
+  .payment__modal__content > div > div {
+    width: 100%;
+  }
+}
+
+.payment__modal__content > div > div > span {
+  font-size: 12px;
+  text-align: left;
+  color: #fff;
+  font-weight: 600;
+}
+
+.payment__modal__content > div > div > p {
+  font-size: 20px;
+  text-align: left;
+  font-weight: 600;
+  margin: 10px 0 0 0;
+  color: #fff;
 }
 
 .account__nav {
