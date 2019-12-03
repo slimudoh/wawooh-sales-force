@@ -4,6 +4,7 @@ import axios from "axios";
 import * as types from "../store/constant";
 import Error from "../components/error";
 import Success from "../components/success";
+import Pageloader from "../components/pageloader";
 
 function Signup() {
   let history = useHistory();
@@ -15,6 +16,11 @@ function Signup() {
   const [successMessage, setSuccessMessage] = useState(null);
   const [verifyCode, setVerifyCode] = useState(null);
 
+  const [pageOne, setPageOne] = useState(false);
+  const [pageTwo, setPageTwo] = useState(false);
+  const [pageloader, setPageloader] = useState(true);
+  const [pageError, setpageError] = useState(false);
+
   const [signupData, setSignupData] = useState({
     firstname: "",
     lastname: "",
@@ -25,24 +31,31 @@ function Signup() {
 
   useEffect(() => {
     axios
-      // .get(`types.SIGNUP_CODE${code}`)
-      .get(`${types.SIGNUP_CODE}`)
+      .get(`types.SIGNUP_CODE${code}`)
       .then(resp => {
         setVerifyCode(resp.data);
+
+        setPageOne(true);
+        setPageTwo(false);
+        setPageloader(false);
+        setpageError(false);
       })
       .catch(err => {
+        setPageOne(false);
+        setPageTwo(false);
+        setPageloader(false);
+        setpageError(true);
         console.log(JSON.stringify(err));
       });
   }, [verifyCode]);
-
-  const [pageOne, setPageOne] = useState(true);
-  const [pageTwo, setPageTwo] = useState(false);
 
   const openPageOne = e => {
     e.preventDefault();
 
     setPageOne(true);
     setPageTwo(false);
+    setPageloader(false);
+    setpageError(false);
 
     setErrorMessage(null);
     setErrorStatus(false);
@@ -53,6 +66,8 @@ function Signup() {
   const openPageTwo = () => {
     setPageOne(false);
     setPageTwo(true);
+    setPageloader(false);
+    setpageError(false);
   };
 
   const signup = e => {
@@ -126,18 +141,32 @@ function Signup() {
           &nbsp;&nbsp;&nbsp;force
         </div>
       </div>
+
       <div className="auth__form">
         <div className="auth__form--logo">
           <div>
             <img src={require("../assets/img/logo.svg")} alt="logo" />
           </div>
         </div>
+
         <div className="auth__form--heading">
           <p>
             Welcome to the <span>Sales Force</span>
           </p>
           <span>Kindly complete the form below</span>
         </div>
+
+        {pageloader ? (
+          <div className="pageLoader">
+            <Pageloader />
+          </div>
+        ) : null}
+
+        {pageError ? (
+          <div className="page-error">
+            We can not verify this link. Please contact admin.
+          </div>
+        ) : null}
 
         {pageOne ? (
           <div className="auth__form--form">
