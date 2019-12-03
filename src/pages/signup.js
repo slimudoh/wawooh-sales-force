@@ -7,13 +7,12 @@ import Pageloader from "../components/pageloader";
 
 function Signup() {
   let history = useHistory();
-  let { code } = useParams();
+  let { code, hashmail } = useParams();
 
   const [errorStatus, setErrorStatus] = useState(false);
   const [successStatus, setSuccessStatus] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  const [verifyCode, setVerifyCode] = useState(null);
 
   const [pageloader, setPageloader] = useState(false);
   const [pageError, setpageError] = useState(false);
@@ -28,14 +27,34 @@ function Signup() {
   });
 
   useEffect(() => {
+    console.log(code);
+    console.log(hashmail);
+
     axios
-      .get(`types.SIGNUP_CODE${code}`)
+      .get(`${process.env.REACT_APP_SIGNUP_PATH}${hashmail}/${code}`)
       .then(resp => {
-        setVerifyCode(resp.data);
+        const data = resp.data.data;
+        console.log(data);
+
+        if (data.agentCode) {
+          let signupdata = signupData;
+          signupdata.firstname = data.firstName;
+          signupdata.lastname = data.lastName;
+
+          setSignupData({
+            ...signupdata
+          });
+
+          setPageloader(false);
+          setpageError(false);
+          setForm(true);
+
+          return;
+        }
 
         setPageloader(false);
-        setpageError(false);
-        setForm(true);
+        setpageError(true);
+        setForm(false);
       })
       .catch(err => {
         setPageloader(false);
@@ -43,7 +62,7 @@ function Signup() {
         setForm(false);
         console.log(JSON.stringify(err));
       });
-  }, [verifyCode]);
+  }, [code, hashmail]);
 
   const signup = e => {
     e.preventDefault();
@@ -101,7 +120,7 @@ function Signup() {
 
     console.log(signupdata);
 
-    // history.push("/dashboard");
+    history.push("/dashboard");
   };
 
   const handleSignupData = e =>

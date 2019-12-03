@@ -24,7 +24,7 @@ function App() {
     <div>
       <Router>
         <Switch>
-          <Route exact path="/fashion/:code" component={Signup} />
+          <Route exact path="/fashion/:hashmail/:code" component={Signup} />
           <Route path="/signin" component={Signin} />
           <Route path="/change-password" component={Password} />
           <Route path="/new-password" component={Reset} />
