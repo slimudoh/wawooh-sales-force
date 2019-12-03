@@ -35,10 +35,12 @@ function Signup() {
 
         setPageloader(false);
         setpageError(false);
+        setForm(true);
       })
       .catch(err => {
         setPageloader(false);
         setpageError(true);
+        setForm(false);
         console.log(JSON.stringify(err));
       });
   }, [verifyCode]);
@@ -49,7 +51,7 @@ function Signup() {
     let signupdata = signupData;
 
     if (signupdata.phone === "") {
-      setErrorMessage("Please go back and enter your phone number.");
+      setErrorMessage("Please enter your phone number.");
       setErrorStatus(true);
       return;
     }
@@ -97,7 +99,9 @@ function Signup() {
 
     signupdata.password = signupData.password.trim();
 
-    history.push("/dashboard");
+    console.log(signupdata);
+
+    // history.push("/dashboard");
   };
 
   const handleSignupData = e =>
