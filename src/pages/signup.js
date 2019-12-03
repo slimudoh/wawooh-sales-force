@@ -100,8 +100,6 @@ function Signup() {
     signupdata.password = signupData.password.trim();
 
     console.log(signupdata);
-
-    // history.push("/dashboard");
   };
 
   const handleSignupData = e =>
