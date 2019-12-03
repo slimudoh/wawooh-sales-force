@@ -1,9 +1,43 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
+import * as types from "../store/constant";
 
 import Header from "../components/header";
 import Sidebar from "../components/sidebar";
 
 function Dashboard() {
+  // let history = useHistory();
+
+  // TODO: move to state manager
+  // useEffect(() => {
+  //   if (sessionStorage.getItem("token")) {
+  //     const token = sessionStorage.getItem("token");
+  //     const accessToken = `${token}`;
+
+  //     const requestHeaders = {
+  //       headers: {}
+  //     };
+
+  //     requestHeaders.headers.Authorization = accessToken;
+
+  //     console.log(accessToken);
+  //     console.log(types.DASHBOARD__PATH);
+  //     console.log(requestHeaders);
+
+  //     axios
+  //       .get(types.DASHBOARD__PATH, requestHeaders)
+  //       .then(resp => {
+  //         console.log(resp);
+  //       })
+  //       .catch(err => {
+  //         console.log(JSON.stringify(err));
+  //       });
+  //     return;
+  //   }
+  //   history.push("/signin");
+  // }, []);
+
   return (
     <div>
       <Header />
