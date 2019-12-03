@@ -1,27 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import axios from "axios";
+import * as types from "../store/constant";
 import Error from "../components/error";
 import Success from "../components/success";
 import Pageloader from "../components/pageloader";
+import Buttonloader from "../components/buttonloader";
 
 function Signup() {
   let history = useHistory();
-  let { code } = useParams();
+  let { code, hashmail } = useParams();
 
   const [errorStatus, setErrorStatus] = useState(false);
   const [successStatus, setSuccessStatus] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  const [verifyCode, setVerifyCode] = useState(null);
 
-  const [pageloader, setPageloader] = useState(false);
+  const [pageloader, setPageloader] = useState(true);
+  const [btnLoader, setBtnLoader] = useState(false);
   const [pageError, setpageError] = useState(false);
   const [form, setForm] = useState(false);
 
   const [signupData, setSignupData] = useState({
+    id: "",
     firstname: "",
     lastname: "",
+    email: "",
     phone: "",
     password: "",
     confirm: ""
@@ -29,21 +33,38 @@ function Signup() {
 
   useEffect(() => {
     axios
-      .get(`types.SIGNUP_CODE${code}`)
+      .get(`${types.GET__CODE__PATH}${hashmail}/${code}`)
       .then(resp => {
-        setVerifyCode(resp.data);
+        const data = resp.data.data;
 
-        setPageloader(false);
-        setpageError(false);
-        setForm(true);
-      })
-      .catch(err => {
+        if (data.agentCode) {
+          let signupdata = signupData;
+          signupdata.id = data.id;
+          signupdata.firstname = data.firstName;
+          signupdata.lastname = data.lastName;
+          signupdata.email = data.email;
+
+          setSignupData({
+            ...signupdata
+          });
+
+          setPageloader(false);
+          setpageError(false);
+          setForm(true);
+
+          return;
+        }
+
         setPageloader(false);
         setpageError(true);
         setForm(false);
-        console.log(JSON.stringify(err));
+      })
+      .catch(() => {
+        setPageloader(false);
+        setpageError(true);
+        setForm(false);
       });
-  }, [verifyCode]);
+  }, [code, hashmail]);
 
   const signup = e => {
     e.preventDefault();
@@ -99,9 +120,33 @@ function Signup() {
 
     signupdata.password = signupData.password.trim();
 
-    console.log(signupdata);
+    const requestData = {
+      id: signupdata.id,
+      phoneNo: signupdata.phone,
+      email: signupdata.email,
+      password: signupdata.password
+    };
 
-    // history.push("/dashboard");
+    setBtnLoader(true);
+
+    //TODO: move to state manager
+    axios
+      .post(types.SIGNUP__PATH, requestData)
+      .then(resp => {
+        setBtnLoader(false);
+
+        const token = resp.data.data.token;
+        sessionStorage.setItem("token", token);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+        if (sessionStorage.token) {
+          history.push("/dashboard");
+        }
+      })
+      .catch(err => {
+        console.log(JSON.stringify(err));
+        setBtnLoader(true);
+      });
   };
 
   const handleSignupData = e =>
@@ -149,31 +194,11 @@ function Signup() {
         {form ? (
           <div className="auth__form--form">
             <div>
-              <div className="auth__form--form-input">
-                <label>Firstname:</label>
-                <div>
-                  <input
-                    type="text"
-                    name="firstname"
-                    value={signupData.firstname}
-                    onChange={handleSignupData}
-                    readOnly
-                  />
-                </div>
+              <div className="auth__form--form-name">
+                {signupData.firstname} {signupData.lastname}
               </div>
 
-              <div className="auth__form--form-input">
-                <label>Lastname:</label>
-                <div>
-                  <input
-                    type="text"
-                    name="lastname"
-                    value={signupData.lastname}
-                    onChange={handleSignupData}
-                    readOnly
-                  />
-                </div>
-              </div>
+              <div className="auth__form--form-name">{signupData.email}</div>
 
               <div className="auth__form--form-input">
                 <label>Phone Number:</label>
@@ -220,9 +245,15 @@ function Signup() {
                 </div>
               </div>
 
-              <div className="auth__form--form-button">
-                <button onClick={signup}>Sign Up</button>
-              </div>
+              {btnLoader ? (
+                <div className="auth__form--form-loader">
+                  <Buttonloader />
+                </div>
+              ) : (
+                <div className="auth__form--form-button">
+                  <button onClick={signup}>Sign Up</button>
+                </div>
+              )}
 
               <div className="auth__form--form-msg">
                 Already registered, You can sign in{" "}

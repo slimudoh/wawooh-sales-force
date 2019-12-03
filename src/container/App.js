@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Redirect
 } from "react-router-dom";
+
 import "./../assets/css/reset.css";
 import "./../assets/css/app.css";
 
@@ -18,13 +19,13 @@ import Account from "../pages/account";
 import Notfound from "../pages/notfound";
 
 function App() {
-  const [auth, setAuth] = useState(false);
+  const [auth, setAuth] = useState(true);
 
   return (
     <div>
       <Router>
         <Switch>
-          <Route exact path="/fashion/:code" component={Signup} />
+          <Route exact path="/fashion/:hashmail/:code" component={Signup} />
           <Route path="/signin" component={Signin} />
           <Route path="/change-password" component={Password} />
           <Route path="/new-password" component={Reset} />
@@ -32,7 +33,6 @@ function App() {
           {auth ? <Route path="/payment" component={Payment} /> : null}
           {auth ? <Route path="/account" component={Account} /> : null}
           {auth ? <Route component={Notfound} /> : null}
-          <Route render={() => <Redirect to="/signin" />} />
         </Switch>
       </Router>
     </div>

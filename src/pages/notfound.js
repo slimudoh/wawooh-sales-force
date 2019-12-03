@@ -1,6 +1,6 @@
 import React from "react";
 
-function Notfound(props) {
+function Notfound() {
   return (
     <div className="notfound">
       <div>

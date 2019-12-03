@@ -1,6 +1,5 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
 import Error from "../components/error";
 import Success from "../components/success";
 
@@ -14,18 +13,6 @@ function Reset() {
   const [successStatus, setSuccessStatus] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-
-  useEffect(() => {
-    console.log(process.env.REACT_APP_DEV_PATH);
-    axios
-      .get(process.env.REACT_APP_DEV_PATH)
-      .then(resp => {
-        console.log(resp.data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }, []);
 
   const signin = e => {
     e.preventDefault();
