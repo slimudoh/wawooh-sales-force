@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory, useParams } from "react-router-dom";
 import axios from "axios";
-import * as types from "../store/constant";
 import Error from "../components/error";
 import Success from "../components/success";
 import Pageloader from "../components/pageloader";
@@ -16,10 +15,9 @@ function Signup() {
   const [successMessage, setSuccessMessage] = useState(null);
   const [verifyCode, setVerifyCode] = useState(null);
 
-  const [pageOne, setPageOne] = useState(false);
-  const [pageTwo, setPageTwo] = useState(false);
-  const [pageloader, setPageloader] = useState(true);
+  const [pageloader, setPageloader] = useState(false);
   const [pageError, setpageError] = useState(false);
+  const [form, setForm] = useState(false);
 
   const [signupData, setSignupData] = useState({
     firstname: "",
@@ -35,40 +33,15 @@ function Signup() {
       .then(resp => {
         setVerifyCode(resp.data);
 
-        setPageOne(true);
-        setPageTwo(false);
         setPageloader(false);
         setpageError(false);
       })
       .catch(err => {
-        setPageOne(false);
-        setPageTwo(false);
         setPageloader(false);
         setpageError(true);
         console.log(JSON.stringify(err));
       });
   }, [verifyCode]);
-
-  const openPageOne = e => {
-    e.preventDefault();
-
-    setPageOne(true);
-    setPageTwo(false);
-    setPageloader(false);
-    setpageError(false);
-
-    setErrorMessage(null);
-    setErrorStatus(false);
-    setSuccessMessage(null);
-    setSuccessStatus(false);
-  };
-
-  const openPageTwo = () => {
-    setPageOne(false);
-    setPageTwo(true);
-    setPageloader(false);
-    setpageError(false);
-  };
 
   const signup = e => {
     e.preventDefault();
@@ -164,11 +137,12 @@ function Signup() {
 
         {pageError ? (
           <div className="page-error">
-            We can not verify this link. Please contact admin.
+            Sorry we cannot load form because we can't verify this link. Please
+            contact the admin.
           </div>
         ) : null}
 
-        {pageOne ? (
+        {form ? (
           <div className="auth__form--form">
             <div>
               <div className="auth__form--form-input">
@@ -210,23 +184,6 @@ function Signup() {
                 </div>
               </div>
 
-              <div className="auth__form--form-msg">
-                Already registered, You can sign in{" "}
-                <span>
-                  <Link to="/signin">here</Link>
-                </span>
-              </div>
-
-              <div className="auth__form--form-button">
-                <button onClick={openPageTwo}>Next</button>
-              </div>
-            </div>
-          </div>
-        ) : null}
-
-        {pageTwo ? (
-          <div className="auth__form--form">
-            <div>
               <div className="auth__form--form-input">
                 <label>Password:</label>
                 <div>
@@ -260,8 +217,14 @@ function Signup() {
               </div>
 
               <div className="auth__form--form-button">
-                <div onClick={openPageOne}>Back</div>
-                <div onClick={signup}>Sign Up</div>
+                <button onClick={signup}>Sign Up</button>
+              </div>
+
+              <div className="auth__form--form-msg">
+                Already registered, You can sign in{" "}
+                <span>
+                  <Link to="/signin">here</Link>
+                </span>
               </div>
 
               <div className="auth__form--alert">
