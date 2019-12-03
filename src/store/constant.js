@@ -1,2 +1,5 @@
-// export const SIGNUP_CODE = process.env.REACT_APP_SIGNUP_PATH;
-export const SIGNUP_CODE = "https://jsonplaceholder.typicode.com/todos";
+export const TEST_ENDPOINT = "https://jsonplaceholder.typicode.com/todos";
+
+export const GET__CODE__PATH = `${process.env.REACT_APP_PATH}fashion/agent/salesforce/update_profile/`;
+export const SIGNUP__PATH = `${process.env.REACT_APP_PATH}fashion/agent/salesforce/signUp/`;
+export const DASHBOARD__PATH = `${process.env.REACT_APP_PATH}fashion/agent/salesforce/getdashboard/`;
