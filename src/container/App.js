@@ -1,10 +1,5 @@
-import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect
-} from "react-router-dom";
+import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import "./../assets/css/reset.css";
 import "./../assets/css/app.css";
@@ -38,7 +33,5 @@ function App() {
     </div>
   );
 }
-
-// http://192.168.10.35:8094/fashion/agent/salesforce/update_profile/"+agentCode
 
 export default App;
