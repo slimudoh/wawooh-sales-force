@@ -1086,6 +1086,7 @@ a {
   padding: 20px;
   background-color: #60c0e8;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 .account__cards-card > div > span {
@@ -1103,31 +1104,12 @@ a {
   color: #fff;
 }
 
-.account__cards-card > button {
-  width: 80px;
-  height: 30px;
-  margin: 10px auto 0 auto;
-  border-radius: 5px;
-  border: 0;
-  background: red;
-  color: #fff;
-  cursor: pointer;
-  outline: 0;
-}
-
 .account__cards--btn {
-  max-width: 400px;
   margin: 20px auto 0 auto;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: center;
-  justify-content: center;
-  align-content: center;
 }
 
 .account__cards--btn > div {
-  width: 33.33333333%;
+  width: 100px;
   height: 40px;
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 0, 0.5);
@@ -1141,13 +1123,8 @@ a {
   text-align: center;
 }
 
-.account__cards--btn > div:nth-child(2) {
-  margin: 0 10px;
-}
-
-.account__cards--btn > div:nth-child(3) {
-  color: red;
-  border: 1px solid red;
+.account__cards--alert {
+  margin-top: 10px;
 }
 
 .account__modal {
@@ -1171,6 +1148,12 @@ a {
   background: #fff;
   padding: 20px;
   border-radius: 5px;
+}
+
+@media (max-width: 700px) {
+  .account__modal__content {
+    padding: 10px;
+  }
 }
 
 .account__modal__content > p {
@@ -1200,6 +1183,12 @@ a {
   width: 80%;
 }
 
+@media (max-width: 400px) {
+  .account__modal__content--input {
+    width: 100%;
+  }
+}
+
 .account__modal__content--input > label {
   font-size: 12px;
   color: #000;
@@ -1223,6 +1212,12 @@ a {
   color: #fff;
 }
 
+@media (max-width: 400px) {
+  .account__modal__content--btn {
+    width: 100%;
+  }
+}
+
 .account__modal__content--btn > button {
   height: 40px;
   color: #fff;
@@ -1230,6 +1225,37 @@ a {
   border: 0;
   outline: 0;
   cursor: pointer;
+}
+
+.account__modal__content--div {
+  width: 80%;
+  margin: 20px auto 0 auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  align-content: center;
+}
+
+@media (max-width: 400px) {
+  .account__modal__content--div {
+    width: 100%;
+  }
+}
+
+.account__modal__content--div > div {
+  width: 45%;
+  height: 40px;
+  border: 1px solid #000;
+  background-color: #000;
+  color: #fff;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
 }
 
 .account__modal--alert {
