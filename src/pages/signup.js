@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Link, useHistory, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { connect } from "react-redux";
 import axios from "axios";
+
+import * as actionCreators from "../store/actions";
 import * as types from "../store/constant";
+
 import Error from "../components/error";
 import Success from "../components/success";
 import Pageloader from "../components/pageloader";
 import Buttonloader from "../components/buttonloader";
 
-function Signup() {
-  let history = useHistory();
+function Signup(props) {
   let { code, hashmail } = useParams();
 
   const [errorStatus, setErrorStatus] = useState(false);
@@ -64,7 +67,7 @@ function Signup() {
         setpageError(true);
         setForm(false);
       });
-  }, [code, hashmail]);
+  }, []);
 
   const signup = e => {
     e.preventDefault();
@@ -121,7 +124,7 @@ function Signup() {
 
     signupdata.password = signupData.password.trim();
 
-    const requestData = {
+    const registerData = {
       id: signupdata.id,
       phoneNo: signupdata.phone,
       email: signupdata.email,
@@ -130,24 +133,7 @@ function Signup() {
 
     setBtnLoader(true);
 
-    //TODO: move to state manager
-    axios
-      .post(types.SIGNUP__PATH, requestData)
-      .then(resp => {
-        setBtnLoader(false);
-
-        const token = resp.data.data.token;
-        sessionStorage.setItem("token", token);
-        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-
-        if (sessionStorage.token) {
-          history.push("/dashboard");
-        }
-      })
-      .catch(err => {
-        console.log(JSON.stringify(err));
-        setBtnLoader(true);
-      });
+    props.onRegister(registerData);
   };
 
   const handleSignupData = e =>
@@ -274,4 +260,17 @@ function Signup() {
     </div>
   );
 }
-export default Signup;
+
+const mapStateToProps = state => {
+  return {
+    isLoggedIn: state.isLoggedIn
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onRegister: payload => dispatch(actionCreators.register(payload))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);
