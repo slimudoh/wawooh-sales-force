@@ -70,15 +70,16 @@ function Signup() {
     e.preventDefault();
 
     let signupdata = signupData;
+    const onlyDigits = /^[0-9]*$/;
 
-    if (signupdata.phone === "") {
+    if (signupdata.phone.trim() === "") {
       setErrorMessage("Please enter your phone number.");
       setErrorStatus(true);
       return;
     }
 
-    if (!parseInt(signupdata.phone)) {
-      setErrorMessage("Phone number must be numbers.");
+    if (!onlyDigits.test(signupdata.phone.trim())) {
+      setErrorMessage("Phone number must be numbers without space..");
       setErrorStatus(true);
       return;
     }

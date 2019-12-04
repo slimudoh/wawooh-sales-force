@@ -14,7 +14,7 @@ function Header() {
   };
 
   const logout = () => {
-    history.push("/");
+    history.push("/signin");
   };
 
   return (

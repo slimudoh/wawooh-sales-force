@@ -5,7 +5,7 @@ function Sidebar() {
   let history = useHistory();
 
   const logout = () => {
-    history.push("/");
+    history.push("/signin");
   };
 
   return (

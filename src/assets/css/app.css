@@ -113,6 +113,8 @@
   overflow: auto;
   padding-top: 30px;
   padding-bottom: 50px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 @media (max-width: 600px) {
@@ -133,7 +135,6 @@
 
 .auth__form--logo {
   overflow: hidden;
-  padding-right: 10px;
 }
 
 .auth__form--logo > div {
@@ -176,7 +177,6 @@
 .auth__form--form > div {
   max-width: 400px;
   margin: auto;
-  padding: 0 10px;
 }
 
 .auth__form--form-name {
@@ -744,12 +744,13 @@ a {
 @media (max-width: 700px) {
   .payment__cards--btn {
     width: 100%;
+    padding-right: 0;
     border-right: 2px solid transparent;
   }
 }
 
 .payment__cards--btn > div {
-  max-width: 300px;
+  max-width: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -798,11 +799,6 @@ a {
   .payment__cards--card {
     padding-left: 0;
     width: 100%;
-  }
-}
-
-@media (max-width: 500px) {
-  .payment__cards--card {
     flex-direction: column;
     flex-wrap: wrap;
   }
@@ -822,13 +818,8 @@ a {
 
 @media (max-width: 700px) {
   .payment__cards--card > div {
-    padding: 0 10px 0 0;
-  }
-}
-
-@media (max-width: 500px) {
-  .payment__cards--card > div {
     width: 100%;
+    padding: 0;
   }
 }
 
@@ -1112,16 +1103,34 @@ a {
   color: #fff;
 }
 
+.account__cards-card > button {
+  width: 80px;
+  height: 30px;
+  margin: 10px auto 0 auto;
+  border-radius: 5px;
+  border: 0;
+  background: red;
+  color: #fff;
+  cursor: pointer;
+  outline: 0;
+}
+
 .account__cards--btn {
-  margin-top: 20px;
+  max-width: 400px;
+  margin: 20px auto 0 auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
 }
 
 .account__cards--btn > div {
-  width: 100px;
+  width: 33.33333333%;
   height: 40px;
   border-radius: 5px;
   border: 1px solid rgba(0, 0, 0, 0.5);
-  font-size: 14px;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -1129,6 +1138,16 @@ a {
   justify-content: center;
   align-content: center;
   cursor: pointer;
+  text-align: center;
+}
+
+.account__cards--btn > div:nth-child(2) {
+  margin: 0 10px;
+}
+
+.account__cards--btn > div:nth-child(3) {
+  color: red;
+  border: 1px solid red;
 }
 
 .account__modal {
@@ -1245,6 +1264,34 @@ a {
 }
 
 .notfound {
+  text-align: center;
+}
+
+.notfound__img {
+  width: 600px;
+  margin: auto;
+  padding: 20px 10 10px 10px;
+}
+
+.notfound__btn {
+  width: 100px;
+  margin: auto;
+  border-radius: 5px;
+  background-color: #000;
+  overflow: hidden;
+}
+
+.notfound__btn > a {
+  color: #fff;
+}
+
+.notfound__btn > a > div {
+  width: 100%;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid #000;
+  padding: 12px 0;
   text-align: center;
 }
 
