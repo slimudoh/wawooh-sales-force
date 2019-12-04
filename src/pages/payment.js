@@ -15,6 +15,10 @@ function Payment() {
     setModal(false);
   };
 
+  const selectedAcount = () => {
+    alert("account selected");
+  };
+
   return (
     <div>
       <Header />
@@ -100,12 +104,12 @@ function Payment() {
                 </p>
                 <span>Select an Account to receive payment.</span>
                 <div>
-                  <div>
+                  <div onClick={selectedAcount}>
                     <span>FCMB</span>
                     <p>0123456789</p>
                   </div>
 
-                  <div>
+                  <div onClick={selectedAcount}>
                     <span>FCMB</span>
                     <p>0123456789</p>
                   </div>

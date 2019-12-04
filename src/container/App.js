@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -25,7 +25,8 @@ function App() {
     <div>
       <Router>
         <Switch>
-          <Route exact path="/fashion/:hashmail/:code" component={Signup} />
+          <Route exact path="/" component={Signup} />
+          {/* <Route exact path="/fashion/:hashmail/:code" component={Signup} /> */}
           <Route path="/signin" component={Signin} />
           <Route path="/change-password" component={Password} />
           <Route path="/new-password" component={Reset} />
@@ -33,12 +34,11 @@ function App() {
           {auth ? <Route path="/payment" component={Payment} /> : null}
           {auth ? <Route path="/account" component={Account} /> : null}
           {auth ? <Route component={Notfound} /> : null}
+          {!auth ? <Route render={() => <Redirect to="/signin" />} /> : null}
         </Switch>
       </Router>
     </div>
   );
 }
-
-// http://192.168.10.35:8094/fashion/agent/salesforce/update_profile/"+agentCode
 
 export default App;

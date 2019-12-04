@@ -12,19 +12,41 @@ function Account() {
   const [successStatus, setSuccessStatus] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [showDeleteButton, setShowDeleteButton] = useState(false);
 
   const [accountData, setAccountData] = useState({
     accountName: "",
     accountNumber: "",
-    bankName: ""
+    bankName: "",
+    bvn: ""
   });
 
-  const openModal = () => {
+  const addAccount = () => {
+    setShowDeleteButton(false);
+
     setErrorMessage(null);
     setErrorStatus(false);
     setSuccessMessage(null);
     setSuccessStatus(false);
     setAccountModal(true);
+  };
+
+  const editAccount = () => {
+    setShowDeleteButton(false);
+
+    setErrorMessage(null);
+    setErrorStatus(false);
+    setSuccessMessage(null);
+    setSuccessStatus(false);
+    setAccountModal(true);
+  };
+
+  const deleteAccount = () => {
+    if (showDeleteButton) {
+      setShowDeleteButton(false);
+      return;
+    }
+    setShowDeleteButton(true);
   };
 
   const closeModal = () => {
@@ -45,27 +67,40 @@ function Account() {
     e.preventDefault();
 
     let accountdata = accountData;
+    const onlyDigits = /^[0-9]*$/;
 
-    if (accountdata.accountName === "") {
+    if (accountdata.accountName.trim() === "") {
       setErrorMessage("Please enter you account name.");
       setErrorStatus(true);
       return;
     }
 
-    if (accountdata.accountNumber === "") {
+    if (accountdata.accountNumber.trim() === "") {
       setErrorMessage("Please enter you account number.");
       setErrorStatus(true);
       return;
     }
 
-    if (!parseInt(accountdata.accountNumber)) {
-      setErrorMessage("Account number must be numbers.");
+    if (!onlyDigits.test(accountdata.accountNumber.trim())) {
+      setErrorMessage("Account number must be numbers without space.");
       setErrorStatus(true);
       return;
     }
 
-    if (accountdata.bankName === "") {
+    if (accountdata.bankName.trim() === "") {
       setErrorMessage("Please enter you bank name.");
+      setErrorStatus(true);
+      return;
+    }
+
+    if (accountdata.bvn.trim() === "") {
+      setErrorMessage("Please enter you BVN number.");
+      setErrorStatus(true);
+      return;
+    }
+
+    if (!onlyDigits.test(accountdata.bvn.trim())) {
+      setErrorMessage("BVN number must be numbers without space.");
       setErrorStatus(true);
       return;
     }
@@ -76,9 +111,11 @@ function Account() {
     setSuccessStatus(false);
 
     console.log(accountdata);
+
     accountdata.accountName = "";
     accountdata.accountNumber = "";
     accountdata.bankName = "";
+    accountdata.bvn = "";
 
     setAccountData({
       ...accountdata
@@ -103,22 +140,27 @@ function Account() {
                 <span>FCMB</span>
                 <p>1234567890</p>
               </div>
+              {showDeleteButton ? <button>Remove</button> : null}
             </div>
             <div className="account__cards-card">
               <div>
                 <span>FCMB</span>
                 <p>1234567890</p>
               </div>
+              {showDeleteButton ? <button>Remove</button> : null}
             </div>
             <div className="account__cards-card">
               <div>
                 <span>FCMB</span>
                 <p>1234567890</p>
               </div>
+              {showDeleteButton ? <button>Remove</button> : null}
             </div>
           </div>
           <div className="account__cards--btn">
-            <div onClick={openModal}>Add Account</div>
+            <div onClick={addAccount}>Add Account</div>
+            <div onClick={editAccount}>Edit Account</div>
+            <div onClick={deleteAccount}>Delete Account</div>
           </div>
         </div>
         {accountModal ? (
@@ -159,6 +201,17 @@ function Account() {
                       onChange={handleAccountData}
                     />
                   </div>
+
+                  <div className="account__modal__content--input">
+                    <label>BVN:</label>
+                    <input
+                      type="text"
+                      name="bvn"
+                      value={accountData.bvn}
+                      onChange={handleAccountData}
+                    />
+                  </div>
+
                   <div className="account__modal__content--btn">
                     <button onClick={createAccount}>Submit</button>
                   </div>
