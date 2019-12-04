@@ -12,7 +12,7 @@ function Account() {
   const [successStatus, setSuccessStatus] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  const [showAccountdetails, setShowAccountDetails] = useState(true);
+  const [showAccountdetails, setShowAccountDetails] = useState(false);
 
   const [accountData, setAccountData] = useState({
     accountName: "",

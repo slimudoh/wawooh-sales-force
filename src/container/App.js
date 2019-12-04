@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Redirect
 } from "react-router-dom";
+import { connect } from "react-redux";
 
 import "./../assets/css/reset.css";
 import "./../assets/css/app.css";
@@ -18,9 +19,7 @@ import Payment from "../pages/payment";
 import Account from "../pages/account";
 import Notfound from "../pages/notfound";
 
-function App() {
-  const [auth, setAuth] = useState(true);
-
+function App(props) {
   return (
     <div>
       <Router>
@@ -30,15 +29,29 @@ function App() {
           <Route path="/signin" component={Signin} />
           <Route path="/change-password" component={Password} />
           <Route path="/new-password" component={Reset} />
-          {auth ? <Route path="/dashboard" component={Dashboard} /> : null}
-          {auth ? <Route path="/payment" component={Payment} /> : null}
-          {auth ? <Route path="/account" component={Account} /> : null}
-          {auth ? <Route component={Notfound} /> : null}
-          {!auth ? <Route render={() => <Redirect to="/signin" />} /> : null}
+          {props.isLoggedIn ? (
+            <Route path="/dashboard" component={Dashboard} />
+          ) : null}
+          {props.isLoggedIn ? (
+            <Route path="/payment" component={Payment} />
+          ) : null}
+          {props.isLoggedIn ? (
+            <Route path="/account" component={Account} />
+          ) : null}
+          {props.isLoggedIn ? <Route component={Notfound} /> : null}
+          {!props.isLoggedIn ? (
+            <Route render={() => <Redirect to="/signin" />} />
+          ) : null}
         </Switch>
       </Router>
     </div>
   );
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    isLoggedIn: state.isLoggedIn
+  };
+};
+
+export default connect(mapStateToProps)(App);

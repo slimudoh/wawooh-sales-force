@@ -1,13 +1,18 @@
 import React, { useRef, useState } from "react";
-import { useHistory, Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+
+import * as types from "../store/actions";
+
 import Error from "../components/error";
 import Success from "../components/success";
+import Buttonloader from "../components/buttonloader";
 
-function Signin() {
-  let history = useHistory();
+function Signin(props) {
   const email = useRef(null);
   const password = useRef(null);
 
+  const [btnLoader, setBtnLoader] = useState(false);
   const [errorStatus, setErrorStatus] = useState(false);
   const [successStatus, setSuccessStatus] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -43,11 +48,19 @@ function Signin() {
     setSuccessMessage(null);
     setSuccessStatus(false);
 
-    console.log(emailInput.value);
-    console.log(passwordInput.value);
+    setBtnLoader(true);
 
-    history.push("/dashboard");
+    const loginDetails = {
+      email: emailInput.value,
+      password: passwordInput.value
+    };
+
+    props.onLogin(loginDetails);
   };
+
+  if (props.isLoggedIn) {
+    return <Redirect to="/dashboard" />;
+  }
 
   return (
     <div className="auth">
@@ -94,9 +107,15 @@ function Signin() {
               </div>
             </div>
 
-            <div className="auth__form--form-button">
-              <button onClick={signin}>Sign in</button>
-            </div>
+            {btnLoader ? (
+              <div className="auth__form--form-loader">
+                <Buttonloader />
+              </div>
+            ) : (
+              <div className="auth__form--form-button">
+                <button onClick={signin}>Sign in</button>
+              </div>
+            )}
 
             <div className="auth__form--form-msg">
               Not yet registered, check you email for a signup link.
@@ -113,4 +132,17 @@ function Signin() {
   );
 }
 
-export default Signin;
+const mapStateToProps = state => {
+  return {
+    token: state.token,
+    isLoggedIn: state.isLoggedIn
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onLogin: payload => dispatch(types.login(payload))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signin);
