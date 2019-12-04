@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, useHistory } from "react-router-dom";
+import { NavLink, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
 import * as types from "../store/actions";
 
 function Header(props) {
-  let history = useHistory();
   const [showMobile, setShowMobile] = useState(false);
 
   const showMobileNav = () => {
@@ -17,11 +16,13 @@ function Header(props) {
   };
 
   useEffect(() => {
-    if (!props.token) {
-      history.push("/signin");
-      return;
-    }
-  }, [props.token]);
+    const logout = () => {
+      if (!props.isLoggedIn) {
+        return <Redirect to="/signin" />;
+      }
+    };
+    logout();
+  }, [props.isLoggedIn]);
 
   return (
     <div className="header">
@@ -64,7 +65,7 @@ function Header(props) {
 
 const mapStateToProps = state => {
   return {
-    token: state.token
+    isLoggedIn: state.isLoggedIn
   };
 };
 
