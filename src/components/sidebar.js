@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { NavLink, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-import * as types from "../store/actions";
+import * as actionCreators from "../store/actions";
 
 function Sidebar(props) {
   useEffect(() => {
@@ -41,7 +41,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    onLogout: () => dispatch(types.logout())
+    onLogout: () => dispatch(actionCreators.logout())
   };
 };
 

@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-import * as types from "../store/actions";
+import * as actionCreators from "../store/actions";
 
 import Error from "../components/error";
 import Success from "../components/success";
@@ -134,14 +134,13 @@ function Signin(props) {
 
 const mapStateToProps = state => {
   return {
-    token: state.token,
     isLoggedIn: state.isLoggedIn
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onLogin: payload => dispatch(types.login(payload))
+    onLogin: payload => dispatch(actionCreators.login(payload))
   };
 };
 
