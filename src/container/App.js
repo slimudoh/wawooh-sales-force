@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Redirect
 } from "react-router-dom";
+import { connect } from "react-redux";
 
 import "./../assets/css/reset.css";
 import "./../assets/css/app.css";
@@ -18,8 +19,17 @@ import Payment from "../pages/payment";
 import Account from "../pages/account";
 import Notfound from "../pages/notfound";
 
-function App() {
-  const [auth, setAuth] = useState(true);
+function App(props) {
+  const [auth, setAuth] = useState(false);
+
+  useEffect(() => {
+    if (!props.token) {
+      setAuth(false);
+      return;
+    }
+
+    setAuth(true);
+  }, [props.token]);
 
   return (
     <div>
@@ -41,4 +51,10 @@ function App() {
   );
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    token: state.token
+  };
+};
+
+export default connect(mapStateToProps)(App);

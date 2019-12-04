@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavLink, useHistory } from "react-router-dom";
+import { connect } from "react-redux";
 
-function Sidebar() {
+import * as types from "../store/actions";
+
+function Sidebar(props) {
   let history = useHistory();
 
-  const logout = () => {
-    history.push("/signin");
-  };
+  useEffect(() => {
+    if (!props.token) {
+      history.push("/signin");
+      return;
+    }
+  }, [props.token]);
 
   return (
     <div className="sidebar">
@@ -22,9 +28,21 @@ function Sidebar() {
         <div>Account</div>
       </NavLink>
 
-      <div onClick={logout}>Log Out</div>
+      <div onClick={props.onLogout}>Log Out</div>
     </div>
   );
 }
 
-export default Sidebar;
+const mapStateToProps = state => {
+  return {
+    token: state.token
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onLogout: () => dispatch(types.logout())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
