@@ -1,32 +1,22 @@
-import React, { useRef, useState, useEffect } from "react";
-import { useHistory, Link } from "react-router-dom";
+import React, { useRef, useState } from "react";
+import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
 import * as types from "../store/actions";
 
 import Error from "../components/error";
 import Success from "../components/success";
+import Buttonloader from "../components/buttonloader";
 
 function Signin(props) {
-  let history = useHistory();
   const email = useRef(null);
   const password = useRef(null);
 
+  const [btnLoader, setBtnLoader] = useState(false);
   const [errorStatus, setErrorStatus] = useState(false);
   const [successStatus, setSuccessStatus] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-
-  // useEffect(() => {
-  //   const confirmToken = () => {
-  //     if (props.token) {
-  //       // history.push("/dashboard");
-  //       console.log(props.token);
-  //       return;
-  //     }
-  //   };
-  //   confirmToken();
-  // }, [props.token]);
 
   const signin = e => {
     e.preventDefault();
@@ -58,6 +48,8 @@ function Signin(props) {
     setSuccessMessage(null);
     setSuccessStatus(false);
 
+    setBtnLoader(true);
+
     const loginDetails = {
       email: emailInput.value,
       password: passwordInput.value
@@ -65,6 +57,10 @@ function Signin(props) {
 
     props.onLogin(loginDetails);
   };
+
+  if (props.isLoggedIn) {
+    return <Redirect to="/dashboard" />;
+  }
 
   return (
     <div className="auth">
@@ -111,9 +107,15 @@ function Signin(props) {
               </div>
             </div>
 
-            <div className="auth__form--form-button">
-              <button onClick={signin}>Sign in</button>
-            </div>
+            {btnLoader ? (
+              <div className="auth__form--form-loader">
+                <Buttonloader />
+              </div>
+            ) : (
+              <div className="auth__form--form-button">
+                <button onClick={signin}>Sign in</button>
+              </div>
+            )}
 
             <div className="auth__form--form-msg">
               Not yet registered, check you email for a signup link.
@@ -133,7 +135,7 @@ function Signin(props) {
 const mapStateToProps = state => {
   return {
     token: state.token,
-    isLoggedIn: false
+    isLoggedIn: state.isLoggedIn
   };
 };
 
