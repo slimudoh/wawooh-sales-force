@@ -12,7 +12,7 @@ function Account() {
   const [successStatus, setSuccessStatus] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  const [showDeleteButton, setShowDeleteButton] = useState(false);
+  const [showAccountdetails, setShowAccountDetails] = useState(true);
 
   const [accountData, setAccountData] = useState({
     accountName: "",
@@ -22,39 +22,41 @@ function Account() {
   });
 
   const addAccount = () => {
-    setShowDeleteButton(false);
-
     setErrorMessage(null);
     setErrorStatus(false);
     setSuccessMessage(null);
     setSuccessStatus(false);
     setAccountModal(true);
+    setShowAccountDetails(false);
   };
 
-  const editAccount = () => {
-    setShowDeleteButton(false);
-
-    setErrorMessage(null);
-    setErrorStatus(false);
-    setSuccessMessage(null);
-    setSuccessStatus(false);
-    setAccountModal(true);
-  };
-
-  const deleteAccount = () => {
-    if (showDeleteButton) {
-      setShowDeleteButton(false);
-      return;
-    }
-    setShowDeleteButton(true);
-  };
-
-  const closeModal = () => {
+  const showAccountDetails = () => {
     setErrorMessage(null);
     setErrorStatus(false);
     setSuccessMessage(null);
     setSuccessStatus(false);
     setAccountModal(false);
+    setShowAccountDetails(true);
+  };
+
+  const closeAccount = () => {
+    setErrorMessage(null);
+    setErrorStatus(false);
+    setSuccessMessage(null);
+    setSuccessStatus(false);
+    setAccountModal(false);
+    setAccountModal(false);
+    setShowAccountDetails(false);
+  };
+
+  const closeDetails = () => {
+    setErrorMessage(null);
+    setErrorStatus(false);
+    setSuccessMessage(null);
+    setSuccessStatus(false);
+    setAccountModal(false);
+    setAccountModal(false);
+    setShowAccountDetails(false);
   };
 
   const handleAccountData = e =>
@@ -136,31 +138,30 @@ function Account() {
           <p>Select Account</p>
           <div className="account__cards-list">
             <div className="account__cards-card">
-              <div>
+              <div onClick={showAccountDetails}>
                 <span>FCMB</span>
                 <p>1234567890</p>
               </div>
-              {showDeleteButton ? <button>Remove</button> : null}
             </div>
             <div className="account__cards-card">
-              <div>
+              <div onClick={showAccountDetails}>
                 <span>FCMB</span>
                 <p>1234567890</p>
               </div>
-              {showDeleteButton ? <button>Remove</button> : null}
             </div>
             <div className="account__cards-card">
-              <div>
+              <div onClick={showAccountDetails}>
                 <span>FCMB</span>
                 <p>1234567890</p>
               </div>
-              {showDeleteButton ? <button>Remove</button> : null}
             </div>
           </div>
           <div className="account__cards--btn">
             <div onClick={addAccount}>Add Account</div>
-            <div onClick={editAccount}>Edit Account</div>
-            <div onClick={deleteAccount}>Delete Account</div>
+          </div>
+          <div className="account__cards--alert">
+            <Error status={errorStatus} message={errorMessage} />
+            <Success status={successStatus} message={successMessage} />
           </div>
         </div>
         {accountModal ? (
@@ -168,7 +169,7 @@ function Account() {
             <div>
               <div className="account__modal__content">
                 <p>
-                  <span onClick={closeModal}>X</span>
+                  <span onClick={closeAccount}>X</span>
                 </p>
                 <div>
                   <p>Enter Account Details</p>
@@ -215,10 +216,63 @@ function Account() {
                   <div className="account__modal__content--btn">
                     <button onClick={createAccount}>Submit</button>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : null}
+        {showAccountdetails ? (
+          <div className="account__modal">
+            <div>
+              <div className="account__modal__content">
+                <p>
+                  <span onClick={closeDetails}>X</span>
+                </p>
+                <div>
+                  <p>Enter Account Details</p>
+                  <div className="account__modal__content--input">
+                    <label>Account Name:</label>
+                    <input
+                      type="text"
+                      name="accountName"
+                      value={accountData.accountName}
+                      onChange={handleAccountData}
+                    />
+                  </div>
 
-                  <div className="account__modal--alert">
-                    <Error status={errorStatus} message={errorMessage} />
-                    <Success status={successStatus} message={successMessage} />
+                  <div className="account__modal__content--input">
+                    <label>Account Number:</label>
+                    <input
+                      type="text"
+                      name="accountNumber"
+                      value={accountData.accountNumber}
+                      onChange={handleAccountData}
+                    />
+                  </div>
+
+                  <div className="account__modal__content--input">
+                    <label>Bank Name:</label>
+                    <input
+                      type="text"
+                      name="bankName"
+                      value={accountData.bankName}
+                      onChange={handleAccountData}
+                    />
+                  </div>
+
+                  <div className="account__modal__content--input">
+                    <label>BVN:</label>
+                    <input
+                      type="text"
+                      name="bvn"
+                      value={accountData.bvn}
+                      onChange={handleAccountData}
+                    />
+                  </div>
+
+                  <div className="account__modal__content--div">
+                    <div>Edit</div>
+                    <div>Delete</div>
                   </div>
                 </div>
               </div>
