@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -20,17 +20,6 @@ import Account from "../pages/account";
 import Notfound from "../pages/notfound";
 
 function App(props) {
-  const [auth, setAuth] = useState(false);
-
-  useEffect(() => {
-    if (!props.token) {
-      setAuth(false);
-      return;
-    }
-
-    setAuth(true);
-  }, [props.token]);
-
   return (
     <div>
       <Router>
@@ -40,11 +29,19 @@ function App(props) {
           <Route path="/signin" component={Signin} />
           <Route path="/change-password" component={Password} />
           <Route path="/new-password" component={Reset} />
-          {auth ? <Route path="/dashboard" component={Dashboard} /> : null}
-          {auth ? <Route path="/payment" component={Payment} /> : null}
-          {auth ? <Route path="/account" component={Account} /> : null}
-          {auth ? <Route component={Notfound} /> : null}
-          {!auth ? <Route render={() => <Redirect to="/signin" />} /> : null}
+          {props.isLoggedIn ? (
+            <Route path="/dashboard" component={Dashboard} />
+          ) : null}
+          {props.isLoggedIn ? (
+            <Route path="/payment" component={Payment} />
+          ) : null}
+          {props.isLoggedIn ? (
+            <Route path="/account" component={Account} />
+          ) : null}
+          {props.isLoggedIn ? <Route component={Notfound} /> : null}
+          {!props.isLoggedIn ? (
+            <Route render={() => <Redirect to="/signin" />} />
+          ) : null}
         </Switch>
       </Router>
     </div>
@@ -53,7 +50,7 @@ function App(props) {
 
 const mapStateToProps = state => {
   return {
-    token: state.token
+    isLoggedIn: state.isLoggedIn
   };
 };
 

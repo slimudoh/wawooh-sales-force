@@ -1,9 +1,13 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
+import { connect } from "react-redux";
+
+import * as types from "../store/actions";
+
 import Error from "../components/error";
 import Success from "../components/success";
 
-function Signin() {
+function Signin(props) {
   let history = useHistory();
   const email = useRef(null);
   const password = useRef(null);
@@ -12,6 +16,17 @@ function Signin() {
   const [successStatus, setSuccessStatus] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+
+  // useEffect(() => {
+  //   const confirmToken = () => {
+  //     if (props.token) {
+  //       // history.push("/dashboard");
+  //       console.log(props.token);
+  //       return;
+  //     }
+  //   };
+  //   confirmToken();
+  // }, [props.token]);
 
   const signin = e => {
     e.preventDefault();
@@ -43,10 +58,12 @@ function Signin() {
     setSuccessMessage(null);
     setSuccessStatus(false);
 
-    console.log(emailInput.value);
-    console.log(passwordInput.value);
+    const loginDetails = {
+      email: emailInput.value,
+      password: passwordInput.value
+    };
 
-    history.push("/dashboard");
+    props.onLogin(loginDetails);
   };
 
   return (
@@ -113,4 +130,17 @@ function Signin() {
   );
 }
 
-export default Signin;
+const mapStateToProps = state => {
+  return {
+    token: state.token,
+    isLoggedIn: false
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onLogin: payload => dispatch(types.login(payload))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signin);
