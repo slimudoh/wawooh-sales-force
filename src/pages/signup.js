@@ -35,6 +35,13 @@ function Signup(props) {
   });
 
   useEffect(() => {
+    if (!code || !hashmail) {
+      setPageloader(false);
+      setpageError(true);
+      setForm(false);
+      return;
+    }
+
     axios
       .get(`${types.GET__CODE__PATH}${hashmail}/${code}`)
       .then(resp => {
@@ -172,10 +179,18 @@ function Signup(props) {
         ) : null}
 
         {pageError ? (
-          <div className="page-error">
-            Sorry we cannot load form because we can't verify this link. Please
-            contact the admin.
-          </div>
+          <>
+            <div className="page-error">
+              Sorry we cannot load form because we can't verify this link.
+              Please contact the admin.
+            </div>
+            <div className="auth__form--form-msg">
+              Already registered, You can sign in{" "}
+              <span>
+                <Link to="/signin">here</Link>
+              </span>
+            </div>
+          </>
         ) : null}
 
         {form ? (
