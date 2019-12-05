@@ -968,7 +968,7 @@ a {
   margin: 10px 0 0 0;
 }
 
-.payment__modal__content > div {
+.payment__modal__content--card {
   margin-top: 20px;
   display: flex;
   flex-direction: row;
@@ -979,13 +979,13 @@ a {
 }
 
 @media (max-width: 500px) {
-  .payment__modal__content > div {
+  .payment__modal__content--card {
     flex-direction: column;
     flex-wrap: wrap;
   }
 }
 
-.payment__modal__content > div > div {
+.payment__modal__content--card > div {
   width: 45%;
   padding: 20px;
   background-color: #60c0e8;
@@ -996,23 +996,38 @@ a {
 }
 
 @media (max-width: 500px) {
-  .payment__modal__content > div > div {
+  .payment__modal__content--card > div {
     width: 100%;
   }
 }
 
-.payment__modal__content > div > div > span {
+.payment__modal__content--card > div > span {
   font-size: 12px;
   text-align: left;
   color: #fff;
   font-weight: 600;
 }
 
-.payment__modal__content > div > div > p {
+.payment__modal__content--card > div > p {
   font-size: 20px;
   text-align: left;
   font-weight: 600;
   margin: 10px 0 0 0;
+  color: #fff;
+}
+
+.payment__modal__content--btn {
+  margin-top: 10px;
+}
+
+.payment__modal__content--btn > div {
+  width: 100px;
+  margin: auto;
+  padding: 12px 0;
+  border-radius: 5px;
+  background-color: red;
+  cursor: pointer;
+  text-align: center;
   color: #fff;
 }
 
@@ -1209,9 +1224,14 @@ a {
 .account__modal__content--btn {
   margin: 20px auto 0 auto;
   width: 80%;
-  border: 1px solid #000;
-  background-color: #000;
+
   color: #fff;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: space-between;
+  align-content: center;
 }
 
 @media (max-width: 400px) {
@@ -1220,13 +1240,24 @@ a {
   }
 }
 
-.account__modal__content--btn > button {
+.account__modal__content--btn > button:nth-child(1) {
+  width: 45%;
   height: 40px;
   color: #fff;
-  background: transparent;
-  border: 0;
   outline: 0;
   cursor: pointer;
+  border: 1px solid red;
+  background-color: red;
+}
+
+.account__modal__content--btn > button:nth-child(2) {
+  width: 45%;
+  height: 40px;
+  color: #fff;
+  outline: 0;
+  cursor: pointer;
+  border: 1px solid #000;
+  background-color: #000;
 }
 
 .account__modal__content--div {
@@ -1246,8 +1277,23 @@ a {
   }
 }
 
+.account__modal__content--div > div:nth-child(1) {
+  width: 30%;
+  height: 40px;
+  border: 1px solid red;
+  background-color: red;
+  color: #fff;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  cursor: pointer;
+}
+
 .account__modal__content--div > div {
-  width: 45%;
+  width: 30%;
   height: 40px;
   border: 1px solid #000;
   background-color: #000;
@@ -1258,6 +1304,7 @@ a {
   align-items: center;
   justify-content: center;
   align-content: center;
+  cursor: pointer;
 }
 
 .account__modal--alert {
