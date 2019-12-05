@@ -7,6 +7,7 @@ import thunk from "redux-thunk";
 import App from "./container/App";
 import * as serviceWorker from "./serviceWorker";
 import reducer from "./store/reducer";
+import * as actionCreators from "./store/actions";
 
 const store = createStore(reducer, applyMiddleware(thunk));
 
@@ -18,28 +19,20 @@ if (token) {
   axios.defaults.headers.common["Authorization"] = null;
 }
 
-// axios.interceptors.response.use(
-//   undefined,
-//   err =>
-//     new Promise(() => {
-//       if (Object.keys(err).length !== 0) {
-//         if (
-//           err.response.status === 401 &&
-//           err.config &&
-//           !err.config.__isRetryRequest
-//         ) {
-//           store.dispatch(types.AUTH_LOGOUT);
-//           if (window.location.pathname !== "/login") {
-//             document.location.href = "/login";
-//           }
-//         }
-//         throw err;
-//       }
-//       if (window.location.pathname !== "/login") {
-//         document.location.href = "/login";
-//       }
-//     })
-// );
+axios.interceptors.response.use(
+  function(response) {
+    if (response.status === 401) {
+      store.dispatch(actionCreators.logout());
+      if (window.location.pathname !== "/login") {
+        document.location.href = "/login";
+      }
+    }
+    return response;
+  },
+  function(error) {
+    return Promise.reject(error);
+  }
+);
 
 ReactDOM.render(
   <Provider store={store}>

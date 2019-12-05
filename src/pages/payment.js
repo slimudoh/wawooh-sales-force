@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 
 import Header from "../components/header";
 import Sidebar from "../components/sidebar";
@@ -93,11 +92,24 @@ function Payment() {
                 </div>
               </div>
             </div>
+
+            <div className="payment__body--filter">
+              <div className="payment__body--filter-dropdown">
+                <select>
+                  <option value="all">All</option>
+                  <option value="successful">Successful</option>
+                  <option value="pending">Pending</option>
+                  <option value="failed">Failed</option>
+                </select>
+              </div>
+              <div className="payment__body--filter-control">
+                <div>&#8592;</div>
+                <div>&#8594;</div>
+              </div>
+            </div>
             <div className="payment__body">
+              <div className="payment__body--header">Previous Withdrawals</div>
               <div>
-                <div className="payment__body--header">
-                  Previous Withdrawals
-                </div>
                 <div className="payment__body--table">
                   <div>
                     <div className="payment__body--table-amount">
