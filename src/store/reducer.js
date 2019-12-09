@@ -3,14 +3,14 @@ import axios from "axios";
 
 const initialState = {
   token: sessionStorage.getItem("token") || null,
-  isLoggedIn: sessionStorage.getItem("token") ? true : false
+  isLoggedIn: sessionStorage.getItem("token") ? true : false,
+  currentEarnings: null,
+  totalRemittance: null
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case types.SET_TOKEN:
-      const token = sessionStorage.setItem("token", action.payload);
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       return {
         ...state,
         token: action.payload,
@@ -23,6 +23,16 @@ const reducer = (state = initialState, action) => {
         ...state,
         token: null,
         isLoggedIn: false
+      };
+    case types.SET_EARNING:
+      return {
+        ...state,
+        currentEarnings: action.payload
+      };
+    case types.GET_PAID:
+      return {
+        ...state,
+        totalRemittance: action.payload
       };
   }
 
