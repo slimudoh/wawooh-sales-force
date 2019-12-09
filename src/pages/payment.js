@@ -1,22 +1,31 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import * as types from "../store/constant";
+import { connect } from "react-redux";
 
 import Header from "../components/header";
 import Sidebar from "../components/sidebar";
 import Pageloader from "../components/pageloader";
 
-function Payment() {
+function Payment(props) {
   const [comp, setComp] = useState(true);
   const [modal, setModal] = useState(false);
+  const [accountDetails, setAccountDetails] = useState([]);
 
   useEffect(() => {
-    const setTime = setTimeout(() => {
-      setComp(false);
-    }, 2000);
+    axios
+      .get(types.GET__BANK__ACCOUNT__PATH)
+      .then(resp => {
+        setAccountDetails([...resp.data.data]);
 
-    return () => {
-      clearTimeout(setTime);
-    };
-  }, [comp]);
+        getPaymentHistory();
+
+        setComp(false);
+      })
+      .catch(err => {
+        console.log(JSON.stringify(err));
+      });
+  }, []);
 
   const openModal = () => {
     setModal(true);
@@ -26,8 +35,30 @@ function Payment() {
     setModal(false);
   };
 
-  const selectedAcount = () => {
-    alert("account selected");
+  const selectedAcount = val => {
+    axios
+      .get(`${types.MAKE__WITHDRAWAL}${val}`)
+      .then(resp => {
+        console.log(resp);
+        setModal(false);
+      })
+      .catch(err => {
+        console.log(JSON.stringify(err));
+      });
+  };
+
+  const getPaymentHistory = () => {
+    axios
+      .post(`${types.PREVIOUS_WITHDRAWALS}all`, {
+        init: 0,
+        size: 20
+      })
+      .then(resp => {
+        console.log(resp);
+      })
+      .catch(err => {
+        console.log(JSON.stringify(err));
+      });
   };
 
   return (
@@ -64,7 +95,7 @@ function Payment() {
                     <div>
                       <div className="payment__cards--card-text">
                         <span>Total Paid</span>
-                        <p>&#8358;2,000,000</p>
+                        <p>&#8358;{props.totalPaid}</p>
                       </div>
                       <div className="payment__cards--card-icon">
                         <div>
@@ -77,7 +108,7 @@ function Payment() {
                     <div>
                       <div className="payment__cards--card-text">
                         <span>Pending</span>
-                        <p>&#8358;2,000,000</p>
+                        <p>&#8358;{props.earning}</p>
                       </div>
                       <div className="payment__cards--card-icon">
                         <div>
@@ -99,13 +130,12 @@ function Payment() {
                   <option value="all">All</option>
                   <option value="successful">Successful</option>
                   <option value="pending">Pending</option>
-                  <option value="failed">Failed</option>
                 </select>
               </div>
-              <div className="payment__body--filter-control">
+              {/* <div className="payment__body--filter-control">
                 <div>&#8592;</div>
                 <div>&#8594;</div>
-              </div>
+              </div> */}
             </div>
             <div className="payment__body">
               <div className="payment__body--header">Previous Withdrawals</div>
@@ -132,21 +162,26 @@ function Payment() {
                 </div>
               </div>
             </div>
+            <div className="payment__body--filter-paginate">
+              <div>&#8592;</div>
+              <p>0</p>
+              <div>&#8594;</div>
+            </div>
             {modal ? (
               <div className="payment__modal">
                 <div>
                   <div className="payment__modal__content">
                     <span>Select an Account to receive payment.</span>
                     <div className="payment__modal__content--card">
-                      <div onClick={selectedAcount}>
-                        <span>FCMB</span>
-                        <p>0123456789</p>
-                      </div>
-
-                      <div onClick={selectedAcount}>
-                        <span>FCMB</span>
-                        <p>0123456789</p>
-                      </div>
+                      {accountDetails.map(account => (
+                        <div
+                          onClick={() => selectedAcount(account.id)}
+                          key={account.id}
+                        >
+                          <span>{account.bankName}</span>
+                          <p>{account.accountNumber}</p>
+                        </div>
+                      ))}
                     </div>
                     <div className="payment__modal__content--btn">
                       <div onClick={closeModal}>Cancel</div>
@@ -162,4 +197,11 @@ function Payment() {
   );
 }
 
-export default Payment;
+const mapStateToProps = state => {
+  return {
+    earning: state.currentEarnings,
+    totalPaid: state.totalRemittance
+  };
+};
+
+export default connect(mapStateToProps)(Payment);

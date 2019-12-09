@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import * as types from "../store/constant";
 
 import Header from "../components/header";
 import Sidebar from "../components/sidebar";
@@ -15,23 +17,36 @@ function Account() {
   const [successMessage, setSuccessMessage] = useState(null);
   const [accountModal, setAccountModal] = useState(false);
   const [showAccountdetails, setShowAccountDetails] = useState(false);
+  const [accountDetails, setAccountDetails] = useState([]);
+  const [singleAccount, setSingleAccount] = useState({
+    accountFirstName: "",
+    accountLastName: "",
+    accountNumber: "",
+    bankName: "",
+    bvn: "",
+    id: ""
+  });
 
   const [accountData, setAccountData] = useState({
-    accountName: "",
+    accountFirstName: "",
+    accountLastName: "",
     accountNumber: "",
     bankName: "",
     bvn: ""
   });
 
   useEffect(() => {
-    const setTime = setTimeout(() => {
-      setComp(false);
-    }, 2000);
+    axios
+      .get(types.GET__BANK__ACCOUNT__PATH)
+      .then(resp => {
+        setAccountDetails([...resp.data.data]);
 
-    return () => {
-      clearTimeout(setTime);
-    };
-  }, [comp]);
+        setComp(false);
+      })
+      .catch(err => {
+        console.log(JSON.stringify(err));
+      });
+  }, []);
 
   const addAccount = () => {
     setErrorMessage(null);
@@ -42,13 +57,33 @@ function Account() {
     setShowAccountDetails(false);
   };
 
-  const showAccountDetails = () => {
+  const showAccountDetails = val => {
     setErrorMessage(null);
     setErrorStatus(false);
     setSuccessMessage(null);
     setSuccessStatus(false);
     setAccountModal(false);
     setShowAccountDetails(true);
+
+    axios
+      .get(`${types.GET__SINGLE__BANK__ACCOUNT__PATH}${val}`)
+      .then(resp => {
+        const prevAccount = singleAccount;
+
+        prevAccount.accountFirstName = resp.data.data.firstName;
+        prevAccount.accountLastName = resp.data.data.lastName;
+        prevAccount.accountNumber = resp.data.data.accountNumber;
+        prevAccount.bankName = resp.data.data.bankName;
+        prevAccount.bvn = resp.data.data.bvn;
+        prevAccount.id = resp.data.data.id;
+
+        setSingleAccount({
+          ...prevAccount
+        });
+      })
+      .catch(err => {
+        console.log(JSON.stringify(err));
+      });
   };
 
   const closeAccount = () => {
@@ -56,7 +91,6 @@ function Account() {
     setErrorStatus(false);
     setSuccessMessage(null);
     setSuccessStatus(false);
-    setAccountModal(false);
     setAccountModal(false);
     setShowAccountDetails(false);
   };
@@ -67,13 +101,49 @@ function Account() {
     setSuccessMessage(null);
     setSuccessStatus(false);
     setAccountModal(false);
-    setAccountModal(false);
     setShowAccountDetails(false);
+  };
+
+  const editAccount = () => {
+    axios
+      .post(types.UPDATE__BANK__ACCOUNT__PATH, {
+        accountNumber: singleAccount.accountNumber,
+        bankName: singleAccount.bankName,
+        bvn: singleAccount.bvn,
+        id: singleAccount.id,
+        firstName: singleAccount.accountFirstName,
+        lastName: singleAccount.accountLastName
+      })
+      .then(resp => {
+        console.log(resp);
+        setShowAccountDetails(false);
+      })
+      .catch(err => {
+        console.log(JSON.stringify(err));
+      });
+  };
+
+  const deleteAccount = val => {
+    axios
+      .post(`${types.DELETE__BANK__ACCOUNT__PATH}${val}`)
+      .then(resp => {
+        console.log(resp);
+        setShowAccountDetails(false);
+      })
+      .catch(err => {
+        console.log(JSON.stringify(err));
+      });
   };
 
   const handleAccountData = e =>
     setAccountData({
       ...accountData,
+      [e.target.name]: e.target.value
+    });
+
+  const handleSingleAccountData = e =>
+    setSingleAccount({
+      ...singleAccount,
       [e.target.name]: e.target.value
     });
 
@@ -83,39 +153,52 @@ function Account() {
     let accountdata = accountData;
     const onlyDigits = /^[0-9]*$/;
 
-    if (accountdata.accountName.trim() === "") {
-      setErrorMessage("Please enter you account name.");
+    if (accountdata.accountFirstName.trim() === "") {
+      setErrorMessage("Please enter you account firstname name.");
       setErrorStatus(true);
+      setAccountModal(false);
+      return;
+    }
+
+    if (accountdata.accountLastName.trim() === "") {
+      setErrorMessage("Please enter you account last name.");
+      setErrorStatus(true);
+      setAccountModal(false);
       return;
     }
 
     if (accountdata.accountNumber.trim() === "") {
       setErrorMessage("Please enter you account number.");
       setErrorStatus(true);
+      setAccountModal(false);
       return;
     }
 
     if (!onlyDigits.test(accountdata.accountNumber.trim())) {
       setErrorMessage("Account number must be numbers without space.");
       setErrorStatus(true);
+      setAccountModal(false);
       return;
     }
 
     if (accountdata.bankName.trim() === "") {
       setErrorMessage("Please enter you bank name.");
       setErrorStatus(true);
+      setAccountModal(false);
       return;
     }
 
     if (accountdata.bvn.trim() === "") {
       setErrorMessage("Please enter you BVN number.");
       setErrorStatus(true);
+      setAccountModal(false);
       return;
     }
 
     if (!onlyDigits.test(accountdata.bvn.trim())) {
       setErrorMessage("BVN number must be numbers without space.");
       setErrorStatus(true);
+      setAccountModal(false);
       return;
     }
 
@@ -124,18 +207,32 @@ function Account() {
     setSuccessMessage(null);
     setSuccessStatus(false);
 
-    console.log(accountdata);
+    axios
+      .post(types.CREATE__BANK__ACCOUNT__PATH, {
+        accountNumber: accountdata.accountNumber,
+        bankName: accountdata.bankName,
+        bvn: accountdata.bvn,
+        firstName: accountdata.accountFirstName,
+        lastName: accountdata.accountLastName
+      })
+      .then(resp => {
+        console.log(resp);
 
-    accountdata.accountName = "";
-    accountdata.accountNumber = "";
-    accountdata.bankName = "";
-    accountdata.bvn = "";
+        accountdata.accountFirstName = "";
+        accountdata.accountLastName = "";
+        accountdata.accountNumber = "";
+        accountdata.bankName = "";
+        accountdata.bvn = "";
 
-    setAccountData({
-      ...accountdata
-    });
+        setAccountData({
+          ...accountdata
+        });
 
-    setAccountModal(false);
+        setAccountModal(false);
+      })
+      .catch(err => {
+        console.log(JSON.stringify(err));
+      });
   };
 
   return (
@@ -155,24 +252,17 @@ function Account() {
             <div className="account__cards">
               <p>Select Account</p>
               <div className="account__cards-list">
-                <div className="account__cards-card">
-                  <div onClick={showAccountDetails}>
-                    <span>FCMB</span>
-                    <p>1234567890</p>
+                {accountDetails.map(account => (
+                  <div className="account__cards-card" key={account.id}>
+                    <div onClick={() => showAccountDetails(account.id)}>
+                      <span>{account.bankName}</span>
+                      <div>
+                        {account.firstName} {account.lastName}
+                      </div>
+                      <p>{account.accountNumber}</p>
+                    </div>
                   </div>
-                </div>
-                <div className="account__cards-card">
-                  <div onClick={showAccountDetails}>
-                    <span>FCMB</span>
-                    <p>1234567890</p>
-                  </div>
-                </div>
-                <div className="account__cards-card">
-                  <div onClick={showAccountDetails}>
-                    <span>FCMB</span>
-                    <p>1234567890</p>
-                  </div>
-                </div>
+                ))}
               </div>
               <div className="account__cards--btn">
                 <div onClick={addAccount}>Add Account</div>
@@ -189,11 +279,21 @@ function Account() {
                     <div>
                       <p>Enter Account Details</p>
                       <div className="account__modal__content--input">
-                        <label>Account Name:</label>
+                        <label>Account First Name:</label>
                         <input
                           type="text"
-                          name="accountName"
-                          value={accountData.accountName}
+                          name="accountFirstName"
+                          value={accountData.accountFirstName}
+                          onChange={handleAccountData}
+                        />
+                      </div>
+
+                      <div className="account__modal__content--input">
+                        <label>Account Last Name:</label>
+                        <input
+                          type="text"
+                          name="accountLastName"
+                          value={accountData.accountLastName}
                           onChange={handleAccountData}
                         />
                       </div>
@@ -210,12 +310,40 @@ function Account() {
 
                       <div className="account__modal__content--input">
                         <label>Bank Name:</label>
-                        <input
-                          type="text"
+
+                        <select
                           name="bankName"
                           value={accountData.bankName}
                           onChange={handleAccountData}
-                        />
+                        >
+                          <option value="access">Access Bank</option>
+                          <option value="citibank">Citibank</option>
+                          <option value="diamond">Diamond Bank</option>
+                          <option value="ecobank">Ecobank</option>
+                          <option value="fidelity">Fidelity Bank</option>
+                          <option value="firstbank">First Bank</option>
+                          <option value="fcmb">
+                            First City Monument Bank (FCMB)
+                          </option>
+                          <option value="gtb">Guaranty Trust Bank (GTB)</option>
+                          <option value="heritage">Heritage Bank</option>
+                          <option value="keystone">Keystone Bank</option>
+                          <option value="polaris">Polaris Bank</option>
+                          <option value="providus">Providus Bank</option>
+                          <option value="stanbic">Stanbic IBTC Bank</option>
+                          <option value="standard">
+                            Standard Chartered Bank
+                          </option>
+                          <option value="sterling">Sterling Bank</option>
+                          <option value="suntrust">Suntrust Bank</option>
+                          <option value="union">Union Bank</option>
+                          <option value="uba">
+                            United Bank for Africa (UBA)
+                          </option>
+                          <option value="unity">Unity Bank</option>
+                          <option value="wema">Wema Bank</option>
+                          <option value="zenith">Zenith Bank</option>
+                        </select>
                       </div>
 
                       <div className="account__modal__content--input">
@@ -244,12 +372,22 @@ function Account() {
                     <div>
                       <p>Enter Account Details</p>
                       <div className="account__modal__content--input">
-                        <label>Account Name:</label>
+                        <label>Account First Name:</label>
                         <input
                           type="text"
-                          name="accountName"
-                          value={accountData.accountName}
-                          onChange={handleAccountData}
+                          name="accountFirstName"
+                          value={singleAccount.accountFirstName}
+                          onChange={handleSingleAccountData}
+                        />
+                      </div>
+
+                      <div className="account__modal__content--input">
+                        <label>Account Last Name:</label>
+                        <input
+                          type="text"
+                          name="accountLastName"
+                          value={singleAccount.accountLastName}
+                          onChange={handleSingleAccountData}
                         />
                       </div>
 
@@ -258,19 +396,47 @@ function Account() {
                         <input
                           type="text"
                           name="accountNumber"
-                          value={accountData.accountNumber}
-                          onChange={handleAccountData}
+                          value={singleAccount.accountNumber}
+                          onChange={handleSingleAccountData}
                         />
                       </div>
 
                       <div className="account__modal__content--input">
                         <label>Bank Name:</label>
-                        <input
-                          type="text"
+
+                        <select
                           name="bankName"
-                          value={accountData.bankName}
-                          onChange={handleAccountData}
-                        />
+                          value={singleAccount.bankName}
+                          onChange={handleSingleAccountData}
+                        >
+                          <option value="access">Access Bank</option>
+                          <option value="citibank">Citibank</option>
+                          <option value="diamond">Diamond Bank</option>
+                          <option value="ecobank">Ecobank</option>
+                          <option value="fidelity">Fidelity Bank</option>
+                          <option value="firstbank">First Bank</option>
+                          <option value="fcmb">
+                            First City Monument Bank (FCMB)
+                          </option>
+                          <option value="gtb">Guaranty Trust Bank (GTB)</option>
+                          <option value="heritage">Heritage Bank</option>
+                          <option value="keystone">Keystone Bank</option>
+                          <option value="polaris">Polaris Bank</option>
+                          <option value="providus">Providus Bank</option>
+                          <option value="stanbic">Stanbic IBTC Bank</option>
+                          <option value="standard">
+                            Standard Chartered Bank
+                          </option>
+                          <option value="sterling">Sterling Bank</option>
+                          <option value="suntrust">Suntrust Bank</option>
+                          <option value="union">Union Bank</option>
+                          <option value="uba">
+                            United Bank for Africa (UBA)
+                          </option>
+                          <option value="unity">Unity Bank</option>
+                          <option value="wema">Wema Bank</option>
+                          <option value="zenith">Zenith Bank</option>
+                        </select>
                       </div>
 
                       <div className="account__modal__content--input">
@@ -278,15 +444,17 @@ function Account() {
                         <input
                           type="text"
                           name="bvn"
-                          value={accountData.bvn}
-                          onChange={handleAccountData}
+                          value={singleAccount.bvn}
+                          onChange={handleSingleAccountData}
                         />
                       </div>
 
                       <div className="account__modal__content--div">
                         <div onClick={closeDetails}>Cancel</div>
-                        <div>Edit</div>
-                        <div>Delete</div>
+                        <div onClick={editAccount}>Save Edit</div>
+                        <div onClick={() => deleteAccount(singleAccount.id)}>
+                          Delete Account
+                        </div>
                       </div>
                     </div>
                   </div>

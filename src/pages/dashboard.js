@@ -1,49 +1,33 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+import * as types from "../store/constant";
+import { connect } from "react-redux";
+
+import * as actionCreators from "../store/actions";
 
 import Header from "../components/header";
 import Sidebar from "../components/sidebar";
 import Pageloader from "../components/pageloader";
 
-function Dashboard() {
+function Dashboard(props) {
   const [comp, setComp] = useState(true);
-
-  // useEffect(() => {
-  //   if (sessionStorage.getItem("token")) {
-  //     const token = sessionStorage.getItem("token");
-  //     const accessToken = `${token}`;
-
-  //     const requestHeaders = {
-  //       headers: {}
-  //     };
-
-  //     requestHeaders.headers.Authorization = accessToken;
-
-  //     console.log(accessToken);
-  //     console.log(types.DASHBOARD__PATH);
-  //     console.log(requestHeaders);
-
-  //     axios
-  //       .get(types.DASHBOARD__PATH, requestHeaders)
-  //       .then(resp => {
-  //         console.log(resp);
-  //       })
-  //       .catch(err => {
-  //         console.log(JSON.stringify(err));
-  //       });
-  //     return;
-  //   }
-  //   history.push("/signin");
-  // }, []);
+  const [dashboardDetails, setDashboardDetails] = useState(null);
 
   useEffect(() => {
-    const setTime = setTimeout(() => {
-      setComp(false);
-    }, 2000);
+    axios
+      .get(types.DASHBOARD__PATH)
+      .then(resp => {
+        setDashboardDetails(resp.data.data);
 
-    return () => {
-      clearTimeout(setTime);
-    };
-  }, [comp]);
+        props.setCurrentEarning(resp.data.data.currentEarnings);
+        props.setPaid(resp.data.data.currentEarnings);
+
+        setComp(false);
+      })
+      .catch(err => {
+        console.log(JSON.stringify(err));
+      });
+  }, []);
 
   return (
     <div>
@@ -58,14 +42,16 @@ function Dashboard() {
           <>
             <div className="dash__intro">
               <span>Hello</span>
-              <p>Kayode Alapomeji</p>
+              <p>
+                {dashboardDetails.firstName} {dashboardDetails.lastName}
+              </p>
             </div>
             <div className="dash__cards">
               <div>
                 <div className="dash__cards--white">
                   <div className="dash__cards--text">
                     <span>Orders</span>
-                    <p>200</p>
+                    <p> {dashboardDetails.totalOrders}</p>
                   </div>
                   <div className="dash__cards--img">
                     <div className="dash__cards--img-cart">
@@ -78,7 +64,7 @@ function Dashboard() {
                 <div className="dash__cards--white">
                   <div className="dash__cards--text">
                     <span>Sales</span>
-                    <p>&#8358;2,000,000</p>
+                    <p>&#8358;{dashboardDetails.totalSales}</p>
                   </div>
                   <div className="dash__cards--img">
                     <div className="dash__cards--img-chart">
@@ -91,7 +77,7 @@ function Dashboard() {
                 <div className="dash__cards--purple">
                   <div className="dash__cards--text">
                     <span>Earnings</span>
-                    <p>&#8358;2,000,000</p>
+                    <p>&#8358;{dashboardDetails.currentEarnings}</p>
                   </div>
                   <div className="dash__cards--img">
                     <div className="dash__cards--img-money">
@@ -111,8 +97,8 @@ function Dashboard() {
                   lectus, egestas in varius et,
                 </p>
                 <div>
-                  <span>Coupon Code</span>
-                  <p>123jhkn</p>
+                  <span>Agent Code</span>
+                  <p>{dashboardDetails.agentCode}</p>
                 </div>
               </div>
             </div>
@@ -123,4 +109,12 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+const mapDispatchToProps = dispatch => {
+  return {
+    setCurrentEarning: payload =>
+      dispatch(actionCreators.getCurrentEarning(payload)),
+    setPaid: payload => dispatch(actionCreators.getTotalPaid(payload))
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Dashboard);

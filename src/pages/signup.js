@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import axios from "axios";
 
@@ -148,6 +148,10 @@ function Signup(props) {
       ...signupData,
       [e.target.name]: e.target.value
     });
+
+  if (props.isLoggedIn) {
+    return <Redirect to="/dashboard" />;
+  }
 
   return (
     <div className="auth">
