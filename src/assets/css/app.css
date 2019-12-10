@@ -997,6 +997,12 @@ a {
   border-top: 1px solid #ddd;
 }
 
+.payment__body--table-data {
+  font-size: 14px;
+  text-align: left;
+  width: 25%;
+}
+
 .payment__body--table-amount {
   font-size: 14px;
   text-align: left;
