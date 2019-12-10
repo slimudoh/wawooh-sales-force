@@ -262,24 +262,22 @@ function Payment(props) {
               <div className="payment__body--header">Previous Withdrawals</div>
               <div>
                 <div className="payment__body--table">
-                  <div>
-                    <div className="payment__body--table-amount">
-                      &#8358;2,000,000
+                  {history.map(item => (
+                    <div key="item.id">
+                      <div className="payment__body--table-data">
+                        &#8358;{item.amount}
+                      </div>
+                      <div className="payment__body--table-data">
+                        {item.openDate}
+                      </div>
+                      <div className="payment__body--table-data">
+                        {item.closeDate}
+                      </div>
+                      <div className="payment__body--table-data payment__body--table-status-success">
+                        {item.status}
+                      </div>
                     </div>
-                    <div className="payment__body--table-date">12-nov-2019</div>
-                    <div className="payment__body--table-status payment__body--table-status-success">
-                      Successful
-                    </div>
-                  </div>
-                  <div>
-                    <div className="payment__body--table-amount">
-                      &#8358;2,000,000
-                    </div>
-                    <div className="payment__body--table-date">12-nov-2019</div>
-                    <div className="payment__body--table-status payment__body--table-status-fail ">
-                      Failed
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
