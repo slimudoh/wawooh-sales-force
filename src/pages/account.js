@@ -51,13 +51,13 @@ function Account() {
     axios
       .get(types.GET__BANK__ACCOUNT__PATH)
       .then(resp => {
-        console.log(resp);
-
         setAccountDetails([...resp.data.data]);
         setComp(false);
       })
-      .catch(err => {
-        console.log(err);
+      .catch(() => {
+        setComp(true);
+        setErrorMessage("An error occured. Please try again later.");
+        setErrorStatus(true);
       });
   };
 
@@ -140,7 +140,7 @@ function Account() {
         firstName: accountdata.accountFirstName,
         lastName: accountdata.accountLastName
       })
-      .then(() => {
+      .then(resp => {
         accountdata.accountFirstName = "";
         accountdata.accountLastName = "";
         accountdata.accountNumber = "";
@@ -151,10 +151,16 @@ function Account() {
           ...accountdata
         });
 
+        if (resp.data.message.toLowerCase() !== "operation failure") {
+          getAccount();
+          setComp(true);
+        } else {
+          setErrorMessage(resp.data.data);
+          setErrorStatus(true);
+        }
+
         setAccountModal(false);
         setSaveAccount(true);
-        getAccount();
-        setComp(true);
       })
       .catch(() => {
         setErrorMessage("An error occured. Please try again later.");
@@ -282,11 +288,16 @@ function Account() {
         firstName: singleaccount.accountFirstName,
         lastName: singleaccount.accountLastName
       })
-      .then(() => {
+      .then(resp => {
+        if (resp.data.message.toLowerCase() !== "operation failure") {
+          getAccount();
+          setComp(true);
+        } else {
+          setErrorMessage(resp.data.data);
+          setErrorStatus(true);
+        }
         setShowAccountDetails(false);
         setUpdateAccount(true);
-        getAccount();
-        setComp(true);
       })
       .catch(() => {
         getAccount();
@@ -317,11 +328,17 @@ function Account() {
     setDelAccount(false);
     axios
       .post(`${types.DELETE__BANK__ACCOUNT__PATH}${val}`)
-      .then(() => {
+      .then(resp => {
+        if (resp.data.message.toLowerCase() !== "operation failure") {
+          getAccount();
+          setComp(true);
+        } else {
+          setErrorMessage(resp.data.data);
+          setErrorStatus(true);
+        }
+
         setShowAccountDetails(false);
         setDelAccount(true);
-        getAccount();
-        setComp(true);
       })
       .catch(() => {
         getAccount();

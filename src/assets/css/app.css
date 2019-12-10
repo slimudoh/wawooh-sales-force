@@ -1064,7 +1064,7 @@ a {
   margin-top: 20px;
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   align-content: center;
@@ -1164,7 +1164,7 @@ a {
 .account__cards-list {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: flex-start;
   align-content: center;

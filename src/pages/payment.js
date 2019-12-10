@@ -7,10 +7,16 @@ import { connect } from "react-redux";
 import Header from "../components/header";
 import Sidebar from "../components/sidebar";
 import Pageloader from "../components/pageloader";
+import Error from "../components/error";
+import Success from "../components/success";
 
 function Payment(props) {
   const [comp, setComp] = useState(true);
   const [modal, setModal] = useState(false);
+  const [errorStatus, setErrorStatus] = useState(false);
+  const [successStatus, setSuccessStatus] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const [accountDetails, setAccountDetails] = useState([]);
   const [init, setInit] = useState(0);
   const [status, setStatus] = useState("all");
@@ -38,6 +44,11 @@ function Payment(props) {
   }, []);
 
   const getBankAccount = () => {
+    setErrorMessage(null);
+    setErrorStatus(false);
+    setSuccessMessage(null);
+    setSuccessStatus(false);
+
     axios
       .get(types.GET__BANK__ACCOUNT__PATH)
       .then(resp => {
@@ -46,7 +57,9 @@ function Payment(props) {
         getPaymentHistory(status);
       })
       .catch(err => {
-        console.log(JSON.stringify(err));
+        console.log(err);
+        setErrorMessage("Server error. Please try again later.");
+        setErrorStatus(true);
       });
   };
 
@@ -59,15 +72,19 @@ function Payment(props) {
   };
 
   const selectedAcount = val => {
-    axios
-      .get(`${types.MAKE__WITHDRAWAL}${val}`)
-      .then(resp => {
-        console.log(resp);
-        setModal(false);
-      })
-      .catch(err => {
-        console.log(JSON.stringify(err));
-      });
+    if (parseInt(props.user.currentEarnings, 10) < 5000) {
+      axios
+        .get(`${types.MAKE__WITHDRAWAL}${val}`)
+        .then(resp => {
+          console.log(resp);
+          setModal(false);
+        })
+        .catch(err => {
+          console.log(JSON.stringify(err));
+        });
+
+      return;
+    }
   };
 
   const updatedUserDetails = () => {
@@ -268,6 +285,13 @@ function Payment(props) {
                     </div>
                     <div className="payment__modal__content--btn">
                       <div onClick={closeModal}>Cancel</div>
+                    </div>
+                    <div className="account__cards--alert">
+                      <Error status={errorStatus} message={errorMessage} />
+                      <Success
+                        status={successStatus}
+                        message={successMessage}
+                      />
                     </div>
                   </div>
                 </div>
