@@ -1,31 +1,169 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import * as types from "../store/constant";
+import * as actionCreators from "../store/actions";
 import { connect } from "react-redux";
 
 import Header from "../components/header";
 import Sidebar from "../components/sidebar";
 import Pageloader from "../components/pageloader";
+import Error from "../components/error";
+import Success from "../components/success";
 
 function Payment(props) {
   const [comp, setComp] = useState(true);
   const [modal, setModal] = useState(false);
+  const [errorStatus, setErrorStatus] = useState(false);
+  const [successStatus, setSuccessStatus] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const [accountDetails, setAccountDetails] = useState([]);
+  const [init, setInit] = useState(0);
+  const [status, setStatus] = useState("all");
+  const [history, setHistory] = useState([]);
 
   useEffect(() => {
+    getUserDetails();
+  }, []);
+
+  const getUserDetails = () => {
+    if (props.user === null) {
+      axios
+        .get(types.DASHBOARD__PATH)
+        .then(resp => {
+          props.getAllUserDetails(resp.data.data);
+          setComp(false);
+          getBankAccount();
+        })
+        .catch(err => {
+          console.log(err);
+          setErrorMessage("Server error. Please try again later.");
+          setErrorStatus(true);
+        });
+    } else {
+      getBankAccount();
+    }
+  };
+
+  const getBankAccount = () => {
+    setErrorMessage(null);
+    setErrorStatus(false);
+    setSuccessMessage(null);
+    setSuccessStatus(false);
+
     axios
       .get(types.GET__BANK__ACCOUNT__PATH)
       .then(resp => {
         setAccountDetails([...resp.data.data]);
-
-        getPaymentHistory();
-
-        setComp(false);
+        const status = "all";
+        getPaymentHistory(status);
       })
       .catch(err => {
-        console.log(JSON.stringify(err));
+        console.log(err);
+        setErrorMessage("Server error. Please try again later.");
+        setErrorStatus(true);
       });
-  }, []);
+  };
+
+  const selectedAcount = val => {
+    setErrorMessage(null);
+    setErrorStatus(false);
+
+    if (parseInt(props.user.currentEarnings, 10) < 5000) {
+      axios
+        .get(`${types.MAKE__WITHDRAWAL}${val}`)
+        .then(resp => {
+          console.log(resp);
+          setModal(false);
+        })
+        .catch(err => {
+          console.log(err);
+          setErrorMessage("Server error. Please try again later.");
+          setErrorStatus(true);
+          setModal(false);
+        });
+
+      return;
+    } else {
+      setErrorMessage(
+        "Earning must be up to NGN5000 before it can be withdrawn."
+      );
+      setErrorStatus(true);
+      setModal(false);
+    }
+  };
+
+  const updatedUserDetails = () => {
+    setErrorMessage(null);
+    setErrorStatus(false);
+
+    axios
+      .get(types.DASHBOARD__PATH)
+      .then(resp => {
+        props.getAllUserDetails(resp.data.data);
+      })
+      .catch(err => {
+        console.log(err);
+        setErrorMessage("Server error. Please try again later.");
+        setErrorStatus(true);
+      });
+  };
+
+  const getPaymentHistory = val => {
+    setStatus(val);
+    axios
+      .post(`${types.PREVIOUS_WITHDRAWALS}${val}`, {
+        init: init,
+        size: 50
+      })
+      .then(resp => {
+        setComp(false);
+        updatedUserDetails();
+
+        const newHistory = history;
+        setHistory([...newHistory, ...resp.data.data]);
+        console.log(history);
+      })
+      .catch(err => {
+        console.log(err);
+        setErrorMessage("Can't get previous payments. Please try again later.");
+        setErrorStatus(true);
+      });
+  };
+
+  const prevPage = () => {
+    console.log(init);
+    console.log(status);
+    setInit(init - 1);
+    console.log(init);
+
+    // axios
+    //   .post(`${types.PREVIOUS_WITHDRAWALS}${val}`, {
+    //     init: init,
+    //     size: 50
+    //   })
+    //   .then(resp => {
+    //     setComp(false);
+    //     updatedUserDetails();
+
+    //     const newHistory = history;
+    //     setHistory([...newHistory, ...resp.data.data]);
+
+    //     // setHistory(history => history.concat(resp.data.data));
+
+    //     console.log(history);
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //   });
+  };
+
+  const nextPage = () => {
+    console.log(init);
+    console.log(status);
+    setInit(init + 1);
+    console.log(init);
+  };
 
   const openModal = () => {
     setModal(true);
@@ -33,32 +171,6 @@ function Payment(props) {
 
   const closeModal = () => {
     setModal(false);
-  };
-
-  const selectedAcount = val => {
-    axios
-      .get(`${types.MAKE__WITHDRAWAL}${val}`)
-      .then(resp => {
-        console.log(resp);
-        setModal(false);
-      })
-      .catch(err => {
-        console.log(JSON.stringify(err));
-      });
-  };
-
-  const getPaymentHistory = () => {
-    axios
-      .post(`${types.PREVIOUS_WITHDRAWALS}all`, {
-        init: 0,
-        size: 20
-      })
-      .then(resp => {
-        console.log(resp);
-      })
-      .catch(err => {
-        console.log(JSON.stringify(err));
-      });
   };
 
   return (
@@ -95,7 +207,12 @@ function Payment(props) {
                     <div>
                       <div className="payment__cards--card-text">
                         <span>Total Paid</span>
-                        <p>&#8358;{props.totalPaid}</p>
+                        <p>
+                          &#8358;
+                          {props.user.totalRemittance
+                            .toString()
+                            .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00"}
+                        </p>
                       </div>
                       <div className="payment__cards--card-icon">
                         <div>
@@ -108,7 +225,12 @@ function Payment(props) {
                     <div>
                       <div className="payment__cards--card-text">
                         <span>Pending</span>
-                        <p>&#8358;{props.earning}</p>
+                        <p>
+                          &#8358;
+                          {props.user.currentEarnings
+                            .toString()
+                            .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00"}
+                        </p>
                       </div>
                       <div className="payment__cards--card-icon">
                         <div>
@@ -123,19 +245,18 @@ function Payment(props) {
                 </div>
               </div>
             </div>
-
+            <div className="payment__alert">
+              <Error status={errorStatus} message={errorMessage} />
+              <Success status={successStatus} message={successMessage} />
+            </div>
             <div className="payment__body--filter">
               <div className="payment__body--filter-dropdown">
-                <select>
+                <select onChange={e => getPaymentHistory(e.target.value)}>
                   <option value="all">All</option>
-                  <option value="successful">Successful</option>
+                  <option value="success">Successful</option>
                   <option value="pending">Pending</option>
                 </select>
               </div>
-              {/* <div className="payment__body--filter-control">
-                <div>&#8592;</div>
-                <div>&#8594;</div>
-              </div> */}
             </div>
             <div className="payment__body">
               <div className="payment__body--header">Previous Withdrawals</div>
@@ -163,9 +284,9 @@ function Payment(props) {
               </div>
             </div>
             <div className="payment__body--filter-paginate">
-              <div>&#8592;</div>
-              <p>0</p>
-              <div>&#8594;</div>
+              <div onClick={prevPage}>&#8592;</div>
+              <p>{init}</p>
+              <div onClick={nextPage}>&#8594;</div>
             </div>
             {modal ? (
               <div className="payment__modal">
@@ -199,9 +320,14 @@ function Payment(props) {
 
 const mapStateToProps = state => {
   return {
-    earning: state.currentEarnings,
-    totalPaid: state.totalRemittance
+    user: state.userDetails
   };
 };
 
-export default connect(mapStateToProps)(Payment);
+const mapDispatchToProps = dispatch => {
+  return {
+    getAllUserDetails: payload => dispatch(actionCreators.userDetails(payload))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Payment);

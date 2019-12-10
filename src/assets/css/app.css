@@ -20,6 +20,28 @@
   animation: spin 0.3s infinite linear;
 }
 
+.backloader {
+  width: 30px;
+  height: 30px;
+  border-left: 5px solid #000;
+  border-top: 5px solid #000;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-radius: 60px;
+  animation: spin 0.3s infinite linear;
+}
+
+.whiteloader {
+  width: 30px;
+  height: 30px;
+  border-left: 5px solid #fff;
+  border-top: 5px solid #fff;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-radius: 60px;
+  animation: spin 0.3s infinite linear;
+}
+
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -690,6 +712,11 @@ a {
   text-transform: uppercase;
 }
 
+.dash__alert {
+  margin-top: 10px;
+  max-width: 500px;
+}
+
 .payment__nav {
   font-size: 12px;
   text-align: left;
@@ -1042,7 +1069,7 @@ a {
   margin-top: 20px;
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   align-content: center;
@@ -1101,6 +1128,11 @@ a {
   color: #fff;
 }
 
+.payment__alert {
+  margin-top: 10px;
+  max-width: 500px;
+}
+
 .account__nav {
   font-size: 12px;
   text-align: left;
@@ -1142,7 +1174,7 @@ a {
 .account__cards-list {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: flex-start;
   align-content: center;
@@ -1300,6 +1332,7 @@ a {
   border: 1px solid rgba(0, 0, 0, 0.4);
   outline: 0;
   padding: 0 5px;
+  border-radius: 5px;
 }
 
 .account__modal__content--input > select {
@@ -1309,12 +1342,12 @@ a {
   border: 1px solid rgba(0, 0, 0, 0.4);
   outline: 0;
   padding: 0 5px;
+  border-radius: 5px;
 }
 
 .account__modal__content--btn {
   margin: 20px auto 0 auto;
   width: 80%;
-
   color: #fff;
   display: flex;
   flex-direction: row;
@@ -1333,11 +1366,12 @@ a {
 .account__modal__content--btn > button:nth-child(1) {
   width: 45%;
   height: 40px;
-  color: #fff;
+  color: #000;
   outline: 0;
   cursor: pointer;
   border: 1px solid red;
-  background-color: red;
+  border-radius: 5px;
+  background-color: transparent;
 }
 
 .account__modal__content--btn > button:nth-child(2) {
@@ -1348,6 +1382,16 @@ a {
   cursor: pointer;
   border: 1px solid #000;
   background-color: #000;
+  border-radius: 5px;
+}
+
+.account__modal__content--btn > button:nth-child(2) > div {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
 }
 
 .account__modal__content--div {
@@ -1371,8 +1415,9 @@ a {
   width: 30%;
   height: 40px;
   border: 1px solid red;
-  background-color: red;
-  color: #fff;
+  background-color: transparent;
+  border-radius: 5px;
+  color: #000;
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -1388,6 +1433,17 @@ a {
   border: 1px solid #000;
   background-color: #000;
   color: #fff;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.account__modal__content--div > div > div {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;

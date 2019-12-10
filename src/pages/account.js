@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import * as types from "../store/constant";
@@ -8,8 +8,12 @@ import Sidebar from "../components/sidebar";
 import Error from "../components/error";
 import Success from "../components/success";
 import Pageloader from "../components/pageloader";
+import Whiteloader from "../components/whiteloader";
 
 function Account() {
+  const accountHolder = useRef(null);
+  const singleAcountHolder = useRef(null);
+
   const [comp, setComp] = useState(true);
   const [errorStatus, setErrorStatus] = useState(false);
   const [successStatus, setSuccessStatus] = useState(false);
@@ -32,29 +36,140 @@ function Account() {
     accountLastName: "",
     accountNumber: "",
     bankName: "",
-    bvn: ""
+    bvn: "",
+    id: ""
   });
+  const [saveAccount, setSaveAccount] = useState(true);
+  const [updateAccount, setUpdateAccount] = useState(true);
+  const [delAccount, setDelAccount] = useState(true);
 
   useEffect(() => {
+    getAccount();
+  }, []);
+
+  const getAccount = () => {
     axios
       .get(types.GET__BANK__ACCOUNT__PATH)
       .then(resp => {
         setAccountDetails([...resp.data.data]);
-
-        setComp(false);
+        setComp(true);
       })
       .catch(err => {
-        console.log(JSON.stringify(err));
+        console.log(err);
+        setComp(true);
+        setErrorMessage("An error occured. Please try again later.");
+        setErrorStatus(true);
       });
-  }, []);
+  };
 
-  const addAccount = () => {
+  const createAccount = e => {
+    e.preventDefault();
+
+    let accountdata = accountData;
+    const onlyDigits = /^[0-9]*$/;
+
+    if (accountdata.accountFirstName.trim() === "") {
+      setErrorMessage("Please enter your account firstname name.");
+      setErrorStatus(true);
+      setAccountModal(false);
+      return;
+    }
+
+    if (accountdata.accountLastName.trim() === "") {
+      setErrorMessage("Please enter your account last name.");
+      setErrorStatus(true);
+      setAccountModal(false);
+      return;
+    }
+
+    if (accountdata.accountNumber.trim() === "") {
+      setErrorMessage("Please enter you account number.");
+      setErrorStatus(true);
+      setAccountModal(false);
+      return;
+    }
+
+    if (accountdata.accountNumber.trim().length < 10) {
+      setErrorMessage("Account number must not be less than ten digits.");
+      setErrorStatus(true);
+      setAccountModal(false);
+      return;
+    }
+
+    if (!onlyDigits.test(accountdata.accountNumber.trim())) {
+      setErrorMessage("Account number must be numbers without space.");
+      setErrorStatus(true);
+      setAccountModal(false);
+      return;
+    }
+
+    if (accountHolder.current.value === "") {
+      setErrorMessage("Please enter you bank name.");
+      setErrorStatus(true);
+      setAccountModal(false);
+      return;
+    }
+
+    accountdata.accountNumber = accountHolder.current.value;
+
+    if (accountdata.bvn.trim() === "") {
+      setErrorMessage("Please enter you BVN number.");
+      setErrorStatus(true);
+      setAccountModal(false);
+      return;
+    }
+
+    if (!onlyDigits.test(accountdata.bvn.trim())) {
+      setErrorMessage("BVN number must be numbers without space.");
+      setErrorStatus(true);
+      setAccountModal(false);
+      return;
+    }
+
+    setSaveAccount(false);
+
     setErrorMessage(null);
     setErrorStatus(false);
     setSuccessMessage(null);
     setSuccessStatus(false);
-    setAccountModal(true);
-    setShowAccountDetails(false);
+
+    axios
+      .post(types.CREATE__BANK__ACCOUNT__PATH, {
+        accountNumber: accountdata.accountNumber,
+        bankName: accountdata.bankName,
+        bvn: accountdata.bvn,
+        firstName: accountdata.accountFirstName,
+        lastName: accountdata.accountLastName
+      })
+      .then(resp => {
+        accountdata.accountFirstName = "";
+        accountdata.accountLastName = "";
+        accountdata.accountNumber = "";
+        accountdata.bankName = "";
+        accountdata.bvn = "";
+
+        setAccountData({
+          ...accountdata
+        });
+
+        if (resp.data.message.toLowerCase() !== "operation failure") {
+          getAccount();
+          setComp(true);
+        } else {
+          setErrorMessage(resp.data.data);
+          setErrorStatus(true);
+        }
+
+        setAccountModal(false);
+        setSaveAccount(true);
+      })
+      .catch(() => {
+        setErrorMessage("An error occured. Please try again later.");
+        setErrorStatus(true);
+        setAccountModal(false);
+        getAccount();
+        setComp(true);
+      });
   };
 
   const showAccountDetails = val => {
@@ -64,6 +179,15 @@ function Account() {
     setSuccessStatus(false);
     setAccountModal(false);
     setShowAccountDetails(true);
+
+    setSingleAccount({
+      accountFirstName: "",
+      accountLastName: "",
+      accountNumber: "",
+      bankName: "",
+      bvn: "",
+      id: ""
+    });
 
     axios
       .get(`${types.GET__SINGLE__BANK__ACCOUNT__PATH}${val}`)
@@ -81,8 +205,132 @@ function Account() {
           ...prevAccount
         });
       })
-      .catch(err => {
-        console.log(JSON.stringify(err));
+      .catch(() => {
+        setErrorMessage("An error occured. Please try again later.");
+        setErrorStatus(true);
+        setShowAccountDetails(false);
+      });
+  };
+
+  const editAccount = () => {
+    let singleaccount = singleAccount;
+    const onlyDigits = /^[0-9]*$/;
+
+    if (singleaccount.accountFirstName.trim() === "") {
+      setErrorMessage("Please enter you account firstname name.");
+      setErrorStatus(true);
+      setShowAccountDetails(false);
+      return;
+    }
+
+    if (singleaccount.accountLastName.trim() === "") {
+      setErrorMessage("Please enter you account last name.");
+      setErrorStatus(true);
+      setShowAccountDetails(false);
+      return;
+    }
+
+    if (singleaccount.accountNumber.trim() === "") {
+      setErrorMessage("Please enter you account number.");
+      setErrorStatus(true);
+      setShowAccountDetails(false);
+      return;
+    }
+
+    if (singleaccount.accountNumber.trim().length < 10) {
+      setErrorMessage("Account number must not be less than ten digits.");
+      setErrorStatus(true);
+      setShowAccountDetails(false);
+      return;
+    }
+
+    if (!onlyDigits.test(singleaccount.accountNumber.trim())) {
+      setErrorMessage("Account number must be numbers without space.");
+      setErrorStatus(true);
+      setShowAccountDetails(false);
+      return;
+    }
+
+    if (singleAcountHolder.current.value === "") {
+      setErrorMessage("Please enter you bank name.");
+      setErrorStatus(true);
+      setShowAccountDetails(false);
+      return;
+    }
+    singleAccount.accountNumber = singleAcountHolder.current.value;
+
+    if (singleaccount.bvn.trim() === "") {
+      setErrorMessage("Please enter you BVN number.");
+      setErrorStatus(true);
+      setShowAccountDetails(false);
+      return;
+    }
+
+    if (!onlyDigits.test(singleaccount.bvn.trim())) {
+      setErrorMessage("BVN number must be numbers without space.");
+      setErrorStatus(true);
+      setShowAccountDetails(false);
+      return;
+    }
+
+    setUpdateAccount(false);
+
+    setErrorMessage(null);
+    setErrorStatus(false);
+    setSuccessMessage(null);
+    setSuccessStatus(false);
+
+    axios
+      .post(types.UPDATE__BANK__ACCOUNT__PATH, {
+        accountNumber: singleaccount.accountNumber,
+        bankName: singleaccount.bankName,
+        bvn: singleaccount.bvn,
+        id: singleaccount.id,
+        firstName: singleaccount.accountFirstName,
+        lastName: singleaccount.accountLastName
+      })
+      .then(resp => {
+        if (resp.data.message.toLowerCase() !== "operation failure") {
+          getAccount();
+          setComp(true);
+        } else {
+          setErrorMessage(resp.data.data);
+          setErrorStatus(true);
+        }
+        setShowAccountDetails(false);
+        setUpdateAccount(true);
+      })
+      .catch(() => {
+        getAccount();
+        setComp(true);
+        setErrorMessage("An error occured. Please try again later.");
+        setErrorStatus(true);
+        setShowAccountDetails(false);
+      });
+  };
+
+  const deleteAccount = val => {
+    setDelAccount(false);
+    axios
+      .post(`${types.DELETE__BANK__ACCOUNT__PATH}${val}`)
+      .then(resp => {
+        if (resp.data.message.toLowerCase() !== "operation failure") {
+          getAccount();
+          setComp(true);
+        } else {
+          setErrorMessage(resp.data.data);
+          setErrorStatus(true);
+        }
+
+        setShowAccountDetails(false);
+        setDelAccount(true);
+      })
+      .catch(() => {
+        getAccount();
+        setComp(true);
+        setErrorMessage("An error occured. Please try again later.");
+        setErrorStatus(true);
+        setShowAccountDetails(false);
       });
   };
 
@@ -96,43 +344,19 @@ function Account() {
   };
 
   const closeDetails = () => {
-    setErrorMessage(null);
-    setErrorStatus(false);
     setSuccessMessage(null);
     setSuccessStatus(false);
     setAccountModal(false);
     setShowAccountDetails(false);
   };
 
-  const editAccount = () => {
-    axios
-      .post(types.UPDATE__BANK__ACCOUNT__PATH, {
-        accountNumber: singleAccount.accountNumber,
-        bankName: singleAccount.bankName,
-        bvn: singleAccount.bvn,
-        id: singleAccount.id,
-        firstName: singleAccount.accountFirstName,
-        lastName: singleAccount.accountLastName
-      })
-      .then(resp => {
-        console.log(resp);
-        setShowAccountDetails(false);
-      })
-      .catch(err => {
-        console.log(JSON.stringify(err));
-      });
-  };
-
-  const deleteAccount = val => {
-    axios
-      .post(`${types.DELETE__BANK__ACCOUNT__PATH}${val}`)
-      .then(resp => {
-        console.log(resp);
-        setShowAccountDetails(false);
-      })
-      .catch(err => {
-        console.log(JSON.stringify(err));
-      });
+  const addAccount = () => {
+    setErrorMessage(null);
+    setErrorStatus(false);
+    setSuccessMessage(null);
+    setSuccessStatus(false);
+    setAccountModal(true);
+    setShowAccountDetails(false);
   };
 
   const handleAccountData = e =>
@@ -146,94 +370,6 @@ function Account() {
       ...singleAccount,
       [e.target.name]: e.target.value
     });
-
-  const createAccount = e => {
-    e.preventDefault();
-
-    let accountdata = accountData;
-    const onlyDigits = /^[0-9]*$/;
-
-    if (accountdata.accountFirstName.trim() === "") {
-      setErrorMessage("Please enter you account firstname name.");
-      setErrorStatus(true);
-      setAccountModal(false);
-      return;
-    }
-
-    if (accountdata.accountLastName.trim() === "") {
-      setErrorMessage("Please enter you account last name.");
-      setErrorStatus(true);
-      setAccountModal(false);
-      return;
-    }
-
-    if (accountdata.accountNumber.trim() === "") {
-      setErrorMessage("Please enter you account number.");
-      setErrorStatus(true);
-      setAccountModal(false);
-      return;
-    }
-
-    if (!onlyDigits.test(accountdata.accountNumber.trim())) {
-      setErrorMessage("Account number must be numbers without space.");
-      setErrorStatus(true);
-      setAccountModal(false);
-      return;
-    }
-
-    if (accountdata.bankName.trim() === "") {
-      setErrorMessage("Please enter you bank name.");
-      setErrorStatus(true);
-      setAccountModal(false);
-      return;
-    }
-
-    if (accountdata.bvn.trim() === "") {
-      setErrorMessage("Please enter you BVN number.");
-      setErrorStatus(true);
-      setAccountModal(false);
-      return;
-    }
-
-    if (!onlyDigits.test(accountdata.bvn.trim())) {
-      setErrorMessage("BVN number must be numbers without space.");
-      setErrorStatus(true);
-      setAccountModal(false);
-      return;
-    }
-
-    setErrorMessage(null);
-    setErrorStatus(false);
-    setSuccessMessage(null);
-    setSuccessStatus(false);
-
-    axios
-      .post(types.CREATE__BANK__ACCOUNT__PATH, {
-        accountNumber: accountdata.accountNumber,
-        bankName: accountdata.bankName,
-        bvn: accountdata.bvn,
-        firstName: accountdata.accountFirstName,
-        lastName: accountdata.accountLastName
-      })
-      .then(resp => {
-        console.log(resp);
-
-        accountdata.accountFirstName = "";
-        accountdata.accountLastName = "";
-        accountdata.accountNumber = "";
-        accountdata.bankName = "";
-        accountdata.bvn = "";
-
-        setAccountData({
-          ...accountdata
-        });
-
-        setAccountModal(false);
-      })
-      .catch(err => {
-        console.log(JSON.stringify(err));
-      });
-  };
 
   return (
     <div>
@@ -311,11 +447,7 @@ function Account() {
                       <div className="account__modal__content--input">
                         <label>Bank Name:</label>
 
-                        <select
-                          name="bankName"
-                          value={accountData.bankName}
-                          onChange={handleAccountData}
-                        >
+                        <select name="bankName" ref={accountHolder}>
                           <option value="access">Access Bank</option>
                           <option value="citibank">Citibank</option>
                           <option value="diamond">Diamond Bank</option>
@@ -358,7 +490,13 @@ function Account() {
 
                       <div className="account__modal__content--btn">
                         <button onClick={closeAccount}>Cancel</button>
-                        <button onClick={createAccount}>Submit</button>
+                        {saveAccount ? (
+                          <button onClick={createAccount}>Submit</button>
+                        ) : (
+                          <button disabled>
+                            <Whiteloader />
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -404,11 +542,7 @@ function Account() {
                       <div className="account__modal__content--input">
                         <label>Bank Name:</label>
 
-                        <select
-                          name="bankName"
-                          value={singleAccount.bankName}
-                          onChange={handleSingleAccountData}
-                        >
+                        <select ref={singleAcountHolder}>
                           <option value="access">Access Bank</option>
                           <option value="citibank">Citibank</option>
                           <option value="diamond">Diamond Bank</option>
@@ -451,10 +585,23 @@ function Account() {
 
                       <div className="account__modal__content--div">
                         <div onClick={closeDetails}>Cancel</div>
-                        <div onClick={editAccount}>Save Edit</div>
-                        <div onClick={() => deleteAccount(singleAccount.id)}>
-                          Delete Account
-                        </div>
+                        {updateAccount ? (
+                          <div onClick={editAccount}>Save Edit</div>
+                        ) : (
+                          <div>
+                            <Whiteloader />
+                          </div>
+                        )}
+
+                        {delAccount ? (
+                          <div onClick={() => deleteAccount(singleAccount.id)}>
+                            Delete Account
+                          </div>
+                        ) : (
+                          <div>
+                            <Whiteloader />
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

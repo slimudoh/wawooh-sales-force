@@ -5,8 +5,7 @@ export const LOGIN = "LOGIN";
 export const LOGOUT = "LOGOUT";
 export const REGISTER = "REGISTER";
 export const SET_TOKEN = "SET_TOKEN";
-export const SET_EARNING = "SET_EARNING";
-export const GET_PAID = "GET_PAID";
+export const USER_DETAILS = "USER_DETAILS";
 
 export const GET__CODE__PATH = `${process.env.REACT_APP_PATH}fashion/agent/salesforce/update_profile/`;
 export const SIGNUP__PATH = `${process.env.REACT_APP_PATH}fashion/agent/salesforce/signUp/`;
