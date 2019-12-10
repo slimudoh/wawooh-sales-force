@@ -11,23 +11,34 @@ import Pageloader from "../components/pageloader";
 
 function Dashboard(props) {
   const [comp, setComp] = useState(true);
-  const [dashboardDetails, setDashboardDetails] = useState(null);
 
   useEffect(() => {
+    if (props.user === null) {
+      axios
+        .get(types.DASHBOARD__PATH)
+        .then(resp => {
+          props.getAllUserDetails(resp.data.data);
+          setComp(false);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      setComp(false);
+      updatedUserDetails();
+    }
+  }, []);
+
+  const updatedUserDetails = () => {
     axios
       .get(types.DASHBOARD__PATH)
       .then(resp => {
-        setDashboardDetails(resp.data.data);
-
-        props.setCurrentEarning(resp.data.data.currentEarnings);
-        props.setPaid(resp.data.data.currentEarnings);
-
-        setComp(false);
+        props.getAllUserDetails(resp.data.data);
       })
       .catch(err => {
-        console.log(JSON.stringify(err));
+        console.log(err);
       });
-  }, []);
+  };
 
   return (
     <div>
@@ -43,7 +54,7 @@ function Dashboard(props) {
             <div className="dash__intro">
               <span>Hello</span>
               <p>
-                {dashboardDetails.firstName} {dashboardDetails.lastName}
+                {props.user.firstName} {props.user.lastName}
               </p>
             </div>
             <div className="dash__cards">
@@ -51,7 +62,7 @@ function Dashboard(props) {
                 <div className="dash__cards--white">
                   <div className="dash__cards--text">
                     <span>Orders</span>
-                    <p> {dashboardDetails.totalOrders}</p>
+                    <p> {props.user.totalOrders}</p>
                   </div>
                   <div className="dash__cards--img">
                     <div className="dash__cards--img-cart">
@@ -64,7 +75,12 @@ function Dashboard(props) {
                 <div className="dash__cards--white">
                   <div className="dash__cards--text">
                     <span>Sales</span>
-                    <p>&#8358;{dashboardDetails.totalSales}</p>
+                    <p>
+                      &#8358;
+                      {props.user.totalSales
+                        .toString()
+                        .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00"}
+                    </p>
                   </div>
                   <div className="dash__cards--img">
                     <div className="dash__cards--img-chart">
@@ -77,7 +93,12 @@ function Dashboard(props) {
                 <div className="dash__cards--purple">
                   <div className="dash__cards--text">
                     <span>Earnings</span>
-                    <p>&#8358;{dashboardDetails.currentEarnings}</p>
+                    <p>
+                      &#8358;
+                      {props.user.currentEarnings
+                        .toString()
+                        .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00"}
+                    </p>
                   </div>
                   <div className="dash__cards--img">
                     <div className="dash__cards--img-money">
@@ -98,7 +119,7 @@ function Dashboard(props) {
                 </p>
                 <div>
                   <span>Agent Code</span>
-                  <p>{dashboardDetails.agentCode}</p>
+                  <p>{props.user.agentCode}</p>
                 </div>
               </div>
             </div>
@@ -109,12 +130,16 @@ function Dashboard(props) {
   );
 }
 
-const mapDispatchToProps = dispatch => {
+const mapStateToProps = state => {
   return {
-    setCurrentEarning: payload =>
-      dispatch(actionCreators.getCurrentEarning(payload)),
-    setPaid: payload => dispatch(actionCreators.getTotalPaid(payload))
+    user: state.userDetails
   };
 };
 
-export default connect(null, mapDispatchToProps)(Dashboard);
+const mapDispatchToProps = dispatch => {
+  return {
+    getAllUserDetails: payload => dispatch(actionCreators.userDetails(payload))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

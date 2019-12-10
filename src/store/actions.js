@@ -61,16 +61,9 @@ export const logout = () => {
   };
 };
 
-export const getCurrentEarning = payload => {
+export const userDetails = payload => {
   return {
-    type: types.SET_EARNING,
-    payload: payload
-  };
-};
-
-export const getTotalPaid = payload => {
-  return {
-    type: types.GET_PAID,
+    type: types.USER_DETAILS,
     payload: payload
   };
 };
