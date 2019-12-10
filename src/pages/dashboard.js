@@ -8,11 +8,18 @@ import * as actionCreators from "../store/actions";
 import Header from "../components/header";
 import Sidebar from "../components/sidebar";
 import Pageloader from "../components/pageloader";
+import Error from "../components/error";
 
 function Dashboard(props) {
   const [comp, setComp] = useState(true);
+  const [errorStatus, setErrorStatus] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
+    getUserDetails();
+  }, []);
+
+  const getUserDetails = () => {
     if (props.user === null) {
       axios
         .get(types.DASHBOARD__PATH)
@@ -22,12 +29,14 @@ function Dashboard(props) {
         })
         .catch(err => {
           console.log(err);
+          setErrorMessage("Server error. Please try again later.");
+          setErrorStatus(true);
         });
     } else {
       setComp(false);
       updatedUserDetails();
     }
-  }, []);
+  };
 
   const updatedUserDetails = () => {
     axios
@@ -37,6 +46,8 @@ function Dashboard(props) {
       })
       .catch(err => {
         console.log(err);
+        setErrorMessage("Server error. Please try again later.");
+        setErrorStatus(true);
       });
   };
 
@@ -108,14 +119,15 @@ function Dashboard(props) {
                 </div>
               </div>
             </div>
+            <div className="dash__alert">
+              <Error status={errorStatus} message={errorMessage} />
+            </div>
             <div className="dash__body">
               <div>
                 <span>Agent Code</span>
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc
-                  bibendum varius mauris, sit amet facilisis velit condimentum
-                  a. Quisque vehicula dui in porta ullamcorper. Mauris ipsum
-                  lectus, egestas in varius et,
+                  Failure to use angent code will result in inability of WAWOOH
+                  to track transactions.
                 </p>
                 <div>
                   <span>Agent Code</span>

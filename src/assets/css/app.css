@@ -712,6 +712,11 @@ a {
   text-transform: uppercase;
 }
 
+.dash__alert {
+  margin-top: 10px;
+  max-width: 500px;
+}
+
 .payment__nav {
   font-size: 12px;
   text-align: left;
@@ -1121,6 +1126,11 @@ a {
   cursor: pointer;
   text-align: center;
   color: #fff;
+}
+
+.payment__alert {
+  margin-top: 10px;
+  max-width: 500px;
 }
 
 .account__nav {

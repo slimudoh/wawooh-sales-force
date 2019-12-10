@@ -52,9 +52,10 @@ function Account() {
       .get(types.GET__BANK__ACCOUNT__PATH)
       .then(resp => {
         setAccountDetails([...resp.data.data]);
-        setComp(false);
+        setComp(true);
       })
-      .catch(() => {
+      .catch(err => {
+        console.log(err);
         setComp(true);
         setErrorMessage("An error occured. Please try again later.");
         setErrorStatus(true);
@@ -308,22 +309,6 @@ function Account() {
       });
   };
 
-  const closeAccount = () => {
-    setErrorMessage(null);
-    setErrorStatus(false);
-    setSuccessMessage(null);
-    setSuccessStatus(false);
-    setAccountModal(false);
-    setShowAccountDetails(false);
-  };
-
-  const closeDetails = () => {
-    setSuccessMessage(null);
-    setSuccessStatus(false);
-    setAccountModal(false);
-    setShowAccountDetails(false);
-  };
-
   const deleteAccount = val => {
     setDelAccount(false);
     axios
@@ -347,6 +332,22 @@ function Account() {
         setErrorStatus(true);
         setShowAccountDetails(false);
       });
+  };
+
+  const closeAccount = () => {
+    setErrorMessage(null);
+    setErrorStatus(false);
+    setSuccessMessage(null);
+    setSuccessStatus(false);
+    setAccountModal(false);
+    setShowAccountDetails(false);
+  };
+
+  const closeDetails = () => {
+    setSuccessMessage(null);
+    setSuccessStatus(false);
+    setAccountModal(false);
+    setShowAccountDetails(false);
   };
 
   const addAccount = () => {

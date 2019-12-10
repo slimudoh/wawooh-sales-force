@@ -23,25 +23,25 @@ function Payment(props) {
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
-    const init = () => {
-      if (props.user === null) {
-        axios
-          .get(types.DASHBOARD__PATH)
-          .then(resp => {
-            props.getAllUserDetails(resp.data.data);
-            setComp(false);
-            getBankAccount();
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      } else {
-        getBankAccount();
-      }
-    };
-
-    init();
+    getUserDetails();
   }, []);
+
+  const getUserDetails = () => {
+    if (props.user === null) {
+      axios
+        .get(types.DASHBOARD__PATH)
+        .then(resp => {
+          props.getAllUserDetails(resp.data.data);
+          setComp(false);
+          getBankAccount();
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    } else {
+      getBankAccount();
+    }
+  };
 
   const getBankAccount = () => {
     setErrorMessage(null);
@@ -63,15 +63,10 @@ function Payment(props) {
       });
   };
 
-  const openModal = () => {
-    setModal(true);
-  };
-
-  const closeModal = () => {
-    setModal(false);
-  };
-
   const selectedAcount = val => {
+    setErrorMessage(null);
+    setErrorStatus(false);
+
     if (parseInt(props.user.currentEarnings, 10) < 5000) {
       axios
         .get(`${types.MAKE__WITHDRAWAL}${val}`)
@@ -80,14 +75,26 @@ function Payment(props) {
           setModal(false);
         })
         .catch(err => {
-          console.log(JSON.stringify(err));
+          console.log(err);
+          setErrorMessage("Server error. Please try again later.");
+          setErrorStatus(true);
+          setModal(false);
         });
 
       return;
+    } else {
+      setErrorMessage(
+        "Earning must be up to NGN5000 before it can be withdrawn."
+      );
+      setErrorStatus(true);
+      setModal(false);
     }
   };
 
   const updatedUserDetails = () => {
+    setErrorMessage(null);
+    setErrorStatus(false);
+
     axios
       .get(types.DASHBOARD__PATH)
       .then(resp => {
@@ -95,6 +102,8 @@ function Payment(props) {
       })
       .catch(err => {
         console.log(err);
+        setErrorMessage("Server error. Please try again later.");
+        setErrorStatus(true);
       });
   };
 
@@ -111,13 +120,12 @@ function Payment(props) {
 
         const newHistory = history;
         setHistory([...newHistory, ...resp.data.data]);
-
-        // setHistory(history => history.concat(resp.data.data));
-
         console.log(history);
       })
       .catch(err => {
         console.log(err);
+        setErrorMessage("Can't get previous payments. Please try again later.");
+        setErrorStatus(true);
       });
   };
 
@@ -153,6 +161,14 @@ function Payment(props) {
     console.log(status);
     setInit(init + 1);
     console.log(init);
+  };
+
+  const openModal = () => {
+    setModal(true);
+  };
+
+  const closeModal = () => {
+    setModal(false);
   };
 
   return (
@@ -227,7 +243,10 @@ function Payment(props) {
                 </div>
               </div>
             </div>
-
+            <div className="payment__alert">
+              <Error status={errorStatus} message={errorMessage} />
+              <Success status={successStatus} message={successMessage} />
+            </div>
             <div className="payment__body--filter">
               <div className="payment__body--filter-dropdown">
                 <select onChange={e => getPaymentHistory(e.target.value)}>
@@ -285,13 +304,6 @@ function Payment(props) {
                     </div>
                     <div className="payment__modal__content--btn">
                       <div onClick={closeModal}>Cancel</div>
-                    </div>
-                    <div className="account__cards--alert">
-                      <Error status={errorStatus} message={errorMessage} />
-                      <Success
-                        status={successStatus}
-                        message={successMessage}
-                      />
                     </div>
                   </div>
                 </div>
