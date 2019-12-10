@@ -37,6 +37,8 @@ function Payment(props) {
         })
         .catch(err => {
           console.log(err);
+          setErrorMessage("Server error. Please try again later.");
+          setErrorStatus(true);
         });
     } else {
       getBankAccount();
