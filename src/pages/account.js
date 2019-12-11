@@ -112,9 +112,6 @@ function Account() {
 
     accountdata.bankName = accountHolder.current.value;
 
-    console.log(accountHolder.current.value);
-    console.log(accountdata.bankName);
-
     if (accountdata.bvn.trim() === "") {
       setErrorMessage("Please enter you BVN number.");
       setErrorStatus(true);
@@ -135,8 +132,6 @@ function Account() {
     setErrorStatus(false);
     setSuccessMessage(null);
     setSuccessStatus(false);
-
-    console.log(accountdata);
 
     axios
       .post(types.CREATE__BANK__ACCOUNT__PATH, {
@@ -264,7 +259,7 @@ function Account() {
       setShowAccountDetails(false);
       return;
     }
-    singleAccount.accountNumber = singleAcountHolder.current.value;
+    singleAccount.bankName = singleAcountHolder.current.value;
 
     if (singleaccount.bvn.trim() === "") {
       setErrorMessage("Please enter you BVN number.");
@@ -592,13 +587,13 @@ function Account() {
 
                       <div className="account__modal__content--div">
                         <div onClick={closeDetails}>Cancel</div>
-                        {/* {updateAccount ? (
+                        {updateAccount ? (
                           <div onClick={editAccount}>Save Edit</div>
                         ) : (
                           <div>
                             <Whiteloader />
                           </div>
-                        )} */}
+                        )}
 
                         {delAccount ? (
                           <div onClick={() => deleteAccount(singleAccount.id)}>

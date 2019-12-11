@@ -119,6 +119,8 @@ function Payment(props) {
 
   const getPaymentHistory = val => {
     setStatus(val);
+
+    console.log(val);
     axios
       .post(`${types.PREVIOUS_WITHDRAWALS}${val}`, {
         init: init,
