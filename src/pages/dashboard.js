@@ -126,7 +126,7 @@ function Dashboard(props) {
               <div>
                 <span>Agent Code</span>
                 <p>
-                  Failure to use angent code will result in inability of WAWOOH
+                  Failure to use agent code will result in inability of WAWOOH
                   to track transactions.
                 </p>
                 <div>

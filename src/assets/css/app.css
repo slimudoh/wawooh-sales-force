@@ -1135,7 +1135,7 @@ a {
 }
 
 .payment__alert {
-  margin-top: 10px;
+  margin: 10px 0;
   max-width: 500px;
 }
 
@@ -1419,6 +1419,7 @@ a {
 
 .account__modal__content--div > div:nth-child(1) {
   width: 30%;
+  /* width: 45%; */
   height: 40px;
   border: 1px solid red;
   background-color: transparent;
@@ -1435,6 +1436,7 @@ a {
 
 .account__modal__content--div > div {
   width: 30%;
+  /* width: 45%; */
   height: 40px;
   border: 1px solid #000;
   background-color: #000;

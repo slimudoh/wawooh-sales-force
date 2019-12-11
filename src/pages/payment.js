@@ -68,13 +68,21 @@ function Payment(props) {
   const selectedAcount = val => {
     setErrorMessage(null);
     setErrorStatus(false);
+    setSuccessMessage(null);
+    setSuccessStatus(false);
 
-    if (parseInt(props.user.currentEarnings, 10) < 5000) {
+    if (parseInt(props.user.currentEarnings, 10) > 5000) {
       axios
         .get(`${types.MAKE__WITHDRAWAL}${val}`)
         .then(resp => {
           console.log(resp);
+          setSuccessMessage(
+            "Your request has been sent and will be processed by the account."
+          );
+          setSuccessStatus(true);
           setModal(false);
+          setModal(false);
+          getUserDetails();
         })
         .catch(err => {
           console.log(err);
@@ -111,6 +119,8 @@ function Payment(props) {
 
   const getPaymentHistory = val => {
     setStatus(val);
+
+    console.log(val);
     axios
       .post(`${types.PREVIOUS_WITHDRAWALS}${val}`, {
         init: init,
@@ -120,9 +130,8 @@ function Payment(props) {
         setComp(false);
         updatedUserDetails();
 
-        const newHistory = history;
-        setHistory([...newHistory, ...resp.data.data]);
-        console.log(history);
+        const data = resp.data.data;
+        setHistory(data);
       })
       .catch(err => {
         console.log(err);
@@ -132,37 +141,65 @@ function Payment(props) {
   };
 
   const prevPage = () => {
-    console.log(init);
-    console.log(status);
-    setInit(init - 1);
-    console.log(init);
+    if (init > 0) {
+      console.log(init);
+      console.log(status);
+      setInit(init - 1);
+      console.log(init);
+      console.log(status);
 
-    // axios
-    //   .post(`${types.PREVIOUS_WITHDRAWALS}${val}`, {
-    //     init: init,
-    //     size: 50
-    //   })
-    //   .then(resp => {
-    //     setComp(false);
-    //     updatedUserDetails();
+      axios
+        .post(`${types.PREVIOUS_WITHDRAWALS}${status}`, {
+          init: init,
+          size: 50
+        })
+        .then(resp => {
+          console.log(resp);
 
-    //     const newHistory = history;
-    //     setHistory([...newHistory, ...resp.data.data]);
-
-    //     // setHistory(history => history.concat(resp.data.data));
-
-    //     console.log(history);
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //   });
+          if (resp.data.data) {
+            const data = resp.data.data;
+            setHistory(data);
+          } else {
+            setInit(init + 1);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          setErrorMessage("Server error. Please try again later.");
+          setErrorStatus(true);
+        });
+    }
   };
 
   const nextPage = () => {
-    console.log(init);
-    console.log(status);
-    setInit(init + 1);
-    console.log(init);
+    if (init >= 0) {
+      console.log(init);
+      console.log(status);
+      setInit(init + 1);
+      console.log(init);
+      console.log(status);
+
+      axios
+        .post(`${types.PREVIOUS_WITHDRAWALS}${status}`, {
+          init: init,
+          size: 50
+        })
+        .then(resp => {
+          console.log(resp);
+
+          if (resp.data.data) {
+            const data = resp.data.data;
+            setHistory(data);
+          } else {
+            setInit(init === 0 ? 0 : init - 1);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          setErrorMessage("Server error. Please try again later.");
+          setErrorStatus(true);
+        });
+    }
   };
 
   const openModal = () => {
@@ -262,10 +299,13 @@ function Payment(props) {
               <div className="payment__body--header">Previous Withdrawals</div>
               <div>
                 <div className="payment__body--table">
-                  {history.map(item => (
-                    <div key="item.id">
+                  {history.map((item, index) => (
+                    <div key={index}>
                       <div className="payment__body--table-data">
-                        &#8358;{item.amount}
+                        &#8358;
+                        {item.amount
+                          .toString()
+                          .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,") + ".00"}
                       </div>
                       <div className="payment__body--table-data">
                         {item.openDate}

@@ -52,11 +52,11 @@ function Account() {
       .get(types.GET__BANK__ACCOUNT__PATH)
       .then(resp => {
         setAccountDetails([...resp.data.data]);
-        setComp(true);
+        setComp(false);
       })
       .catch(err => {
         console.log(err);
-        setComp(true);
+        setComp(false);
         setErrorMessage("An error occured. Please try again later.");
         setErrorStatus(true);
       });
@@ -110,7 +110,7 @@ function Account() {
       return;
     }
 
-    accountdata.accountNumber = accountHolder.current.value;
+    accountdata.bankName = accountHolder.current.value;
 
     if (accountdata.bvn.trim() === "") {
       setErrorMessage("Please enter you BVN number.");
@@ -151,6 +151,8 @@ function Account() {
         setAccountData({
           ...accountdata
         });
+
+        console.log(resp);
 
         if (resp.data.message.toLowerCase() !== "operation failure") {
           getAccount();
@@ -257,7 +259,7 @@ function Account() {
       setShowAccountDetails(false);
       return;
     }
-    singleAccount.accountNumber = singleAcountHolder.current.value;
+    singleAccount.bankName = singleAcountHolder.current.value;
 
     if (singleaccount.bvn.trim() === "") {
       setErrorMessage("Please enter you BVN number.");
