@@ -52,11 +52,11 @@ function Account() {
       .get(types.GET__BANK__ACCOUNT__PATH)
       .then(resp => {
         setAccountDetails([...resp.data.data]);
-        setComp(true);
+        setComp(false);
       })
       .catch(err => {
         console.log(err);
-        setComp(true);
+        setComp(false);
         setErrorMessage("An error occured. Please try again later.");
         setErrorStatus(true);
       });
@@ -110,7 +110,10 @@ function Account() {
       return;
     }
 
-    accountdata.accountNumber = accountHolder.current.value;
+    accountdata.bankName = accountHolder.current.value;
+
+    console.log(accountHolder.current.value);
+    console.log(accountdata.bankName);
 
     if (accountdata.bvn.trim() === "") {
       setErrorMessage("Please enter you BVN number.");
@@ -133,6 +136,8 @@ function Account() {
     setSuccessMessage(null);
     setSuccessStatus(false);
 
+    console.log(accountdata);
+
     axios
       .post(types.CREATE__BANK__ACCOUNT__PATH, {
         accountNumber: accountdata.accountNumber,
@@ -151,6 +156,8 @@ function Account() {
         setAccountData({
           ...accountdata
         });
+
+        console.log(resp);
 
         if (resp.data.message.toLowerCase() !== "operation failure") {
           getAccount();
@@ -585,13 +592,13 @@ function Account() {
 
                       <div className="account__modal__content--div">
                         <div onClick={closeDetails}>Cancel</div>
-                        {updateAccount ? (
+                        {/* {updateAccount ? (
                           <div onClick={editAccount}>Save Edit</div>
                         ) : (
                           <div>
                             <Whiteloader />
                           </div>
-                        )}
+                        )} */}
 
                         {delAccount ? (
                           <div onClick={() => deleteAccount(singleAccount.id)}>
