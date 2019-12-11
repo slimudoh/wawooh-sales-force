@@ -21,34 +21,42 @@ function Dashboard(props) {
 
   const getUserDetails = () => {
     if (props.user === null) {
-      axios
-        .get(types.DASHBOARD__PATH)
-        .then(resp => {
-          props.getAllUserDetails(resp.data.data);
-          setComp(false);
-        })
-        .catch(err => {
-          console.log(err);
-          setErrorMessage("Server error. Please try again later.");
-          setErrorStatus(true);
-        });
-    } else {
-      setComp(false);
       updatedUserDetails();
+      // axios
+      //   .get(types.DASHBOARD__PATH)
+      //   .then(resp => {
+      //     if (!cleanUp) {
+      //       props.getAllUserDetails(resp.data.data);
+      //       setComp(false);
+      //     }
+      //   })
+      //   .catch(err => {
+      //     if (!cleanUp) {
+      //       console.log(err);
+      //       setErrorMessage("Server error. Please try again later.");
+      //       setErrorStatus(true);
+      //     }
+      //   });
+    } else {
+      // if (!cleanUp) {
+      //   setComp(false);
+      //   updatedUserDetails();
+      // }
     }
   };
 
   const updatedUserDetails = () => {
-    axios
-      .get(types.DASHBOARD__PATH)
-      .then(resp => {
-        props.getAllUserDetails(resp.data.data);
-      })
-      .catch(err => {
-        console.log(err);
-        setErrorMessage("Server error. Please try again later.");
-        setErrorStatus(true);
-      });
+    props.getAllUserDetails();
+    // axios
+    //   .get(types.DASHBOARD__PATH)
+    //   .then(resp => {
+    //     props.getAllUserDetails(resp.data.data);
+    //   })
+    //   .catch(err => {
+    //     console.log(err);
+    //     setErrorMessage("Server error. Please try again later.");
+    //     setErrorStatus(true);
+    //   });
   };
 
   return (
@@ -150,7 +158,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getAllUserDetails: payload => dispatch(actionCreators.userDetails(payload))
+    getAllUserDetails: () => dispatch(actionCreators.getUserDetails())
   };
 };
 

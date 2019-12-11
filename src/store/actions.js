@@ -61,9 +61,51 @@ export const logout = () => {
   };
 };
 
+export const getUserDetails = () => {
+  return dispatch => {
+    new Promise((resolve, reject) => {
+      axios
+        .get(types.DASHBOARD__PATH)
+        .then(resp => {
+          const data = resp.data.data;
+          dispatch(userDetails(data));
+          dispatch(getBankDetails());
+          resolve(resp);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  };
+};
+
 export const userDetails = payload => {
   return {
     type: types.USER_DETAILS,
+    payload: payload
+  };
+};
+
+export const getBankDetails = () => {
+  return dispatch => {
+    new Promise((resolve, reject) => {
+      axios
+        .get(types.GET__BANK__ACCOUNT__PATH)
+        .then(resp => {
+          const data = resp.data.data;
+          dispatch(bankDetails(data));
+          resolve(resp);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  };
+};
+
+export const bankDetails = payload => {
+  return {
+    type: types.BANK_DETAILS,
     payload: payload
   };
 };

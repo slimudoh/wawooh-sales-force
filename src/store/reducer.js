@@ -4,7 +4,8 @@ import axios from "axios";
 const initialState = {
   token: sessionStorage.getItem("token") || null,
   isLoggedIn: sessionStorage.getItem("token") ? true : false,
-  userDetails: null
+  userDetails: null,
+  bankDetails: null
 };
 
 const reducer = (state = initialState, action) => {
@@ -28,6 +29,11 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         userDetails: action.payload
+      };
+    case types.BANK_DETAILS:
+      return {
+        ...state,
+        bankDetails: action.payload
       };
   }
 

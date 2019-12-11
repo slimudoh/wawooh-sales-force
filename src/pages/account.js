@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import * as types from "../store/constant";
+import * as actionCreators from "../store/actions";
+import { connect } from "react-redux";
 
 import Header from "../components/header";
 import Sidebar from "../components/sidebar";
@@ -10,7 +12,7 @@ import Success from "../components/success";
 import Pageloader from "../components/pageloader";
 import Whiteloader from "../components/whiteloader";
 
-function Account() {
+function Account(props) {
   const accountHolder = useRef(null);
   const singleAcountHolder = useRef(null);
 
@@ -44,23 +46,29 @@ function Account() {
   const [delAccount, setDelAccount] = useState(true);
 
   useEffect(() => {
-    getAccount();
+    props.getAllBankDetails();
+    // getAccount();
   }, []);
 
-  const getAccount = () => {
-    axios
-      .get(types.GET__BANK__ACCOUNT__PATH)
-      .then(resp => {
-        setAccountDetails([...resp.data.data]);
-        setComp(false);
-      })
-      .catch(err => {
-        console.log(err);
-        setComp(false);
-        setErrorMessage("An error occured. Please try again later.");
-        setErrorStatus(true);
-      });
-  };
+  // const getAccount = () => {
+  // props.getAllBankDetails();
+  // axios
+  //   .get(types.GET__BANK__ACCOUNT__PATH)
+  //   .then(resp => {
+  //     if (!cleanUp) {
+  //       setAccountDetails([...resp.data.data]);
+  //       setComp(false);
+  //     }
+  //   })
+  //   .catch(err => {
+  //     if (!cleanUp) {
+  //       console.log(err);
+  //       setComp(false);
+  //       setErrorMessage("An error occured. Please try again later.");
+  //       setErrorStatus(true);
+  //     }
+  //   });
+  // };
 
   const createAccount = e => {
     e.preventDefault();
@@ -68,26 +76,34 @@ function Account() {
     let accountdata = accountData;
     const onlyDigits = /^[0-9]*$/;
 
-    if (accountdata.accountFirstName.trim() === "") {
-      setErrorMessage("Please enter your account firstname name.");
-      setErrorStatus(true);
-      setAccountModal(false);
-      return;
+    for (const num in accountdata) {
+      if (accountdata[num].trim() === "") {
+        setErrorMessage("All values are required.");
+        setErrorStatus(true);
+        setAccountModal(false);
+      }
     }
 
-    if (accountdata.accountLastName.trim() === "") {
-      setErrorMessage("Please enter your account last name.");
-      setErrorStatus(true);
-      setAccountModal(false);
-      return;
-    }
+    // if (accountdata.accountFirstName.trim() === "") {
+    //   setErrorMessage("Please enter your account firstname name.");
+    //   setErrorStatus(true);
+    //   setAccountModal(false);
+    //   return;
+    // }
 
-    if (accountdata.accountNumber.trim() === "") {
-      setErrorMessage("Please enter you account number.");
-      setErrorStatus(true);
-      setAccountModal(false);
-      return;
-    }
+    // if (accountdata.accountLastName.trim() === "") {
+    //   setErrorMessage("Please enter your account last name.");
+    //   setErrorStatus(true);
+    //   setAccountModal(false);
+    //   return;
+    // }
+
+    // if (accountdata.accountNumber.trim() === "") {
+    //   setErrorMessage("Please enter you account number.");
+    //   setErrorStatus(true);
+    //   setAccountModal(false);
+    //   return;
+    // }
 
     if (accountdata.accountNumber.trim().length < 10) {
       setErrorMessage("Account number must not be less than ten digits.");
@@ -96,7 +112,7 @@ function Account() {
       return;
     }
 
-    if (!onlyDigits.test(accountdata.accountNumber.trim())) {
+    if (!onlyDigits.test(accountdata.accountNumber)) {
       setErrorMessage("Account number must be numbers without space.");
       setErrorStatus(true);
       setAccountModal(false);
@@ -112,14 +128,14 @@ function Account() {
 
     accountdata.bankName = accountHolder.current.value;
 
-    if (accountdata.bvn.trim() === "") {
-      setErrorMessage("Please enter you BVN number.");
-      setErrorStatus(true);
-      setAccountModal(false);
-      return;
-    }
+    // if (accountdata.bvn.trim() === "") {
+    //   setErrorMessage("Please enter you BVN number.");
+    //   setErrorStatus(true);
+    //   setAccountModal(false);
+    //   return;
+    // }
 
-    if (!onlyDigits.test(accountdata.bvn.trim())) {
+    if (!onlyDigits.test(accountdata.bvn)) {
       setErrorMessage("BVN number must be numbers without space.");
       setErrorStatus(true);
       setAccountModal(false);
@@ -152,10 +168,9 @@ function Account() {
           ...accountdata
         });
 
-        console.log(resp);
-
         if (resp.data.message.toLowerCase() !== "operation failure") {
-          getAccount();
+          // getAccount();
+          props.getAllBankDetails();
           setComp(true);
         } else {
           setErrorMessage(resp.data.data);
@@ -169,7 +184,8 @@ function Account() {
         setErrorMessage("An error occured. Please try again later.");
         setErrorStatus(true);
         setAccountModal(false);
-        getAccount();
+        // getAccount();
+        props.getAllBankDetails();
         setComp(true);
       });
   };
@@ -218,26 +234,34 @@ function Account() {
     let singleaccount = singleAccount;
     const onlyDigits = /^[0-9]*$/;
 
-    if (singleaccount.accountFirstName.trim() === "") {
-      setErrorMessage("Please enter you account firstname name.");
-      setErrorStatus(true);
-      setShowAccountDetails(false);
-      return;
+    for (const num in singleaccount) {
+      if (singleaccount[num].trim() === "") {
+        setErrorMessage("All values are required.");
+        setErrorStatus(true);
+        setShowAccountDetails(false);
+      }
     }
 
-    if (singleaccount.accountLastName.trim() === "") {
-      setErrorMessage("Please enter you account last name.");
-      setErrorStatus(true);
-      setShowAccountDetails(false);
-      return;
-    }
+    // if (singleaccount.accountFirstName.trim() === "") {
+    //   setErrorMessage("Please enter you account firstname name.");
+    //   setErrorStatus(true);
+    //   setShowAccountDetails(false);
+    //   return;
+    // }
 
-    if (singleaccount.accountNumber.trim() === "") {
-      setErrorMessage("Please enter you account number.");
-      setErrorStatus(true);
-      setShowAccountDetails(false);
-      return;
-    }
+    // if (singleaccount.accountLastName.trim() === "") {
+    //   setErrorMessage("Please enter you account last name.");
+    //   setErrorStatus(true);
+    //   setShowAccountDetails(false);
+    //   return;
+    // }
+
+    // if (singleaccount.accountNumber.trim() === "") {
+    //   setErrorMessage("Please enter you account number.");
+    //   setErrorStatus(true);
+    //   setShowAccountDetails(false);
+    //   return;
+    // }
 
     if (singleaccount.accountNumber.trim().length < 10) {
       setErrorMessage("Account number must not be less than ten digits.");
@@ -246,7 +270,7 @@ function Account() {
       return;
     }
 
-    if (!onlyDigits.test(singleaccount.accountNumber.trim())) {
+    if (!onlyDigits.test(singleaccount.accountNumber)) {
       setErrorMessage("Account number must be numbers without space.");
       setErrorStatus(true);
       setShowAccountDetails(false);
@@ -261,14 +285,14 @@ function Account() {
     }
     singleAccount.bankName = singleAcountHolder.current.value;
 
-    if (singleaccount.bvn.trim() === "") {
-      setErrorMessage("Please enter you BVN number.");
-      setErrorStatus(true);
-      setShowAccountDetails(false);
-      return;
-    }
+    // if (singleaccount.bvn.trim() === "") {
+    //   setErrorMessage("Please enter you BVN number.");
+    //   setErrorStatus(true);
+    //   setShowAccountDetails(false);
+    //   return;
+    // }
 
-    if (!onlyDigits.test(singleaccount.bvn.trim())) {
+    if (!onlyDigits.test(singleaccount.bvn)) {
       setErrorMessage("BVN number must be numbers without space.");
       setErrorStatus(true);
       setShowAccountDetails(false);
@@ -293,7 +317,8 @@ function Account() {
       })
       .then(resp => {
         if (resp.data.message.toLowerCase() !== "operation failure") {
-          getAccount();
+          // getAccount();
+          props.getAllBankDetails();
           setComp(true);
         } else {
           setErrorMessage(resp.data.data);
@@ -303,7 +328,8 @@ function Account() {
         setUpdateAccount(true);
       })
       .catch(() => {
-        getAccount();
+        // getAccount();
+        props.getAllBankDetails();
         setComp(true);
         setErrorMessage("An error occured. Please try again later.");
         setErrorStatus(true);
@@ -317,7 +343,8 @@ function Account() {
       .post(`${types.DELETE__BANK__ACCOUNT__PATH}${val}`)
       .then(resp => {
         if (resp.data.message.toLowerCase() !== "operation failure") {
-          getAccount();
+          // getAccount();
+          props.getAllBankDetails();
           setComp(true);
         } else {
           setErrorMessage(resp.data.data);
@@ -328,7 +355,8 @@ function Account() {
         setDelAccount(true);
       })
       .catch(() => {
-        getAccount();
+        // getAccount();
+        props.getAllBankDetails();
         setComp(true);
         setErrorMessage("An error occured. Please try again later.");
         setErrorStatus(true);
@@ -617,4 +645,18 @@ function Account() {
   );
 }
 
-export default Account;
+const mapStateToProps = state => {
+  return {
+    user: state.userDetails,
+    bank: state.bankdetails
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getAllUserDetails: () => dispatch(actionCreators.getUserDetails()),
+    getAllBankDetails: () => dispatch(actionCreators.getBankDetails())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Account);

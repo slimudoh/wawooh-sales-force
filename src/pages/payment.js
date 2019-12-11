@@ -30,42 +30,48 @@ function Payment(props) {
 
   const getUserDetails = () => {
     if (props.user === null) {
-      axios
-        .get(types.DASHBOARD__PATH)
-        .then(resp => {
-          props.getAllUserDetails(resp.data.data);
-          setComp(false);
-          getBankAccount();
-        })
-        .catch(err => {
-          console.log(err);
-          setErrorMessage("Server error. Please try again later.");
-          setErrorStatus(true);
-        });
+      props.getAllUserDetails();
+      // axios
+      //   .get(types.DASHBOARD__PATH)
+      //   .then(resp => {
+      //     if (!cleanUp) {
+      //       props.getAllUserDetails(resp.data.data);
+      //       setComp(false);
+      //       getBankAccount();
+      //     }
+      //   })
+      //   .catch(err => {
+      //     if (!cleanUp) {
+      //       console.log(err);
+      //       setErrorMessage("Server error. Please try again later.");
+      //       setErrorStatus(true);
+      //     }
+      //   });
     } else {
-      getBankAccount();
+      props.getAllBankDetails();
+      // getBankAccount();
     }
+    getPaymentHistory("all");
   };
 
-  const getBankAccount = () => {
-    setErrorMessage(null);
-    setErrorStatus(false);
-    setSuccessMessage(null);
-    setSuccessStatus(false);
-
-    axios
-      .get(types.GET__BANK__ACCOUNT__PATH)
-      .then(resp => {
-        setAccountDetails([...resp.data.data]);
-        const status = "all";
-        getPaymentHistory(status);
-      })
-      .catch(err => {
-        console.log(err);
-        setErrorMessage("Server error. Please try again later.");
-        setErrorStatus(true);
-      });
-  };
+  // const getBankAccount = () => {
+  // setErrorMessage(null);
+  // setErrorStatus(false);
+  // setSuccessMessage(null);
+  // setSuccessStatus(false);
+  // axios
+  //   .get(types.GET__BANK__ACCOUNT__PATH)
+  //   .then(resp => {
+  //     setAccountDetails([...resp.data.data]);
+  //     const status = "all";
+  //     getPaymentHistory(status);
+  //   })
+  //   .catch(err => {
+  //     console.log(err);
+  //     setErrorMessage("Server error. Please try again later.");
+  //     setErrorStatus(true);
+  //   });
+  // };
 
   const selectedAcount = val => {
     setErrorMessage(null);
@@ -106,25 +112,24 @@ function Payment(props) {
     }
   };
 
-  const updatedUserDetails = () => {
-    setErrorMessage(null);
-    setErrorStatus(false);
+  // const updatedUserDetails = () => {
+  //   setErrorMessage(null);
+  //   setErrorStatus(false);
 
-    axios
-      .get(types.DASHBOARD__PATH)
-      .then(resp => {
-        props.getAllUserDetails(resp.data.data);
-      })
-      .catch(err => {
-        console.log(err);
-        setErrorMessage("Server error. Please try again later.");
-        setErrorStatus(true);
-      });
-  };
+  // axios
+  //   .get(types.DASHBOARD__PATH)
+  //   .then(resp => {
+  //     props.getAllUserDetails(resp.data.data);
+  //   })
+  //   .catch(err => {
+  //     console.log(err);
+  //     setErrorMessage("Server error. Please try again later.");
+  //     setErrorStatus(true);
+  //   });
+  // };
 
   const getPaymentHistory = val => {
     setStatus(val);
-
     axios
       .post(`${types.PREVIOUS_WITHDRAWALS}${val}`, {
         init: init,
@@ -132,8 +137,7 @@ function Payment(props) {
       })
       .then(resp => {
         setComp(false);
-        updatedUserDetails();
-
+        props.getAllUserDetails();
         const data = resp.data.data;
         setHistory(data);
       })
@@ -152,13 +156,10 @@ function Payment(props) {
           size: 50
         })
         .then(resp => {
-          console.log(resp);
-
           if (resp.data.data.length !== 0) {
             const data = resp.data.data;
             setHistory(data);
             setInit(init - 1);
-            console.log(init);
           }
         })
         .catch(err => {
@@ -353,13 +354,15 @@ function Payment(props) {
 
 const mapStateToProps = state => {
   return {
-    user: state.userDetails
+    user: state.userDetails,
+    bank: state.bankdetails
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    getAllUserDetails: payload => dispatch(actionCreators.userDetails(payload))
+    getAllUserDetails: () => dispatch(actionCreators.getUserDetails()),
+    getAllBankDetails: () => dispatch(actionCreators.getBankDetails())
   };
 };
 
