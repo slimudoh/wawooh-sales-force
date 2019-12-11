@@ -120,7 +120,6 @@ function Payment(props) {
   const getPaymentHistory = val => {
     setStatus(val);
 
-    console.log(val);
     axios
       .post(`${types.PREVIOUS_WITHDRAWALS}${val}`, {
         init: init,
@@ -142,26 +141,30 @@ function Payment(props) {
 
   const prevPage = () => {
     if (init > 0) {
-      console.log(init);
-      console.log(status);
-      setInit(init - 1);
-      console.log(init);
-      console.log(status);
+      // console.log(init);
+      // console.log(status);
+      // setInit(init - 1);
+      // console.log(init);
+      // console.log(status);
 
       axios
-        .post(`${types.PREVIOUS_WITHDRAWALS}${status}`, {
+        .post(`${types.PREVIOUS_WITHDRAWALS}${init - 1}`, {
           init: init,
           size: 50
         })
         .then(resp => {
           console.log(resp);
 
-          if (resp.data.data) {
+          if (resp.data.data.length !== 0) {
             const data = resp.data.data;
             setHistory(data);
-          } else {
-            setInit(init + 1);
+            setInit(init - 1);
+            console.log(init);
           }
+
+          // else {
+          //   setInit(init + 1);
+          // }
         })
         .catch(err => {
           console.log(err);
@@ -173,26 +176,29 @@ function Payment(props) {
 
   const nextPage = () => {
     if (init >= 0) {
-      console.log(init);
-      console.log(status);
-      setInit(init + 1);
-      console.log(init);
-      console.log(status);
+      // console.log(init);
+      // console.log(status);
+      // setInit(init + 1);
+      // console.log(init);
+      // console.log(status);
 
       axios
-        .post(`${types.PREVIOUS_WITHDRAWALS}${status}`, {
+        .post(`${types.PREVIOUS_WITHDRAWALS}${init + 1}`, {
           init: init,
           size: 50
         })
         .then(resp => {
           console.log(resp);
 
-          if (resp.data.data) {
+          if (resp.data.data.length !== 0) {
             const data = resp.data.data;
             setHistory(data);
-          } else {
-            setInit(init === 0 ? 0 : init - 1);
+            setInit(init + 1);
           }
+
+          // else {
+          //   setInit(init === 0 ? 0 : init - 1);
+          // }
         })
         .catch(err => {
           console.log(err);
