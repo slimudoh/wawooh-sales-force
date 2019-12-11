@@ -188,8 +188,6 @@ function Payment(props) {
           size: 50
         })
         .then(resp => {
-          console.log(resp);
-
           if (resp.data.data.length !== 0) {
             const data = resp.data.data;
             setHistory(data);
