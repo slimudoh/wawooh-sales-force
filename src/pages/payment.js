@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import Header from "../components/header";
 import Sidebar from "../components/sidebar";
 import Pageloader from "../components/pageloader";
+import Whiteloader from "../components/whiteloader";
 import Error from "../components/error";
 import Success from "../components/success";
 
@@ -18,6 +19,7 @@ function Payment(props) {
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [accountDetails, setAccountDetails] = useState([]);
+  const [withdrawalLoader, setWithdrawalLoader] = useState(true);
   const [init, setInit] = useState(0);
   const [status, setStatus] = useState("all");
   const [history, setHistory] = useState([]);
@@ -72,26 +74,29 @@ function Payment(props) {
     setSuccessStatus(false);
 
     if (parseInt(props.user.currentEarnings, 10) > 5000) {
+      setWithdrawalLoader(false);
+      setModal(false);
       axios
         .get(`${types.MAKE__WITHDRAWAL}${val}`)
         .then(resp => {
-          console.log(resp);
-          setSuccessMessage(
-            "Your request has been sent and will be processed by the account."
-          );
-          setSuccessStatus(true);
-          setModal(false);
-          setModal(false);
-          getUserDetails();
+          if (resp.data.message.toLowerCase() !== "operation failure") {
+            setSuccessMessage(
+              "Your request has been sent and will be processed by the account."
+            );
+            setSuccessStatus(true);
+          } else {
+            setErrorMessage(resp.data.data);
+            setErrorStatus(true);
+          }
+
+          setWithdrawalLoader(true);
         })
         .catch(err => {
           console.log(err);
           setErrorMessage("Server error. Please try again later.");
           setErrorStatus(true);
-          setModal(false);
+          setWithdrawalLoader(true);
         });
-
-      return;
     } else {
       setErrorMessage(
         "Earning must be up to NGN5000 before it can be withdrawn."
@@ -141,15 +146,9 @@ function Payment(props) {
 
   const prevPage = () => {
     if (init > 0) {
-      // console.log(init);
-      // console.log(status);
-      // setInit(init - 1);
-      // console.log(init);
-      // console.log(status);
-
       axios
-        .post(`${types.PREVIOUS_WITHDRAWALS}${init - 1}`, {
-          init: init,
+        .post(`${types.PREVIOUS_WITHDRAWALS}${status}`, {
+          init: init - 1,
           size: 50
         })
         .then(resp => {
@@ -161,10 +160,6 @@ function Payment(props) {
             setInit(init - 1);
             console.log(init);
           }
-
-          // else {
-          //   setInit(init + 1);
-          // }
         })
         .catch(err => {
           console.log(err);
@@ -176,29 +171,17 @@ function Payment(props) {
 
   const nextPage = () => {
     if (init >= 0) {
-      // console.log(init);
-      // console.log(status);
-      // setInit(init + 1);
-      // console.log(init);
-      // console.log(status);
-
       axios
-        .post(`${types.PREVIOUS_WITHDRAWALS}${init + 1}`, {
-          init: init,
+        .post(`${types.PREVIOUS_WITHDRAWALS}${status}`, {
+          init: init + 1,
           size: 50
         })
         .then(resp => {
-          console.log(resp);
-
           if (resp.data.data.length !== 0) {
             const data = resp.data.data;
             setHistory(data);
             setInit(init + 1);
           }
-
-          // else {
-          //   setInit(init === 0 ? 0 : init - 1);
-          // }
         })
         .catch(err => {
           console.log(err);
@@ -231,19 +214,25 @@ function Payment(props) {
               <p>Payments</p>
               <div>
                 <div className="payment__cards--btn">
-                  <div onClick={openModal}>
-                    <div className="payment__cards--btn-icon">
-                      <div>
-                        <img
-                          src={require("../assets/img/withdraw.svg")}
-                          alt=""
-                        />
+                  {withdrawalLoader ? (
+                    <div onClick={openModal}>
+                      <div className="payment__cards--btn-icon">
+                        <div>
+                          <img
+                            src={require("../assets/img/withdraw.svg")}
+                            alt=""
+                          />
+                        </div>
+                      </div>
+                      <div className="payment__cards--btn-text">
+                        Make Withdrawal
                       </div>
                     </div>
-                    <div className="payment__cards--btn-text">
-                      Make Withdrawal
+                  ) : (
+                    <div>
+                      <Whiteloader />
                     </div>
-                  </div>
+                  )}
                 </div>
                 <div className="payment__cards--card">
                   <div>
