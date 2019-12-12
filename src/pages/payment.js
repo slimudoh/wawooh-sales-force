@@ -34,7 +34,7 @@ function Payment(props) {
     };
 
     checkIsAuthenticated();
-  }, [props.isAuth]);
+  });
 
   const getUserDetails = () => {
     if (props.user === null) {

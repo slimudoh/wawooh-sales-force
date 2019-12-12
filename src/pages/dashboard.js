@@ -22,7 +22,7 @@ function Dashboard(props) {
     };
 
     checkIsAuthenticated();
-  }, [props.isAuth]);
+  });
 
   const getUserDetails = () => {
     if (props.user === null) {

@@ -20,13 +20,14 @@ function Signin(props) {
 
   useEffect(() => {
     const checkIsAuthenticated = () => {
-      if (props.isLoggedIn) {
+      if (props.isAuth) {
         return <Redirect to="/dashboard" />;
       }
+      props.onLogout();
     };
 
     checkIsAuthenticated();
-  }, [props.isLoggedIn]);
+  });
 
   const signin = e => {
     e.preventDefault();
@@ -140,13 +141,14 @@ function Signin(props) {
 
 const mapStateToProps = state => {
   return {
-    isLoggedIn: state.isLoggedIn
+    isAuth: state.isLoggedIn
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onLogin: payload => dispatch(actionCreators.login(payload))
+    onLogin: payload => dispatch(actionCreators.login(payload)),
+    onLogout: () => dispatch(actionCreators.logout())
   };
 };
 

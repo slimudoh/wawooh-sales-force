@@ -24,10 +24,22 @@ function App(props) {
     <div>
       <Router>
         <Switch>
-          <Route exact path="/fashion/:hashmail/:code" component={Signup} />
-          <Route path="/signin" component={Signin} />
-          <Route path="/change-password" component={Password} />
-          <Route path="/new-password" component={Reset} />
+          {!props.isLoggedIn ? (
+            <Route exact path="/fashion/:hashmail/:code" component={Signup} />
+          ) : null}
+          {!props.isLoggedIn ? (
+            <Route path="/signin" component={Signin} />
+          ) : null}
+          {!props.isLoggedIn ? (
+            <Route path="/change-password" component={Password} />
+          ) : null}
+          {!props.isLoggedIn ? (
+            <Route path="/new-password" component={Reset} />
+          ) : null}
+          {!props.isLoggedIn ? (
+            <Route render={() => <Redirect to="/signin" />} />
+          ) : null}
+
           {props.isLoggedIn ? (
             <Route path="/dashboard" component={Dashboard} />
           ) : null}
@@ -38,9 +50,6 @@ function App(props) {
             <Route path="/account" component={Account} />
           ) : null}
           {props.isLoggedIn ? <Route component={Notfound} /> : null}
-          {!props.isLoggedIn ? (
-            <Route render={() => <Redirect to="/signin" />} />
-          ) : null}
         </Switch>
       </Router>
     </div>

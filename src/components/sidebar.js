@@ -7,12 +7,12 @@ import * as actionCreators from "../store/actions";
 function Sidebar(props) {
   useEffect(() => {
     const logout = () => {
-      if (!props.isLoggedIn) {
+      if (!props.isAuth) {
         return <Redirect to="/signin" />;
       }
     };
     logout();
-  }, [props.isLoggedIn]);
+  }, [props.isAuth]);
 
   return (
     <div className="sidebar">
@@ -35,7 +35,7 @@ function Sidebar(props) {
 
 const mapStateToProps = state => {
   return {
-    isLoggedIn: state.isLoggedIn
+    isAuth: state.isLoggedIn
   };
 };
 

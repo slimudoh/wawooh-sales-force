@@ -7,6 +7,15 @@ import * as actionCreators from "../store/actions";
 function Header(props) {
   const [showMobile, setShowMobile] = useState(false);
 
+  useEffect(() => {
+    const logout = () => {
+      if (!props.isAuth) {
+        return <Redirect to="/signin" />;
+      }
+    };
+    logout();
+  }, [props.isAuth]);
+
   const showMobileNav = () => {
     setShowMobile(true);
   };
@@ -14,15 +23,6 @@ function Header(props) {
   const closeMobileNav = () => {
     setShowMobile(false);
   };
-
-  useEffect(() => {
-    const logout = () => {
-      if (!props.isLoggedIn) {
-        return <Redirect to="/signin" />;
-      }
-    };
-    logout();
-  }, [props.isLoggedIn]);
 
   return (
     <div className="header">
@@ -65,7 +65,7 @@ function Header(props) {
 
 const mapStateToProps = state => {
   return {
-    isLoggedIn: state.isLoggedIn
+    isAuth: state.isLoggedIn
   };
 };
 

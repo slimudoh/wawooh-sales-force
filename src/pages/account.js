@@ -54,7 +54,7 @@ function Account(props) {
     };
 
     checkIsAuthenticated();
-  }, [props.isAuth]);
+  });
 
   // const getAccount = () => {
   // props.getAllBankDetails();

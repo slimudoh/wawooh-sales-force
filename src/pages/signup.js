@@ -36,15 +36,14 @@ function Signup(props) {
 
   useEffect(() => {
     const checkIsAuthenticated = () => {
-      if (props.isLoggedIn) {
+      if (props.isAuth) {
         return <Redirect to="/dashboard" />;
-      } else {
-        checkRegistrationLink();
       }
+      props.onLogout();
+      checkRegistrationLink();
     };
-
     checkIsAuthenticated();
-  }, [props.isLoggedIn]);
+  });
 
   const checkRegistrationLink = () => {
     if (!code || !hashmail) {
@@ -290,13 +289,14 @@ function Signup(props) {
 
 const mapStateToProps = state => {
   return {
-    isLoggedIn: state.isLoggedIn
+    isAuth: state.isLoggedIn
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onRegister: payload => dispatch(actionCreators.register(payload))
+    onRegister: payload => dispatch(actionCreators.register(payload)),
+    onLogout: () => dispatch(actionCreators.logout())
   };
 };
 

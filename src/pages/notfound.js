@@ -11,7 +11,7 @@ function Notfound(props) {
     };
 
     checkIsAuthenticated();
-  }, [props.isAuth]);
+  });
 
   return (
     <div className="notfound">
