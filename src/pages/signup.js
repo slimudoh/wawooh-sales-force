@@ -35,6 +35,18 @@ function Signup(props) {
   });
 
   useEffect(() => {
+    const checkIsAuthenticated = () => {
+      if (props.isLoggedIn) {
+        return <Redirect to="/dashboard" />;
+      } else {
+        checkRegistrationLink();
+      }
+    };
+
+    checkIsAuthenticated();
+  }, [props.isLoggedIn]);
+
+  const checkRegistrationLink = () => {
     if (!code || !hashmail) {
       setPageloader(false);
       setpageError(true);
@@ -74,7 +86,7 @@ function Signup(props) {
         setpageError(true);
         setForm(false);
       });
-  }, []);
+  };
 
   const signup = e => {
     e.preventDefault();
@@ -148,10 +160,6 @@ function Signup(props) {
       ...signupData,
       [e.target.name]: e.target.value
     });
-
-  if (props.isLoggedIn) {
-    return <Redirect to="/dashboard" />;
-  }
 
   return (
     <div className="auth">

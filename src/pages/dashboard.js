@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import * as types from "../store/constant";
 import { connect } from "react-redux";
-
+import { Redirect } from "react-router-dom";
 import * as actionCreators from "../store/actions";
 
 import Header from "../components/header";
@@ -16,8 +14,15 @@ function Dashboard(props) {
   const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
-    getUserDetails();
-  }, []);
+    const checkIsAuthenticated = () => {
+      if (!props.isAuth) {
+        return <Redirect to="/signin" />;
+      }
+      getUserDetails();
+    };
+
+    checkIsAuthenticated();
+  }, [props.isAuth]);
 
   const getUserDetails = () => {
     if (props.user === null) {
@@ -152,7 +157,8 @@ function Dashboard(props) {
 
 const mapStateToProps = state => {
   return {
-    user: state.userDetails
+    user: state.userDetails,
+    isAuth: state.isLoggedIn
   };
 };
 

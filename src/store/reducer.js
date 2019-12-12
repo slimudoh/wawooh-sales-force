@@ -35,9 +35,9 @@ const reducer = (state = initialState, action) => {
         ...state,
         bankDetails: action.payload
       };
+    default:
+      return state;
   }
-
-  return state;
 };
 
 export default reducer;

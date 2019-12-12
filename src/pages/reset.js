@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import Error from "../components/error";
 import Success from "../components/success";
+import Whiteloader from "../components/whiteloader";
 
 function Reset() {
   let history = useHistory();
@@ -13,6 +14,7 @@ function Reset() {
   const [successStatus, setSuccessStatus] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [btnLoader, setBtnLoader] = useState(true);
 
   const signin = e => {
     e.preventDefault();
@@ -54,6 +56,8 @@ function Reset() {
     setErrorStatus(false);
     setSuccessMessage(null);
     setSuccessStatus(false);
+
+    setBtnLoader(false);
 
     console.log(passwordInput.value);
 
@@ -97,7 +101,13 @@ function Reset() {
             </div>
 
             <div className="auth__form--form-button">
-              <button onClick={signin}>Reset Password</button>
+              {btnLoader ? (
+                <button onClick={signin}>Reset Password</button>
+              ) : (
+                <button disabled>
+                  <Whiteloader />
+                </button>
+              )}
             </div>
 
             <div className="auth__form--form-msg">

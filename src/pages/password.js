@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import Error from "../components/error";
 import Success from "../components/success";
+import Whiteloader from "../components/whiteloader";
 
 function Password() {
   let history = useHistory();
@@ -11,6 +12,7 @@ function Password() {
   const [successStatus, setSuccessStatus] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [btnLoader, setBtnLoader] = useState(true);
 
   const reset = e => {
     e.preventDefault();
@@ -36,6 +38,8 @@ function Password() {
     setSuccessStatus(false);
 
     console.log(emailInput.value);
+
+    setBtnLoader(false);
 
     history.push("/new-password");
   };
@@ -76,7 +80,13 @@ function Password() {
               </span>
             </div>
             <div className="auth__form--form-button">
-              <button onClick={reset}>Send Link</button>
+              {btnLoader ? (
+                <button onClick={reset}>Send Link</button>
+              ) : (
+                <button disabled>
+                  <Whiteloader />
+                </button>
+              )}
             </div>
 
             <div className="auth__form--alert">

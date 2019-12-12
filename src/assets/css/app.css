@@ -253,6 +253,10 @@
   border: 1px solid #000;
 }
 
+.auth__form--form-button > button > div > div {
+  margin: auto;
+}
+
 .auth__form--form-button > div {
   width: 45%;
   height: 40px;

@@ -3,6 +3,7 @@ import axios from "axios";
 import * as types from "../store/constant";
 import * as actionCreators from "../store/actions";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 import Header from "../components/header";
 import Sidebar from "../components/sidebar";
@@ -25,8 +26,15 @@ function Payment(props) {
   const [history, setHistory] = useState([]);
 
   useEffect(() => {
-    getUserDetails();
-  }, []);
+    const checkIsAuthenticated = () => {
+      if (!props.isAuth) {
+        return <Redirect to="/signin" />;
+      }
+      getUserDetails();
+    };
+
+    checkIsAuthenticated();
+  }, [props.isAuth]);
 
   const getUserDetails = () => {
     if (props.user === null) {
@@ -355,7 +363,8 @@ function Payment(props) {
 const mapStateToProps = state => {
   return {
     user: state.userDetails,
-    bank: state.bankdetails
+    bank: state.bankdetails,
+    isAuth: state.isLoggedIn
   };
 };
 

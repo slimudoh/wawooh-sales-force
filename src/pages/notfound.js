@@ -1,7 +1,18 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Link, Redirect } from "react-router-dom";
+import { connect } from "react-redux";
 
-function Notfound() {
+function Notfound(props) {
+  useEffect(() => {
+    const checkIsAuthenticated = () => {
+      if (!props.isAuth) {
+        return <Redirect to="/signin" />;
+      }
+    };
+
+    checkIsAuthenticated();
+  }, [props.isAuth]);
+
   return (
     <div className="notfound">
       <div className="notfound__img">
@@ -16,4 +27,10 @@ function Notfound() {
   );
 }
 
-export default Notfound;
+const mapStateToProps = state => {
+  return {
+    isAuth: state.isLoggedIn
+  };
+};
+
+export default connect(mapStateToProps)(Notfound);

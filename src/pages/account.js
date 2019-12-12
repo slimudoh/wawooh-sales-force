@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
 import * as types from "../store/constant";
 import * as actionCreators from "../store/actions";
@@ -46,9 +46,15 @@ function Account(props) {
   const [delAccount, setDelAccount] = useState(true);
 
   useEffect(() => {
-    props.getAllBankDetails();
-    // getAccount();
-  }, []);
+    const checkIsAuthenticated = () => {
+      if (!props.isAuth) {
+        return <Redirect to="/signin" />;
+      }
+      props.getAllBankDetails();
+    };
+
+    checkIsAuthenticated();
+  }, [props.isAuth]);
 
   // const getAccount = () => {
   // props.getAllBankDetails();
@@ -478,33 +484,35 @@ function Account(props) {
                         <label>Bank Name:</label>
 
                         <select name="bankName" ref={accountHolder}>
-                          <option value="access">Access Bank</option>
+                          <option value="access bank">Access Bank</option>
                           <option value="citibank">Citibank</option>
-                          <option value="diamond">Diamond Bank</option>
+                          <option value="diamond bank">Diamond Bank</option>
                           <option value="ecobank">Ecobank</option>
-                          <option value="fidelity">Fidelity Bank</option>
+                          <option value="fidelity bank">Fidelity Bank</option>
                           <option value="firstbank">First Bank</option>
                           <option value="fcmb">
                             First City Monument Bank (FCMB)
                           </option>
                           <option value="gtb">Guaranty Trust Bank (GTB)</option>
-                          <option value="heritage">Heritage Bank</option>
-                          <option value="keystone">Keystone Bank</option>
-                          <option value="polaris">Polaris Bank</option>
-                          <option value="providus">Providus Bank</option>
-                          <option value="stanbic">Stanbic IBTC Bank</option>
-                          <option value="standard">
+                          <option value="heritage bank">Heritage Bank</option>
+                          <option value="keystone bank">Keystone Bank</option>
+                          <option value="polaris bank">Polaris Bank</option>
+                          <option value="providus bank">Providus Bank</option>
+                          <option value="stanbic ibtc bank">
+                            Stanbic IBTC Bank
+                          </option>
+                          <option value="standard bank">
                             Standard Chartered Bank
                           </option>
-                          <option value="sterling">Sterling Bank</option>
-                          <option value="suntrust">Suntrust Bank</option>
-                          <option value="union">Union Bank</option>
-                          <option value="uba">
+                          <option value="sterling bank">Sterling Bank</option>
+                          <option value="suntrust bank">Suntrust Bank</option>
+                          <option value="union bank">Union Bank</option>
+                          <option value="uba bank">
                             United Bank for Africa (UBA)
                           </option>
-                          <option value="unity">Unity Bank</option>
-                          <option value="wema">Wema Bank</option>
-                          <option value="zenith">Zenith Bank</option>
+                          <option value="unity bank">Unity Bank</option>
+                          <option value="wema bank">Wema Bank</option>
+                          <option value="zenith bank">Zenith Bank</option>
                         </select>
                       </div>
 
@@ -566,6 +574,7 @@ function Account(props) {
                           name="accountNumber"
                           value={singleAccount.accountNumber}
                           onChange={handleSingleAccountData}
+                          readOnly
                         />
                       </div>
 
@@ -573,33 +582,35 @@ function Account(props) {
                         <label>Bank Name:</label>
 
                         <select ref={singleAcountHolder}>
-                          <option value="access">Access Bank</option>
+                          <option value="access bank">Access Bank</option>
                           <option value="citibank">Citibank</option>
-                          <option value="diamond">Diamond Bank</option>
+                          <option value="diamond bank">Diamond Bank</option>
                           <option value="ecobank">Ecobank</option>
-                          <option value="fidelity">Fidelity Bank</option>
+                          <option value="fidelity bank">Fidelity Bank</option>
                           <option value="firstbank">First Bank</option>
                           <option value="fcmb">
                             First City Monument Bank (FCMB)
                           </option>
                           <option value="gtb">Guaranty Trust Bank (GTB)</option>
-                          <option value="heritage">Heritage Bank</option>
-                          <option value="keystone">Keystone Bank</option>
-                          <option value="polaris">Polaris Bank</option>
-                          <option value="providus">Providus Bank</option>
-                          <option value="stanbic">Stanbic IBTC Bank</option>
-                          <option value="standard">
+                          <option value="heritage bank">Heritage Bank</option>
+                          <option value="keystone bank">Keystone Bank</option>
+                          <option value="polaris bank">Polaris Bank</option>
+                          <option value="providus bank">Providus Bank</option>
+                          <option value="stanbic ibtc bank">
+                            Stanbic IBTC Bank
+                          </option>
+                          <option value="standard chartered bank">
                             Standard Chartered Bank
                           </option>
-                          <option value="sterling">Sterling Bank</option>
-                          <option value="suntrust">Suntrust Bank</option>
-                          <option value="union">Union Bank</option>
+                          <option value="sterling bank">Sterling Bank</option>
+                          <option value="suntrust bank">Suntrust Bank</option>
+                          <option value="union bank">Union Bank</option>
                           <option value="uba">
                             United Bank for Africa (UBA)
                           </option>
-                          <option value="unity">Unity Bank</option>
-                          <option value="wema">Wema Bank</option>
-                          <option value="zenith">Zenith Bank</option>
+                          <option value="unity bank">Unity Bank</option>
+                          <option value="wema bank">Wema Bank</option>
+                          <option value="zenith bank">Zenith Bank</option>
                         </select>
                       </div>
 
@@ -648,7 +659,8 @@ function Account(props) {
 const mapStateToProps = state => {
   return {
     user: state.userDetails,
-    bank: state.bankdetails
+    bank: state.bankdetails,
+    isAuth: state.isLoggedIn
   };
 };
 

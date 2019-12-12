@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -17,6 +17,16 @@ function Signin(props) {
   const [successStatus, setSuccessStatus] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+
+  useEffect(() => {
+    const checkIsAuthenticated = () => {
+      if (props.isLoggedIn) {
+        return <Redirect to="/dashboard" />;
+      }
+    };
+
+    checkIsAuthenticated();
+  }, [props.isLoggedIn]);
 
   const signin = e => {
     e.preventDefault();
@@ -57,10 +67,6 @@ function Signin(props) {
 
     props.onLogin(loginDetails);
   };
-
-  if (props.isLoggedIn) {
-    return <Redirect to="/dashboard" />;
-  }
 
   return (
     <div className="auth">
