@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
-import * as types from "../store/constant";
-import * as actionCreators from "../store/actions";
+import * as types from "../store/actions/constant";
+import * as actionCreators from "../store/actions/actions";
 import { connect } from "react-redux";
 
 import Header from "../components/header";
@@ -658,9 +658,9 @@ function Account(props) {
 
 const mapStateToProps = state => {
   return {
-    user: state.userDetails,
-    bank: state.bankdetails,
-    isAuth: state.isLoggedIn
+    user: state.details.userDetails,
+    bank: state.details.bankdetails,
+    isAuth: state.auths.isLoggedIn
   };
 };
 

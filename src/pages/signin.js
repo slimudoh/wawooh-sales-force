@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-import * as actionCreators from "../store/actions";
+import * as actionCreators from "../store/actions/actions";
 
 import Error from "../components/error";
 import Success from "../components/success";
@@ -152,8 +152,8 @@ function Signin(props) {
 
 const mapStateToProps = state => {
   return {
-    isAuth: state.isLoggedIn,
-    error: state.loginError
+    isAuth: state.auths.isLoggedIn,
+    error: state.err.loginError
   };
 };
 

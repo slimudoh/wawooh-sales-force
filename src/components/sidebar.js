@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { NavLink, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-import * as actionCreators from "../store/actions";
+import * as actionCreators from "../store/actions/actions";
 
 function Sidebar(props) {
   useEffect(() => {
@@ -35,7 +35,7 @@ function Sidebar(props) {
 
 const mapStateToProps = state => {
   return {
-    isAuth: state.isLoggedIn
+    isAuth: state.auths.isLoggedIn
   };
 };
 

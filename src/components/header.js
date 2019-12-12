@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { NavLink, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 
-import * as actionCreators from "../store/actions";
+import * as actionCreators from "../store/actions/actions";
 
 function Header(props) {
   const [showMobile, setShowMobile] = useState(false);
@@ -65,7 +65,7 @@ function Header(props) {
 
 const mapStateToProps = state => {
   return {
-    isAuth: state.isLoggedIn
+    isAuth: state.auths.isLoggedIn
   };
 };
 

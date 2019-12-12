@@ -24,32 +24,26 @@ function App(props) {
     <div>
       <Router>
         <Switch>
-          {!props.isLoggedIn ? (
+          {!props.isAuth ? (
             <Route exact path="/fashion/:hashmail/:code" component={Signup} />
           ) : null}
-          {!props.isLoggedIn ? (
-            <Route path="/signin" component={Signin} />
-          ) : null}
-          {!props.isLoggedIn ? (
+          {!props.isAuth ? <Route path="/signin" component={Signin} /> : null}
+          {!props.isAuth ? (
             <Route path="/change-password" component={Password} />
           ) : null}
-          {!props.isLoggedIn ? (
+          {!props.isAuth ? (
             <Route path="/new-password" component={Reset} />
           ) : null}
-          {!props.isLoggedIn ? (
+          {!props.isAuth ? (
             <Route render={() => <Redirect to="/signin" />} />
           ) : null}
 
-          {props.isLoggedIn ? (
+          {props.isAuth ? (
             <Route path="/dashboard" component={Dashboard} />
           ) : null}
-          {props.isLoggedIn ? (
-            <Route path="/payment" component={Payment} />
-          ) : null}
-          {props.isLoggedIn ? (
-            <Route path="/account" component={Account} />
-          ) : null}
-          {props.isLoggedIn ? <Route component={Notfound} /> : null}
+          {props.isAuth ? <Route path="/payment" component={Payment} /> : null}
+          {props.isAuth ? <Route path="/account" component={Account} /> : null}
+          {props.isAuth ? <Route component={Notfound} /> : null}
         </Switch>
       </Router>
     </div>
@@ -58,7 +52,7 @@ function App(props) {
 
 const mapStateToProps = state => {
   return {
-    isLoggedIn: state.isLoggedIn
+    isAuth: state.auths.isLoggedIn
   };
 };
 

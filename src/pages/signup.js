@@ -3,8 +3,8 @@ import { Link, useParams, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import axios from "axios";
 
-import * as actionCreators from "../store/actions";
-import * as types from "../store/constant";
+import * as actionCreators from "../store/actions/actions";
+import * as types from "../store/actions/constant";
 
 import Error from "../components/error";
 import Success from "../components/success";
@@ -294,8 +294,8 @@ function Signup(props) {
 
 const mapStateToProps = state => {
   return {
-    isAuth: state.isLoggedIn,
-    error: state.registerError
+    isAuth: state.auths.isLoggedIn,
+    error: state.err.registerError
   };
 };
 

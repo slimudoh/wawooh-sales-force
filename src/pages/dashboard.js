@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
-import * as actionCreators from "../store/actions";
+import * as actionCreators from "../store/actions/actions";
 
 import Header from "../components/header";
 import Sidebar from "../components/sidebar";
@@ -157,8 +157,8 @@ function Dashboard(props) {
 
 const mapStateToProps = state => {
   return {
-    user: state.userDetails,
-    isAuth: state.isLoggedIn
+    user: state.details.userDetails,
+    isAuth: state.auths.isLoggedIn
   };
 };
 

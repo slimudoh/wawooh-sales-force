@@ -1,15 +1,24 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import axios from "axios";
-import { createStore, applyMiddleware } from "redux";
+import { createStore, applyMiddleware, combineReducers } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import App from "./container/App";
+import * as actionCreators from "./store/actions/actions";
 import * as serviceWorker from "./serviceWorker";
-import reducer from "./store/reducer";
-import * as actionCreators from "./store/actions";
 
-const store = createStore(reducer, applyMiddleware(thunk));
+import authReducer from "./store/reduces/auth";
+import detailsReducer from "./store/reduces/details";
+import errorsReducer from "./store/reduces/error";
+
+const rootReducer = combineReducers({
+  auths: authReducer,
+  details: detailsReducer,
+  err: errorsReducer
+});
+
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 const token = sessionStorage.getItem("token");
 if (token) {
