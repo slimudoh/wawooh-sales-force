@@ -7,6 +7,10 @@ export const REGISTER = "REGISTER";
 export const SET_TOKEN = "SET_TOKEN";
 export const USER_DETAILS = "USER_DETAILS";
 export const BANK_DETAILS = "BANK_DETAILS";
+export const LOGIN_ERROR = "LOGIN_ERROR";
+export const REGISTER_ERROR = "REGISTER_ERROR";
+export const USER_ERROR = "USER_ERROR";
+export const BANK_ERROR = "BANK_ERROR";
 
 export const GET__CODE__PATH = `${process.env.REACT_APP_PATH}fashion/agent/salesforce/update_profile/`;
 export const SIGNUP__PATH = `${process.env.REACT_APP_PATH}fashion/agent/salesforce/signUp/`;

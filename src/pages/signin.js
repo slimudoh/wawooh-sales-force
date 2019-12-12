@@ -23,6 +23,12 @@ function Signin(props) {
       if (props.isAuth) {
         return <Redirect to="/dashboard" />;
       }
+
+      if (props.error) {
+        setErrorMessage(props.error);
+        setErrorStatus(true);
+        setBtnLoader(false);
+      }
       props.onLogout();
     };
 
@@ -31,6 +37,11 @@ function Signin(props) {
 
   const signin = e => {
     e.preventDefault();
+
+    setErrorMessage(null);
+    setErrorStatus(false);
+    setSuccessMessage(null);
+    setSuccessStatus(false);
 
     let emailInput = email.current;
     let passwordInput = password.current;
@@ -141,7 +152,8 @@ function Signin(props) {
 
 const mapStateToProps = state => {
   return {
-    isAuth: state.isLoggedIn
+    isAuth: state.isLoggedIn,
+    error: state.loginError
   };
 };
 

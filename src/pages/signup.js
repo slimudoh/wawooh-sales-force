@@ -39,6 +39,11 @@ function Signup(props) {
       if (props.isAuth) {
         return <Redirect to="/dashboard" />;
       }
+      if (props.error) {
+        setErrorMessage(props.error);
+        setErrorStatus(true);
+        setBtnLoader(false);
+      }
       props.onLogout();
       checkRegistrationLink();
     };
@@ -289,7 +294,8 @@ function Signup(props) {
 
 const mapStateToProps = state => {
   return {
-    isAuth: state.isLoggedIn
+    isAuth: state.isLoggedIn,
+    error: state.registerError
   };
 };
 

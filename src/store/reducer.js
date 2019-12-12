@@ -5,7 +5,11 @@ const initialState = {
   token: sessionStorage.getItem("token") || null,
   isLoggedIn: sessionStorage.getItem("token") ? true : false,
   userDetails: null,
-  bankDetails: null
+  bankDetails: null,
+  loginError: null,
+  registerError: null,
+  userError: null,
+  bankError: null
 };
 
 const reducer = (state = initialState, action) => {
@@ -34,6 +38,26 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         bankDetails: action.payload
+      };
+    case types.LOGIN_ERROR:
+      return {
+        ...state,
+        loginError: action.payload
+      };
+    case types.REGISTER_ERROR:
+      return {
+        ...state,
+        registerError: action.payload
+      };
+    case types.USER_ERROR:
+      return {
+        ...state,
+        userError: action.payload
+      };
+    case types.BANK_ERROR:
+      return {
+        ...state,
+        bankError: action.payload
       };
     default:
       return state;
